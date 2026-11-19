@@ -7,16 +7,9 @@ export default defineConfig({
     host: '127.0.0.1',
     port: 3000,
     strictPort: false,
-    open: false,
-    fs: { strict: true },
-  },
-  preview: {
-    host: '127.0.0.1',
-    port: 4173,
-    strictPort: true,
   },
   build: {
-    target: 'es2022',
-    sourcemap: false,
+    target: 'esnext',
+    sourcemap: true,
   },
 })
