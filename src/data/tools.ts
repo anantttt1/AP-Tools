@@ -7,7 +7,7 @@ export type Tool = {
 }
 
 export const tools: Tool[] = [
-  {
+{
     "id": "zip-creator",
     "name": "ZIP Creator",
     "category": "Files",
