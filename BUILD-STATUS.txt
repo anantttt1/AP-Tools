@@ -1,0 +1,30 @@
+AP TOOLS — SOURCE AUDIT / BUILD STATUS
+
+Catalog mapping: PASS (100 unique catalog IDs; every entry maps to a processor or interactive widget).
+Project static test suite: PASS (declared imports, patched dependency lines, localhost-only Vite, PDF/ZIP/image/text bounds, regex isolation, CSV formula protection, workflow/batch limits and browser security headers).
+Processor smoke tests: PASS (49 browser-independent processing operations executed with stubbed third-party/browser-only integrations; includes AES-GCM/PBKDF2 encrypt-decrypt round-trip).
+TypeScript/TSX parser: PASS (all 16 .ts/.tsx source/config files parsed; no duplicate literal object keys or duplicate string switch cases found).
+Processor TypeScript parser: PASS (Node's TypeScript stripping syntax check).
+Service worker and test-script syntax: PASS.
+PWA assets: PASS (192px and 512px PNG icons and SVG icon present; manifest references all three).
+Dependency review: Vite 8.3.8, pdfjs-dist 6.5.438, React Router 7.18.6 and React/React DOM 19.3.1 were selected after review of current release/advisory information. Snyk reports no direct vulnerabilities for the selected JSZip 3.10.2, pdfjs-dist 6.5.438 and pdf-lib 1.17.1 versions at review time. This is not a substitute for a dependency-resolved npm audit.
+Security review: reviewed ZIP paths and decompression limits, PDF.js lifecycle, image signature checks, iframe preview sandbox, CSP, local-only dev server, regex timeout, cryptographic random generation, AES-GCM encryption and browser local-storage handling. See SECURITY.md.
+
+Production typecheck/build: NOT VERIFIED. Dependencies are absent in this container. An attempted `tsc -b` reports missing React/Vite/PDF.js and other package declarations because node_modules is not installed. Previous npm installation attempts were blocked by npm registry DNS/network error EAI_AGAIN. Therefore this environment could not verify `npm run typecheck`, `npm run build`, npm audit, or browser end-to-end behavior. Static checks and source parsing are not substitutes for those tests.
+
+After extracting on a machine with internet access and Node.js 22.12+:
+  npm install
+  npm run verify:catalog
+  npm test
+  npm run typecheck
+  npm run build
+  npm run dev
+
+Hosting: `_headers` is provided for static hosts that support it (such as Cloudflare Pages / Netlify). Vercel users must mirror the same response headers in Vercel configuration. The PWA app-shell cache uses root-relative paths and expects deployment at the domain root.
+
+
+Windows follow-up fixes (2026-11-19):
+- Fixed PDF.js 6 TypeScript API usage: removed the obsolete isEvalSupported option and supplied the required canvas property to page.render(). PDF.js 6.2.108+ includes the upstream fix for the arbitrary-JavaScript PDF advisory; current dependency is 6.5.438.
+- Fixed the file-count union comparison by explicitly typing maxCount as number.
+- Changed the local Vite development port from 5173 to 3000 and enabled fallback to another available port; still binds only to 127.0.0.1. This avoids common Windows reserved-port EACCES conflicts on 5173.
+- Updated the project self-test to validate the current PDF.js API and local dev port.

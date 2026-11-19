@@ -1,0 +1,45 @@
+{
+  "name": "ap-tools",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc -b",
+    "verify:catalog": "node scripts/verify-tools.mjs",
+    "test": "node scripts/test-project.mjs",
+    "check": "npm run verify:catalog && npm test && npm run typecheck && npm run build"
+  },
+  "dependencies": {
+    "framer-motion": "^12.23.24",
+    "lucide-react": "^0.468.0",
+    "pdf-lib": "^1.17.1",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "react-router-dom": "^7.18.6",
+    "zustand": "^5.0.2",
+    "jszip": "^3.10.2",
+    "papaparse": "^5.7.1",
+    "qrcode": "^1.5.4",
+    "pdfjs-dist": "^6.5.438",
+    "jsbarcode": "^3.11.6"
+  },
+  "devDependencies": {
+    "@types/papaparse": "^5.3.15",
+    "@types/qrcode": "^1.5.5",
+    "@types/react": "^19.0.3",
+    "@types/react-dom": "^19.0.3",
+    "@vitejs/plugin-react": "^6.3.0",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.17",
+    "typescript": "~5.7.2",
+    "vite": "^8.3.8",
+    "@types/jsbarcode": "^3.11.4"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  }
+}
