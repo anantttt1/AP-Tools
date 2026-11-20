@@ -1,7 +1,8 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import ToolCard from '../components/ToolCard'
 import { Download, Heart, RotateCcw, ShieldCheck, AlertCircle, Copy, FileUp, Clock3, Play, Pause, Square, Plus, Trash2 } from 'lucide-react'
 import { tools } from '../data/tools'
 import { useAppStore } from '../store/useAppStore'
@@ -58,6 +59,111 @@ const textPlaceholders: Record<string,string> = {
   'json-format':'{"name":"AP TOOLS","free":true}','json-minify':'Paste JSON...','json-csv':'[{"name":"AP TOOLS","category":"Utility"}]','csv-json':'name,category\nAP TOOLS,Utility','xml-escape':'Enter HTML/XML text...','base64-encode':'Enter text...','base64-decode':'Paste Base64...','url-encode':'Enter URL or text...','url-decode':'Enter encoded URL...','jwt-decode':'Paste JWT token...','uuid':'1','regex':'Enter test text...','timestamp':'1735689600','html-minify':'Paste HTML...','css-gradient':'#635BFF','css-shadow':'0 4px 16px rgba(0,0,0,.12)','color-convert':'#635BFF','random-string':'Leave blank for default character set','hash-text':'Enter text to hash...','regex-escape':'Enter text to escape...','markdown-html':'# Hello\n\nMarkdown to HTML','html-preview':'<h1>Hello AP TOOLS</h1><p>Preview your HTML here.</p>',
   'calculator':'(25 + 5) * 2','percentage':'1000','gst':'1000','discount':'1000','emi':'500000,9,60','simple-interest':'10000,5,2','compound-interest':'10000,5,2','age':'2000-01-01','date-difference':'2026-01-01,2026-12-31','bmi':'70,175','average':'10,20,30,40','ratio':'12:18','unit-length':'5,km','unit-weight':'70,kg','unit-temp':'100,C','unit-data':'5,GB','unit-speed':'100,km/h','qr-generator':'https://example.com','barcode':'123456789012','password':'16','password-strength':'Enter password to check','text-encrypt':'Text to encrypt...','text-decrypt':'Encrypted Base64 payload...','random-number':'1,100'
 }
+
+const extendedHelp: Record<string,string> = {
+  'lines-prefix':'Enter the text to add before each line in Additional input.',
+  'lines-suffix':'Enter the text to add after each line in Additional input.',
+  'markdown-table':'Paste CSV with a header row and at least one data row.',
+  'csv-to-markdown':'Paste CSV with a header row and at least one data row.',
+  'xml-formatter':'Paste well-formed XML. DTD and entity declarations are rejected for safety.',
+  'xml-minifier':'Paste well-formed XML. DTD and entity declarations are rejected for safety.',
+  'json-to-xml':'Paste a JSON object, array or scalar value.',
+  'xml-to-json':'Paste well-formed XML. DTD and entity declarations are rejected for safety.',
+  'color-contrast-checker':'Enter foreground and background HEX colours separated by a comma, e.g. #111111,#FFFFFF.',
+  'rgb-to-hex':'Enter red, green and blue values from 0–255, e.g. 99,91,255.',
+  'px-to-rem':'Enter pixel value and optional root font size, e.g. 24,16. Default root size is 16px.',
+  'rem-to-px':'Enter rem value and optional root font size, e.g. 1.5,16. Default root size is 16px.',
+  'aspect-ratio-calculator':'Enter whole-number width and height separated by a comma, e.g. 1920,1080.',
+  'tip-calculator':'Enter bill, tip percentage and optional number of people, e.g. 1200,10,3.',
+  'gcd-lcm-calculator':'Enter two whole numbers separated by a comma, e.g. 24,36.',
+  'percentage-change':'Enter original and new values separated by a comma, e.g. 100,125.',
+  'date-add-days':'Enter date and signed number of days, e.g. 2026-01-01,30.',
+  'working-days-calculator':'Enter start and end dates as YYYY-MM-DD,YYYY-MM-DD. Public holidays are not excluded.',
+  'time-duration-calculator':'Enter two times as HH:MM or HH:MM:SS separated by a comma, e.g. 09:30,17:45.',
+  'number-to-words':'Enter a whole number from 0 to 999,999,999,999.',
+  'prime-generator':'Enter the upper limit (2–1,000,000).',
+  'fibonacci-generator':'Enter the number of Fibonacci terms (1–1,000).',
+  'hmac-sha256':'Enter the message below and the secret key in Additional input. The key remains in this browser session.',
+  'credit-card-validator':'Enter digits only or a card number with spaces/hyphens. This checks the Luhn checksum only.',
+  'isbn-validator':'Enter an ISBN-10 or ISBN-13; spaces and hyphens are optional.',
+  'reading-time-estimator':'Paste text below. Optional Additional input sets reading speed in words per minute (50–1,000); default is 200.'
+}
+const extendedPlaceholders: Record<string,string> = {
+  'line-numbers-add':'Paste lines to number...','line-numbers-remove':'1. First line\\n2. Second line',
+  'lines-prefix':'Paste lines to prefix...','lines-suffix':'Paste lines to suffix...','words-sort':'Paste words to sort...',
+  'word-frequency':'Paste text to count word frequency...','keyword-density':'Paste content to calculate keyword density...',
+  'sentence-count':'Paste sentences...','paragraph-count':'Paste paragraphs...','text-cleaner':'Paste text to clean...',
+  'whitespace-normalizer':'Paste text with extra spaces or blank lines...','title-case':'the quick brown fox',
+  'sentence-case':'THIS IS A SENTENCE. THIS IS ANOTHER.','camel-case':'hello world example','pascal-case':'hello world example',
+  'snake-case':'Hello world example','kebab-case':'Hello world example','constant-case':'Hello world example',
+  'alternating-case':'make this text alternate','remove-emojis':'Text 😊 with emojis 🚀','extract-emails':'Contact alex@example.com for help',
+  'extract-urls':'Visit https://example.com for details','text-to-hex':'Hello','hex-to-text':'48 65 6c 6c 6f',
+  'text-to-decimal':'Hello','decimal-to-text':'72 101 108 108 111','unicode-escape':'Hello नमस्ते',
+  'unicode-unescape':'Hello \\u{1f680}','markdown-toc':'# Title\\n## Section one\\n### Details',
+  'markdown-table':'name,score\\nAlex,95\\nSam,88','csv-to-markdown':'name,score\\nAlex,95\\nSam,88',
+  'json-stringify-text':'Hello "world"','json-parse-text':'"Hello world"','lines-to-json':'apple\\nbanana\\ncherry',
+  'json-to-lines':'["apple","banana","cherry"]','csv-to-tsv':'name,score\\nAlex,95','tsv-to-csv':'name\\tscore\\nAlex\\t95',
+  'csv-to-html':'name,score\\nAlex,95','json-sort-keys':'{"z":1,"a":{"y":2,"b":3}}',
+  'json-flatten':'{"user":{"name":"Alex","active":true}}','json-unflatten':'{"user.name":"Alex","user.active":true}',
+  'xml-formatter':'<root><item>One</item><item>Two</item></root>','xml-minifier':'<root>  <item>One</item> </root>',
+  'json-to-xml':'{"name":"Alex","score":95}','xml-to-json':'<user><name>Alex</name><score>95</score></user>',
+  'css-formatter':'body{color:#333;margin:0;padding:8px}','css-minifier':'body { color: #333; margin: 0; }',
+  'sql-formatter':'select id,name from users where active = 1 order by name','sql-minifier':'SELECT  id, name  FROM users;',
+  'sql-escape':"O'Reilly",'url-parser':'https://example.com/path?name=Alex#top',
+  'query-string-parser':'name=Alex&tag=one&tag=two','query-string-builder':'{"name":"Alex","tag":["one","two"]}',
+  'base64url-encoder':'Hello world','base64url-decoder':'SGVsbG8gd29ybGQ',
+  'uuid-validator':'550e8400-e29b-41d4-a716-446655440000','email-validator':'alex@example.com',
+  'url-validator':'https://example.com','ipv4-validator':'192.168.1.1','mac-validator':'00:1A:2B:3C:4D:5E',
+  'hex-color-validator':'#635BFF','credit-card-validator':'4242 4242 4242 4242','isbn-validator':'9780306406157',
+  'color-contrast-checker':'#111111,#FFFFFF','color-shade-generator':'#635BFF','rgb-to-hex':'99,91,255',
+  'hex-to-rgb':'#635BFF','px-to-rem':'24,16','rem-to-px':'1.5,16','aspect-ratio-calculator':'1920,1080',
+  'binary-to-decimal':'101010','decimal-to-binary':'42','decimal-to-hex':'255','hex-to-decimal':'FF',
+  'decimal-to-octal':'64','roman-to-decimal':'MCMXCIV','decimal-to-roman':'1994','number-to-words':'123456',
+  'prime-checker':'97','prime-generator':'100','factorial-calculator':'10','fibonacci-generator':'10',
+  'gcd-lcm-calculator':'24,36','percentage-change':'100,125','tip-calculator':'1200,10,3',
+  'date-add-days':'2026-01-01,30','working-days-calculator':'2026-01-01,2026-01-31',
+  'time-duration-calculator':'09:30,17:45','reading-time-estimator':'Paste your article or document text...'
+}
+
+
+const relatedToolMap: Record<string,string[]> = {
+  'text-encrypt':['text-decrypt','password','password-strength'],'text-decrypt':['text-encrypt','password','password-strength'],
+  'base64-encode':['base64-decode','base64url-encoder','text-to-hex'],'base64-decode':['base64-encode','base64url-decoder','hex-to-text'],
+  'base64url-encoder':['base64url-decoder','base64-encode'],'base64url-decoder':['base64url-encoder','base64-decode'],
+  'json-csv':['csv-json','json-format','csv-to-markdown'],'csv-json':['json-csv','csv-to-tsv','json-format'],
+  'csv-to-tsv':['tsv-to-csv','csv-json','csv-to-markdown'],'tsv-to-csv':['csv-to-tsv','csv-json','json-csv'],
+  'json-format':['json-minify','json-sort-keys','json-flatten'],'json-minify':['json-format','json-sort-keys','json-flatten'],
+  'json-flatten':['json-unflatten','json-format','json-sort-keys'],'json-unflatten':['json-flatten','json-format','json-sort-keys'],
+  'pdf-merge':['pdf-split','pdf-rotate','pdf-watermark','pdf-page-numbers'],'pdf-split':['pdf-merge','pdf-page-numbers','pdf-info'],
+  'pdf-images':['images-pdf','image-compress','image-convert'],'images-pdf':['pdf-images','pdf-merge','pdf-info'],'image-pdf':['pdf-images','pdf-merge','image-compress'],
+  'pdf-text':['word-counter','text-diff','html-strip-tags'],'pdf-watermark':['pdf-page-numbers','pdf-rotate','pdf-merge'],
+  'pdf-rotate':['pdf-merge','pdf-split','pdf-page-numbers'],'pdf-page-numbers':['pdf-merge','pdf-watermark','pdf-split'],
+  'image-compress':['image-resize','image-convert','image-crop'],'image-resize':['image-compress','image-crop','image-convert'],
+  'image-convert':['image-compress','image-resize','image-pdf'],'image-base64':['base64-image','base64-encode','base64-decode'],'base64-image':['image-base64','image-convert','image-metadata'],
+  'text-binary':['binary-text','text-to-hex','text-to-decimal'],'binary-text':['text-binary','decimal-to-binary','binary-to-decimal'],
+  'text-to-hex':['hex-to-text','text-to-decimal','decimal-to-text'],'hex-to-text':['text-to-hex','base64-encode','base64-decode'],
+  'text-to-decimal':['decimal-to-text','text-to-hex','text-binary'],'decimal-to-text':['text-to-decimal','hex-to-text','binary-text'],
+  'text-morse':['morse-text','text-binary','text-to-hex'],'morse-text':['text-morse','binary-text','hex-to-text'],
+  'url-encode':['url-decode','url-parser','query-string-builder'],'url-decode':['url-encode','url-parser','query-string-parser'],
+  'query-string-parser':['query-string-builder','url-parser','url-decode'],'query-string-builder':['query-string-parser','url-parser','url-encode'],
+  'xml-escape':['html-unescape','html-strip-tags','text-to-html'],'html-unescape':['xml-escape','html-strip-tags','text-to-html'],
+  'text-to-html':['html-strip-tags','html-unescape','markdown-html'],'markdown-html':['markdown-preview','html-strip-tags','text-to-html'],
+  'markdown-table':['csv-to-markdown','csv-to-html','csv-to-tsv'],'csv-to-markdown':['markdown-table','csv-to-html','tsv-to-csv'],'csv-to-html':['csv-to-markdown','markdown-table','html-strip-tags'],
+  'json-to-xml':['xml-to-json','json-format','json-sort-keys'],'xml-to-json':['json-to-xml','xml-formatter','json-format'],
+  'xml-formatter':['xml-minifier','xml-to-json','json-to-xml'],'xml-minifier':['xml-formatter','xml-to-json','json-to-xml'],
+  'css-formatter':['css-minifier','css-gradient','css-shadow'],'css-minifier':['css-formatter','css-gradient','css-shadow'],
+  'rgb-to-hex':['hex-to-rgb','color-contrast-checker','color-shade-generator'],'hex-to-rgb':['rgb-to-hex','color-contrast-checker','color-shade-generator'],
+  'color-contrast-checker':['color-shade-generator','hex-to-rgb','rgb-to-hex'],'color-shade-generator':['color-contrast-checker','hex-to-rgb','rgb-to-hex'],
+  'px-to-rem':['rem-to-px','aspect-ratio-calculator','css-gradient'],'rem-to-px':['px-to-rem','aspect-ratio-calculator','css-gradient'],
+  'decimal-to-binary':['binary-to-decimal','decimal-to-hex','decimal-to-octal'],'binary-to-decimal':['decimal-to-binary','hex-to-decimal','decimal-to-hex'],
+  'decimal-to-hex':['hex-to-decimal','decimal-to-binary','decimal-to-octal'],'hex-to-decimal':['decimal-to-hex','binary-to-decimal','decimal-to-octal'],
+  'decimal-to-octal':['decimal-to-binary','decimal-to-hex','hex-to-decimal'],'decimal-to-roman':['roman-to-decimal','number-to-words','factorial-calculator'],
+  'roman-to-decimal':['decimal-to-roman','number-to-words','factorial-calculator'],'prime-checker':['prime-generator','factorial-calculator','gcd-lcm-calculator'],
+  'prime-generator':['prime-checker','fibonacci-generator','factorial-calculator'],'hmac-sha256':['text-encrypt','text-decrypt','hash-text'],
+  'date-add-days':['date-difference','working-days-calculator','age'],'working-days-calculator':['date-add-days','date-difference','age'],
+  'time-duration-calculator':['timestamp','stopwatch','countdown']
+}
+
 function UtilityWidget({id}:{id:string}) {
   const [seconds,setSeconds]=useState(0)
   const [running,setRunning]=useState(false)
@@ -107,6 +213,7 @@ export default function ToolPage() {
   const addRecent=useAppStore(s=>s.addRecent)
   const favorites=useAppStore(s=>s.favorites)
   const toggleFavorite=useAppStore(s=>s.toggleFavorite)
+  const navigate=useNavigate()
   const [files,setFiles]=useState<File[]>([])
   const [input,setInput]=useState('')
   const [secondary,setSecondary]=useState('')
@@ -171,6 +278,9 @@ export default function ToolPage() {
     finally{if(currentRequest===requestId.current)setBusy(false)}
   }
   const favorite=favorites.includes(id)
+  const explicitRelated=relatedToolMap[id]||[]
+  const sameCategory=tools.filter(item=>item.id!==id&&item.category===tool.category).map(item=>item.id)
+  const suggestedTools=[...new Set([...explicitRelated,...sameCategory])].filter(relatedId=>relatedId!==id).map(relatedId=>tools.find(item=>item.id===relatedId)).filter((item):item is (typeof tools)[number]=>Boolean(item)).slice(0,4)
   const download=()=>{
     if(output?.kind!=='blob')return
     const url=URL.createObjectURL(output.blob)
@@ -197,12 +307,12 @@ export default function ToolPage() {
         {id==='bulk-rename'&&<div className="settings-grid"><label>Filename prefix<input value={prefix} onChange={e=>setPrefix(e.target.value)}/></label><label>Starting number<input type="number" value={start} onChange={e=>setStart(Number(e.target.value))}/></label></div>}
         {id==='image-flip'&&<label className="field-label">Flip direction<select value={secondary} onChange={e=>setSecondary(e.target.value)}><option value="horizontal">Horizontal</option><option value="vertical">Vertical</option></select></label>}
         {id==='case-converter'&&<label className="field-label">Conversion<select value={secondary} onChange={e=>setSecondary(e.target.value)}><option value="upper">UPPERCASE</option><option value="lower">lowercase</option><option value="title">Title Case</option><option value="sentence">Sentence case</option></select></label>}
-        {['percentage','gst','discount','regex','text-diff','text-encrypt','text-decrypt','css-gradient','image-rotate','random-string'].includes(id)&&(id==='text-diff'?<label className="field-label">Second text block<textarea maxLength={10_000_000} value={secondary} onChange={e=>setSecondary(e.target.value)} rows={6} placeholder="Enter the second text block to compare..."/></label>:<label className="field-label">Additional input<input maxLength={id==='text-encrypt'||id==='text-decrypt'?1024:id==='regex'?500:id==='random-string'?3:100} type={id==='text-encrypt'||id==='text-decrypt'?'password':'text'} autoComplete={id==='text-encrypt'||id==='text-decrypt'?'new-password':'off'} value={secondary} onChange={e=>setSecondary(e.target.value)} placeholder={id==='text-encrypt'||id==='text-decrypt'?'Password':id==='regex'?'Regular expression':id==='image-rotate'?'90, 180 or 270':id==='random-string'?'Output length (1–256)':'Enter required value'}/></label>)}
+        {['percentage','gst','discount','regex','text-diff','text-encrypt','text-decrypt','css-gradient','image-rotate','random-string','hmac-sha256','reading-time-estimator','lines-prefix','lines-suffix'].includes(id)&&(id==='text-diff'?<label className="field-label">Second text block<textarea maxLength={10_000_000} value={secondary} onChange={e=>setSecondary(e.target.value)} rows={6} placeholder="Enter the second text block to compare..."/></label>:<label className="field-label">Additional input<input maxLength={id==='text-encrypt'||id==='text-decrypt'?1024:id==='regex'?500:id==='random-string'?3:id==='hmac-sha256'?4096:1000} type={id==='text-encrypt'||id==='text-decrypt'||id==='hmac-sha256'?'password':'text'} autoComplete={id==='text-encrypt'||id==='text-decrypt'||id==='hmac-sha256'?'new-password':'off'} value={secondary} onChange={e=>setSecondary(e.target.value)} placeholder={id==='text-encrypt'||id==='text-decrypt'||id==='hmac-sha256'?'Password / secret key':id==='regex'?'Regular expression':id==='image-rotate'?'90, 180 or 270':id==='random-string'?'Output length (1–256)':id==='reading-time-estimator'?'Words per minute (default 200)':id==='lines-prefix'||id==='lines-suffix'?'Text to add':'Enter required value'}/></label>)}
         {id==='regex'&&<label className="field-label">Regex flags<input maxLength={7} value={flags} onChange={e=>setFlags(e.target.value)} placeholder="g"/></label>}
         {id==='regex'&&<label className="field-label">Text to test<textarea maxLength={200_000} value={input} onChange={e=>setInput(e.target.value)} rows={5} placeholder="Text to test against regex..."/></label>}
-        {!['regex'].includes(id)&&!needsFiles&&<label className="field-label">Input<textarea maxLength={10_000_000} value={input} onChange={e=>setInput(e.target.value)} rows={6} placeholder={textPlaceholders[id]||'Enter text or value...'}/></label>}
+        {!['regex'].includes(id)&&!needsFiles&&<label className="field-label">Input<textarea maxLength={10_000_000} value={input} onChange={e=>setInput(e.target.value)} rows={6} placeholder={extendedPlaceholders[id]||textPlaceholders[id]||'Enter text or value...'}/></label>}
         {needsFiles&&['pdf-split','image-crop','image-color','pdf-watermark','pdf-rotate','image-watermark'].includes(id)&&<label className="field-label">{id==='pdf-split'?'Pages to extract':id==='image-crop'?'Crop rectangle (x,y,width,height)':id==='image-color'?'Pixel coordinate (x,y)':id==='pdf-rotate'?'Rotation degrees':id==='image-watermark'?'Watermark text':'Watermark text'}<input value={id==='image-watermark'?secondary:input} onChange={e=>id==='image-watermark'?setSecondary(e.target.value):setInput(e.target.value)} placeholder={help[id]}/></label>}
-        {help[id]&&<div className="subtle-hint">{help[id]}</div>}
+        {(help[id]||extendedHelp[id])&&<div className="subtle-hint">{help[id]||extendedHelp[id]}</div>}
         <div className="workspace-actions"><button className="button-primary" disabled={busy} onClick={run}>{busy?'Processing...':'Run tool'} <span>→</span></button><button className="button-secondary" onClick={()=>{requestId.current+=1;setBusy(false);setInput('');setSecondary('');setFiles([]);setOutput(null);setError('')}}><RotateCcw size={15}/> Reset</button></div>
       </>}
       {error&&<div className="notice error"><AlertCircle size={17}/>{error}</div>}
@@ -210,6 +320,13 @@ export default function ToolPage() {
       {output?.kind==='blob'&&<div className="output-panel"><div className="output-heading"><strong>Result ready</strong><button className="button-primary small" onClick={download}><Download size={14}/> Download {output.filename}</button></div>{output.preview==='image'&&<img className="result-image" src={previewUrl} alt="Processed output"/>}{output.preview==='pdf'&&<span className="download-ready">PDF created successfully. Download it to view the document.</span>}<span className="subtle-hint">{output.filename} · {(output.blob.size/1024).toFixed(1)} KB</span></div>}
       {output?.kind==='html'&&<div className="output-panel"><div className="output-heading"><strong>Preview</strong></div><iframe title="HTML preview" sandbox="" referrerPolicy="no-referrer" srcDoc={output.value} className="html-preview-frame"/></div>}
     </div>
+
+    <section className="section related-tools-section">
+      <div className="section-head"><div><label>KEEP WORKING</label><h2>Related tools and next steps</h2><p>Continue your workflow with compatible tools.</p></div></div>
+      <div className="tool-grid">
+        {suggestedTools.map(related => <ToolCard key={related.id} tool={related} onOpen={() => navigate('/tool/' + related.id)} />)}
+      </div>
+    </section>
     <div className="privacy-note"><ShieldCheck size={17}/><span><strong>Privacy first.</strong> Processing happens locally for supported tools. Nothing is uploaded to an AP TOOLS server.</span></div>
   </motion.div>
 }
