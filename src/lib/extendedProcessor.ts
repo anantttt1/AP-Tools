@@ -18,7 +18,9 @@ const strictDate = (value: string) => {
   const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value.trim())
   if (!m) throw new Error('Enter a date as YYYY-MM-DD.')
   const y = Number(m[1]), mo = Number(m[2]), d = Number(m[3])
-  const dt = new Date(Date.UTC(y, mo - 1, d))
+  const dt = new Date(0)
+  dt.setUTCHours(0, 0, 0, 0)
+  dt.setUTCFullYear(y, mo - 1, d)
   if (dt.getUTCFullYear() !== y || dt.getUTCMonth() !== mo - 1 || dt.getUTCDate() !== d) throw new Error('Enter a real calendar date as YYYY-MM-DD.')
   return dt
 }
@@ -59,6 +61,54 @@ const deepSort = (value: any): any => {
   return value
 }
 const parseClock = (value: string) => { const m=/^(\d{1,3}):([0-5]\d)(?::([0-5]\d))?$/.exec(value.trim()); if(!m)throw new Error('Enter time as HH:MM or HH:MM:SS.'); return Number(m[1])*3600+Number(m[2])*60+Number(m[3]||0) }
+const spreadsheetSafeCell = (value: unknown) => {
+  const cell = String(value ?? '')
+  const trimmed = cell.replace(/^[\\t\\r ]+/, '')
+  const formula = /^[=+@]/.test(trimmed) || /^-(?!\\d+(?:\\.\\d+)?$)/.test(trimmed)
+  return formula ? "'" + cell : cell
+}
+const mapSqlOutsideLiterals = (source: string, transform: (chunk: string) => string) => {
+  let output = '', chunk = '', quote = ''
+  const flush = () => { if (chunk) { output += transform(chunk); chunk = '' } }
+  for (let i = 0; i < source.length; i++) {
+    const char = source[i]
+    if (quote) {
+      output += char
+      if (char === quote) {
+        if (source[i + 1] === quote && quote !== ']') { output += source[++i] }
+        else quote = ''
+      } else if (char === '\\\\' && source[i + 1]) { output += source[++i] }
+    } else if (char === "'" || char === '"' || char === '`') {
+      flush(); quote = char; output += char
+    } else if (char === '[') {
+      flush(); quote = ']'; output += char
+    } else {
+      chunk += char
+    }
+  }
+  flush()
+  return output
+}
+const removeSqlComments = (source: string) => {
+  let output = '', quote = '', i = 0
+  while (i < source.length) {
+    const char = source[i], next = source[i + 1]
+    if (quote) {
+      output += char; i++
+      if (char === quote) {
+        if (source[i] === quote && quote !== ']') { output += source[i++ ] }
+        else quote = ''
+      } else if (char === '\\\\' && i < source.length) { output += source[i++] }
+      continue
+    }
+    if (char === "'" || char === '"' || char === '`') { quote = char; output += char; i++; continue }
+    if (char === '[') { quote = ']'; output += char; i++; continue }
+    if (char === '-' && next === '-') { i += 2; while (i < source.length && source[i] !== '\\n') i++; continue }
+    if (char === '/' && next === '*') { i += 2; const end = source.indexOf('*/', i); if (end < 0) throw new Error('SQL block comment is not closed.'); i = end + 2; continue }
+    output += char; i++
+  }
+  return output
+}
 
 export async function processExtendedTool(id: string, rawInput: string, secondary: string): Promise<Result> {
   const input = limit(rawInput)
@@ -205,7 +255,7 @@ export async function processExtendedTool(id: string, rawInput: string, secondar
     case 'roman-to-decimal': return text(String(fromRoman(input)))
     case 'decimal-to-roman': return text(toRoman(Number(input.trim())))
     case 'number-to-words': return text(numberWords(Number(input.trim())))
-    case 'prime-checker': { const n=Number(input.trim());if(!Number.isSafeInteger(n)||n<0)throw new Error('Enter a non-negative safe whole number.');if(n<2)return text(n+' is not prime.');for(let d=2;d<=Math.sqrt(n);d++)if(n%d===0)return text(n+' is not prime; it is divisible by '+d+'.');return text(n+' is prime.') }
+    case 'prime-checker': { const n=Number(input.trim());if(!Number.isSafeInteger(n)||n<0||n>1_000_000_000)throw new Error('Enter a whole number from 0 to 1,000,000,000.');if(n<2)return text(n+' is not prime.');for(let d=2;d<=Math.sqrt(n);d++)if(n%d===0)return text(n+' is not prime; it is divisible by '+d+'.');return text(n+' is prime.') }
     case 'prime-generator': { const n=Number(input.trim());if(!Number.isInteger(n)||n<2||n>1_000_000)throw new Error('Enter an upper limit from 2 to 1,000,000.');const sieve=new Uint8Array(n+1);for(let p=2;p*p<=n;p++)if(!sieve[p])for(let j=p*p;j<=n;j+=p)sieve[j]=1;const out:number[]=[];for(let p=2;p<=n;p++)if(!sieve[p])out.push(p);return text(out.join(', ')) }
     case 'factorial-calculator': { const n=Number(input.trim());if(!Number.isInteger(n)||n<0||n>170)throw new Error('Enter an integer from 0 to 170.');let v=1;for(let i=2;i<=n;i++)v*=i;return text(String(v)) }
     case 'fibonacci-generator': { const n=Number(input.trim());if(!Number.isInteger(n)||n<1||n>1000)throw new Error('Enter a term count from 1 to 1,000.');const a:bigint[]=[0n];if(n>1)a.push(1n);for(let i=2;i<n;i++)a.push(a[i-1]+a[i-2]);return text(a.map(String).join(', ')) }
