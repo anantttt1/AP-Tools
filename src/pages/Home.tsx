@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import { Link, useNavigate } from 'react-router-dom'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Search, ArrowRight, ArrowUpRight, FileText, Image, Code2, Archive, ShieldCheck, Zap } from 'lucide-react'
 import { tools } from '../data/tools'
 import ToolCard from '../components/ToolCard'
@@ -26,6 +26,35 @@ const getTools = (ids: string[]) => ids.map(id => tools.find(tool => tool.id ===
 
 export default function Home() {
   const [q, setQ] = useState('')
+  const studioWheelRef = useRef<HTMLImageElement>(null)
+
+  // Roll the Studio mark like a small tyre in response to left/right phone tilt.
+  // The listener is passive, bounded and cleaned up when the Home page unmounts.
+  useEffect(() => {
+    const wheel = studioWheelRef.current
+    if (!wheel || !('DeviceOrientationEvent' in window)) return
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
+
+    let roll = 0
+    let shift = 0
+    const handleOrientation = (event: DeviceOrientationEvent) => {
+      if (typeof event.gamma !== 'number' || !Number.isFinite(event.gamma)) return
+      const tilt = Math.max(-32, Math.min(32, event.gamma))
+      const targetRoll = tilt * 2.4
+      const targetShift = tilt * 0.42
+      roll += (targetRoll - roll) * 0.32
+      shift += (targetShift - shift) * 0.32
+      wheel.style.setProperty('--studio-wheel-roll', roll.toFixed(2) + 'deg')
+      wheel.style.setProperty('--studio-wheel-x', shift.toFixed(2) + 'px')
+    }
+
+    window.addEventListener('deviceorientation', handleOrientation, { passive: true })
+    return () => {
+      window.removeEventListener('deviceorientation', handleOrientation)
+      wheel.style.removeProperty('--studio-wheel-roll')
+      wheel.style.removeProperty('--studio-wheel-x')
+    }
+  }, [])
   const go = useNavigate()
   const popular = ['image-compress', 'pdf-merge', 'zip-extractor', 'json-format', 'qr-generator', 'password'].map(id => tools.find(t => t.id === id)!).filter(Boolean)
   const pdfTools = getTools(pdfToolIds)
@@ -39,8 +68,8 @@ export default function Home() {
       <div className="hero-search"><Search /><input value={q} onChange={e => setQ(e.target.value)} onKeyDown={e => e.key === 'Enter' && go('/tools?q=' + encodeURIComponent(q))} placeholder="Search PDF, image and file tools..." /><button onClick={() => go('/tools?q=' + encodeURIComponent(q))}>Explore tools <ArrowRight size={16} /></button></div>
       <div className="hero-foot"><ShieldCheck size={15} /> Browser-based processing · No account required · Free to use</div>
       <a className="hero-art" href="https://ap-creativestudio.vercel.app/" target="_blank" rel="noopener noreferrer" aria-label="Explore AP Creative Studio — opens in a new tab">
-        <img src="/ap-creative-studio-logo.webp" alt="AP Creative Studio logo" />
-        <span className="hero-art-copy"><strong>Step Into Creativity</strong><small>Design. Build. Create. <ArrowUpRight size={14} /></small><em>VISIT AP CREATIVE STUDIO</em></span>
+        <img ref={studioWheelRef} src="/ap-creative-studio-logo.webp" alt="AP Creative Studio logo — tilt your phone left or right to roll the wheel" />
+        <span className="hero-art-copy"><strong>Step Into Creativity</strong><small>Design. Build. Create. <ArrowUpRight size={14} /></small><em>VISIT AP CREATIVE STUDIO</em><span className="hero-art-tilt-hint">↔ Tilt your phone to roll the logo</span></span>
       </a>
     </section>
 
