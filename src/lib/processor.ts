@@ -389,7 +389,7 @@ export async function processTool(id:string, files:File[], input:string, seconda
           const ctx=canvas.getContext('2d')
           if(!ctx){page.cleanup();throw new Error('Canvas is unavailable in this browser.')}
           ctx.fillStyle='#ffffff';ctx.fillRect(0,0,w,h)
-          await page.render({canvas,canvasContext:ctx,viewport,background:'#ffffff'}).promise
+          await page.render({canvas,viewport,background:'#ffffff'}).promise
           const jpg=await canvasBlob(canvas,'image/jpeg',0.88)
           canvas.width=0;canvas.height=0;page.cleanup()
           totalBytes+=jpg.size
