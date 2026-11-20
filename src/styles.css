@@ -162,3 +162,52 @@
   .hero-art::after{content:none!important;display:none!important}
   .hero-art img{opacity:1!important;mix-blend-mode:normal!important}
 }
+
+
+/* Dedicated Privacy Policy page */
+html{scroll-behavior:smooth;scroll-padding-top:24px}
+.privacy-page{max-width:1160px;margin:0 auto;display:flex;flex-direction:column;gap:28px;color:#263247}
+.privacy-hero{position:relative;overflow:hidden;border:1px solid #e8e9fb;border-radius:20px;padding:34px 38px;background:radial-gradient(ellipse at 88% 8%,rgba(99,91,255,.12),transparent 38%),linear-gradient(135deg,#fff 0%,#fbfbff 100%)}
+.privacy-eyebrow{display:flex;align-items:center;gap:8px;color:#635bff;font-size:10px;font-weight:800;letter-spacing:1.4px}
+.privacy-hero-row{display:flex;align-items:center;justify-content:space-between;gap:25px;margin-top:24px}
+.privacy-kicker{font-size:10px;font-weight:800;letter-spacing:1.7px;color:#8b87bb}
+.privacy-hero h1{font:800 clamp(34px,5vw,48px)/1.1 'Plus Jakarta Sans';letter-spacing:-1.8px;color:#192338;margin:10px 0}
+.privacy-hero p{max-width:680px;color:#788397;font-size:14px;line-height:1.8;margin:0}
+.privacy-updated{display:inline-flex;align-items:center;gap:10px;margin-top:22px;padding:9px 13px;border:1px solid #e8e8f5;border-radius:9px;background:#fff;font-size:11px;color:#7b8495}
+.privacy-updated strong{color:#303b52}
+.privacy-hero-icon{width:92px;height:92px;flex:0 0 92px;display:grid;place-items:center;border-radius:25px;color:#635bff;background:linear-gradient(145deg,#f0efff,#fff);border:1px solid #e6e4ff;box-shadow:0 12px 30px rgba(67,56,202,.08)}
+.privacy-layout{display:grid;grid-template-columns:260px minmax(0,1fr);gap:24px;align-items:start}
+.privacy-toc{position:sticky;top:20px;max-height:calc(100vh - 40px);overflow:auto;background:#fff;border:1px solid #e8edf3;border-radius:14px;padding:17px;box-shadow:0 5px 20px rgba(24,39,75,.035)}
+.privacy-toc-title{display:flex;align-items:center;gap:8px;color:#344054;font-size:10px;font-weight:800;letter-spacing:1.1px;padding:2px 3px 13px;border-bottom:1px solid #edf0f5}
+.privacy-toc nav{display:flex;flex-direction:column;gap:2px;padding:10px 0}
+.privacy-toc nav a{display:flex;align-items:flex-start;gap:9px;padding:7px 6px;border-radius:7px;color:#647084;font-size:10px;line-height:1.45;transition:background .18s,color .18s}
+.privacy-toc nav a span{font-size:9px;font-weight:800;color:#9b96e8;min-width:18px;padding-top:1px}
+.privacy-toc nav a:hover{background:#f4f3ff;color:#5145e5}
+.privacy-toc-home{display:flex;align-items:center;gap:8px;padding:11px 5px 2px;border-top:1px solid #edf0f5;color:#635bff;font-size:11px;font-weight:700}
+.privacy-article{min-width:0;background:#fff;border:1px solid #e8edf3;border-radius:16px;padding:30px 34px;box-shadow:0 5px 20px rgba(24,39,75,.025)}
+.privacy-intro-note{display:flex;align-items:flex-start;gap:12px;padding:15px 16px;border:1px solid #e6e5ff;border-radius:10px;background:#f8f7ff;color:#635bff}
+.privacy-intro-note svg{flex:0 0 auto;margin-top:2px}
+.privacy-intro-note p{margin:0;color:#59647a;font-size:12px;line-height:1.75}
+.privacy-section{position:relative;padding:27px 0 25px;border-bottom:1px solid #edf0f4;scroll-margin-top:24px}
+.privacy-section:last-of-type{border-bottom:0}
+.privacy-section-number{display:inline-flex;align-items:center;justify-content:center;width:29px;height:25px;border-radius:7px;background:#f0efff;color:#635bff;font-size:9px;font-weight:800;letter-spacing:.4px}
+.privacy-section h2{font:700 18px 'Plus Jakarta Sans';letter-spacing:-.45px;color:#202b40;margin:11px 0 12px}
+.privacy-section p,.privacy-section li{font-size:12px;line-height:1.9;color:#687487}
+.privacy-section p{margin:0 0 11px}
+.privacy-section p:last-child{margin-bottom:0}
+.privacy-section ul{padding-left:20px;margin:8px 0 13px}
+.privacy-section li{padding-left:3px;margin:5px 0}
+.privacy-section li::marker{color:#8178f5}
+.privacy-section strong{color:#39465c;font-weight:700}
+.privacy-endnote{display:flex;align-items:flex-start;gap:12px;margin-top:24px;padding:17px;border:1px solid #dfeee8;border-radius:10px;background:#f5fbf8;color:#26936c}
+.privacy-endnote svg{flex:0 0 auto}
+.privacy-endnote strong{font-size:12px;color:#236f53}
+.privacy-endnote p{font-size:11px;line-height:1.7;color:#658276;margin:5px 0 0}
+.privacy-bottom-actions{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:22px;padding-top:18px;border-top:1px solid #edf0f4}
+.privacy-home-button,.privacy-top-button{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid #e3e7ef;border-radius:8px;padding:10px 13px;background:#fff;color:#536176;font-size:11px;font-weight:700}
+.privacy-top-button{border-color:#e6e3ff;background:#f7f6ff;color:#5b50ed}
+.footer-privacy-link{color:#635bff;font-weight:700}
+.footer-privacy-link:hover{text-decoration:underline}
+@media(max-width:900px){.privacy-layout{grid-template-columns:220px minmax(0,1fr);gap:16px}.privacy-article{padding:24px}}
+@media(max-width:760px){.privacy-page{gap:16px}.privacy-hero{padding:24px 20px;border-radius:15px}.privacy-hero-row{margin-top:19px}.privacy-hero h1{font-size:34px}.privacy-hero p{font-size:12px}.privacy-hero-icon{width:58px;height:58px;flex-basis:58px;border-radius:17px}.privacy-hero-icon svg{width:30px}.privacy-layout{grid-template-columns:1fr}.privacy-toc{position:relative;top:auto;max-height:none}.privacy-toc nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2px 8px}.privacy-toc nav a{font-size:9px}.privacy-article{padding:20px 17px;border-radius:13px}.privacy-section{padding:22px 0}.privacy-section h2{font-size:16px}.privacy-section p,.privacy-section li{font-size:11px}.privacy-bottom-actions{flex-wrap:wrap}.privacy-home-button,.privacy-top-button{flex:1}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.privacy-page *{animation:none!important;transition:none!important}}
