@@ -268,6 +268,136 @@ export async function processTool(id:string, files:File[], input:string, seconda
       return blobResult(await pdfBlob(pdf),'numbered.pdf','pdf')
     }
 
+    case 'pdf-remove-pages':{
+      fileRequired(files);assertFileSize(file,60*1024*1024)
+      const pdf=await PDFDocument.load(await file.arrayBuffer())
+      const count=pdf.getPageCount()
+      if(count>MAX_PDF_PAGES)throw new Error('PDFs are limited to 250 pages.')
+      if(!input.trim()||!/^\d+(?:\s*,\s*\d+)*$/.test(input.trim()))throw new Error('Enter page numbers to remove, separated by commas, e.g. 2,4.')
+      const indexes=[...new Set(input.split(',').map(x=>Number(x.trim())-1))]
+      if(indexes.some(n=>!Number.isInteger(n)||n<0||n>=count))throw new Error('One or more page numbers do not exist in this PDF.')
+      if(indexes.length>=count)throw new Error('A PDF must contain at least one page.')
+      indexes.sort((a,b)=>b-a).forEach(index=>pdf.removePage(index))
+      return blobResult(await pdfBlob(pdf),'pages-removed.pdf','pdf')
+    }
+    case 'pdf-organize-pages':{
+      fileRequired(files);assertFileSize(file,60*1024*1024)
+      const src=await PDFDocument.load(await file.arrayBuffer()),count=src.getPageCount()
+      if(count>MAX_PDF_PAGES)throw new Error('PDFs are limited to 250 pages.')
+      if(!input.trim()||!/^\d+(?:\s*,\s*\d+)*$/.test(input.trim()))throw new Error('Enter every page number in the new order, separated by commas, e.g. 3,1,2.')
+      const order=input.split(',').map(x=>Number(x.trim())-1)
+      if(order.length!==count||new Set(order).size!==count||order.some(n=>!Number.isInteger(n)||n<0||n>=count))throw new Error('Enter each page exactly once. This PDF contains '+count+' pages.')
+      const out=await PDFDocument.create()
+      const copied=await out.copyPages(src,order)
+      copied.forEach(page=>out.addPage(page))
+      return blobResult(await pdfBlob(out),'organized.pdf','pdf')
+    }
+    case 'pdf-split-every-page':{
+      fileRequired(files);assertFileSize(file,60*1024*1024)
+      const src=await PDFDocument.load(await file.arrayBuffer()),count=src.getPageCount()
+      if(count>MAX_PDF_PAGES)throw new Error('PDFs are limited to 250 pages.')
+      const items:{name:string;data:Blob}[]=[]
+      for(let i=0;i<count;i++){
+        const out=await PDFDocument.create()
+        const [page]=await out.copyPages(src,[i]);out.addPage(page)
+        items.push({name:'page-'+String(i+1).padStart(3,'0')+'.pdf',data:await pdfBlob(out)})
+      }
+      return blobResult(await downloadZip(items),'pdf-pages.zip')
+    }
+    case 'pdf-header-footer':{
+      fileRequired(files);assertFileSize(file,60*1024*1024)
+      if(input.length>600)throw new Error('Header and footer text are limited to 600 characters total.')
+      const [header='',footer='']=input.split('|')
+      if(header.length>250||footer.length>250)throw new Error('Each header/footer line is limited to 250 characters.')
+      if(!header.trim()&&!footer.trim())throw new Error('Enter header text, footer text, or both. Separate them with |.')
+      const pdf=await PDFDocument.load(await file.arrayBuffer())
+      if(pdf.getPageCount()>MAX_PDF_PAGES)throw new Error('PDFs are limited to 250 pages.')
+      const font=await pdf.embedFont(StandardFonts.Helvetica)
+      for(const page of pdf.getPages()){
+        const {width,height}=page.getSize()
+        if(header.trim())page.drawText(header,{x:36,y:height-28,size:9,font,color:rgb(.25,.25,.25),maxWidth:width-72})
+        if(footer.trim())page.drawText(footer,{x:36,y:18,size:9,font,color:rgb(.25,.25,.25),maxWidth:width-72})
+      }
+      return blobResult(await pdfBlob(pdf),'header-footer.pdf','pdf')
+    }
+    case 'pdf-metadata-editor':{
+      fileRequired(files);assertFileSize(file,60*1024*1024)
+      if(input.length>10000)throw new Error('Metadata JSON is limited to 10 KB.')
+      let values:Record<string,unknown>
+      try{values=JSON.parse(input)}catch{throw new Error('Enter valid JSON with title, author, subject and/or keywords fields.')}
+      if(!values||typeof values!=='object'||Array.isArray(values))throw new Error('Metadata must be a JSON object.')
+      const allowed=['title','author','subject','keywords','creator','producer']
+      if(Object.keys(values).some(key=>!allowed.includes(key)))throw new Error('Supported metadata fields: '+allowed.join(', ')+'.')
+      for(const [key,value] of Object.entries(values)){
+        if(key==='keywords'){
+          if(!(typeof value==='string'||Array.isArray(value)&&value.every(x=>typeof x==='string')))throw new Error('keywords must be a string or an array of strings.')
+          if((Array.isArray(value)?value.join(','):value as string).length>2000)throw new Error('Keywords are limited to 2,000 characters.')
+        }else if(typeof value!=='string'||value.length>1000)throw new Error(key+' must be a string of at most 1,000 characters.')
+      }
+      const pdf=await PDFDocument.load(await file.arrayBuffer())
+      if(typeof values.title==='string')pdf.setTitle(values.title)
+      if(typeof values.author==='string')pdf.setAuthor(values.author)
+      if(typeof values.subject==='string')pdf.setSubject(values.subject)
+      if(typeof values.creator==='string')pdf.setCreator(values.creator)
+      if(typeof values.producer==='string')pdf.setProducer(values.producer)
+      if(typeof values.keywords==='string')pdf.setKeywords(values.keywords.split(',').map(x=>x.trim()).filter(Boolean))
+      if(Array.isArray(values.keywords))pdf.setKeywords(values.keywords as string[])
+      pdf.setModificationDate(new Date())
+      return blobResult(await pdfBlob(pdf),'metadata-updated.pdf','pdf')
+    }
+    case 'pdf-crop':{
+      fileRequired(files);assertFileSize(file,60*1024*1024)
+      const values=input.split(',').map(x=>Number(x.trim()))
+      if(values.length!==4||values.some(x=>!Number.isFinite(x))||values[0]<0||values[1]<0||values[2]<=0||values[3]<=0)throw new Error('Enter crop x,y,width,height in PDF points, e.g. 20,20,550,750.')
+      const [x,y,width,height]=values
+      const pdf=await PDFDocument.load(await file.arrayBuffer())
+      if(pdf.getPageCount()>MAX_PDF_PAGES)throw new Error('PDFs are limited to 250 pages.')
+      for(const page of pdf.getPages()){
+        const size=page.getSize()
+        if(x+width>size.width||y+height>size.height)throw new Error('Crop rectangle must fit inside every page. Page sizes may differ.')
+        page.setCropBox(x,y,width,height)
+      }
+      return blobResult(await pdfBlob(pdf),'cropped.pdf','pdf')
+    }
+    case 'pdf-flatten-forms':{
+      fileRequired(files);assertFileSize(file,60*1024*1024)
+      const pdf=await PDFDocument.load(await file.arrayBuffer())
+      if(pdf.getPageCount()>MAX_PDF_PAGES)throw new Error('PDFs are limited to 250 pages.')
+      const form=pdf.getForm(),fields=form.getFields()
+      if(!fields.length)throw new Error('This PDF has no supported AcroForm fields to flatten.')
+      form.flatten()
+      return blobResult(await pdfBlob(pdf),'flattened-forms.pdf','pdf')
+    }
+    case 'pdf-compare':{
+      if(files.length!==2)throw new Error('Choose exactly two PDF documents to compare.')
+      assertFilesSize(files,120*1024*1024)
+      const pdfjs=await import('pdfjs-dist/legacy/build/pdf.mjs')
+      pdfjs.GlobalWorkerOptions.workerSrc=pdfWorkerUrl
+      const extract=async(source:File)=>{
+        assertFileSize(source,60*1024*1024)
+        const loading=pdfjs.getDocument({data:await source.arrayBuffer(),enableXfa:false})
+        try{
+          const doc=await loading.promise
+          if(doc.numPages>MAX_PDF_PAGES)throw new Error('PDFs are limited to 250 pages.')
+          const pages:string[]=[];let total=0
+          for(let n=1;n<=doc.numPages;n++){
+            const page=await doc.getPage(n)
+            try{
+              const result=await page.getTextContent()
+              const value=result.items.map((item:any)=>'str'in item?item.str:'').join(' ')
+              total+=value.length
+              if(total>5_000_000)throw new Error('Extracted text is limited to 5 MB per PDF.')
+              pages.push(value)
+            }finally{page.cleanup()}
+          }
+          return pages.join('\n')
+        }finally{await loading.destroy()}
+      }
+      const first=await extract(files[0]),second=await extract(files[1])
+      if(first===second)return textResult('The selectable text in these PDFs is identical.')
+      return textResult('The selectable text differs.\\n\\n'+compareTextLines(first.split(/\r?\n/),second.split(/\r?\n/))+'\\n\\nNote: this compares selectable text, not visual layout, images or scanned pages.')
+    }
+
     // IMAGE
     case 'image-compress':case 'image-resize':case 'image-crop':case 'image-convert':case 'image-rotate':case 'image-flip':case 'image-grayscale':case 'image-watermark':case 'image-base64':case 'base64-image':case 'image-color':case 'image-metadata':case 'favicon':case 'image-collage':{
       if(id==='base64-image'){
