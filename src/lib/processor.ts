@@ -419,6 +419,75 @@ export async function processTool(id:string, files:File[], input:string, seconda
         return blobResult(new Blob([output],{type:'application/vnd.openxmlformats-officedocument.presentationml.presentation'}),'converted-presentation.pptx')
       }finally{await loading.destroy()}
     }
+    case 'powerpoint-to-pdf':{
+      fileRequired(files);assertFileSize(file,80*1024*1024)
+      if(!/\.pptx$/i.test(file.name))throw new Error('Upload a PowerPoint .pptx file. Legacy .ppt files are not supported.')
+      const zip=await JSZip.loadAsync(file,{checkCRC32:true})
+      const slidePaths=Object.keys(zip.files).filter(name=>/^ppt\/slides\/slide\d+\.xml$/.test(name)).sort((a,b)=>Number(a.match(/slide(\d+)/)?.[1])-Number(b.match(/slide(\d+)/)?.[1]))
+      if(!slidePaths.length)throw new Error('No PowerPoint slides were found. Make sure this is a valid .pptx file.')
+      if(slidePaths.length>100)throw new Error('PowerPoint conversion is limited to 100 slides per file.')
+      const pdf=await PDFDocument.create()
+      const pageW=960,pageH=540
+      let embeddedBytes=0
+      for(const slidePath of slidePaths){
+        const slideFile=zip.file(slidePath)
+        if(!slideFile)continue
+        const xml=await slideFile.async('text')
+        const relPath=slidePath.replace('slides/','slides/_rels/')+'.rels'
+        const relXml=await zip.file(relPath)?.async('text')
+        let imageBytes:Uint8Array|undefined
+        let imageKind:'jpg'|'png'|undefined
+        if(relXml){
+          const relDoc=new DOMParser().parseFromString(relXml,'application/xml')
+          const imageRel=Array.from(relDoc.getElementsByTagName('Relationship')).find(el=>(el.getAttribute('Type')||'').endsWith('/image'))
+          if(imageRel){
+            const target=imageRel.getAttribute('Target')||''
+            const base=slidePath.slice(0,slidePath.lastIndexOf('/')+1)
+            const parts=(base+target).split('/')
+            const resolved:string[]=[]
+            for(const part of parts){if(!part||part==='.')continue;if(part==='..')resolved.pop();else resolved.push(part)}
+            const media=zip.file(resolved.join('/'))
+            if(media){
+              const bytes=await media.async('uint8array')
+              embeddedBytes+=bytes.byteLength
+              if(embeddedBytes>MAX_ARCHIVE_OUTPUT_BYTES)throw new Error('Extracted slide images exceed the safe 120 MB limit.')
+              const ext=resolved[resolved.length-1].toLowerCase()
+              if(ext.endsWith('.jpg')||ext.endsWith('.jpeg')){imageBytes=bytes;imageKind='jpg'}
+              else if(ext.endsWith('.png')){imageBytes=bytes;imageKind='png'}
+            }
+          }
+        }
+        const page=pdf.addPage([pageW,pageH])
+        page.drawRectangle({x:0,y:0,width:pageW,height:pageH,color:rgb(1,1,1)})
+        if(imageBytes&&imageKind){
+          const image=imageKind==='jpg'?await pdf.embedJpg(imageBytes):await pdf.embedPng(imageBytes)
+          const scale=Math.min(pageW/image.width,pageH/image.height)
+          const width=image.width*scale,height=image.height*scale
+          page.drawImage(image,{x:(pageW-width)/2,y:(pageH-height)/2,width,height})
+        }else{
+          const doc=new DOMParser().parseFromString(xml,'application/xml')
+          if(doc.getElementsByTagName('parsererror').length)throw new Error('A slide contains invalid XML and could not be read.')
+          const lines=Array.from(doc.getElementsByTagName('a:t')).map(el=>(el.textContent||'').trim()).filter(Boolean)
+          const font=await pdf.embedFont(StandardFonts.Helvetica)
+          const bold=await pdf.embedFont(StandardFonts.HelveticaBold)
+          let y=pageH-48
+          for(const line of lines){
+            const safe=line.replace(/[^\x20-\x7E]/g,'?')
+            const chunks=safe.match(/.{1,105}(?:\s|$)|.{1,105}/g)||[safe]
+            for(const chunk of chunks){
+              if(y<32)break
+              page.drawText(chunk.trim(),{x:40,y,size:14,font:bold,maxWidth:pageW-80,lineHeight:18,color:rgb(0.12,0.14,0.18)})
+              y-=20
+            }
+            y-=8
+            if(y<32)break
+          }
+          if(!lines.length)page.drawText('This slide contains graphics or elements that could not be rendered by the browser converter.',{x:40,y:pageH/2,size:14,font,maxWidth:pageW-80,color:rgb(0.35,0.35,0.35)})
+        }
+      }
+      const bytes=await pdf.save({useObjectStreams:true})
+      return blobResult(new Blob([bytes],{type:'application/pdf'}),safeName(file.name.replace(/\.pptx$/i,'')||'presentation')+'.pdf','pdf')
+    }
     case 'pdf-images':{
       fileRequired(files);assertFileSize(file,60*1024*1024)
       const pdfjs=await import('pdfjs-dist/legacy/build/pdf.mjs')
