@@ -9,7 +9,7 @@
     "preview": "vite preview",
     "typecheck": "tsc -b",
     "verify:catalog": "node scripts/verify-tools.mjs",
-    "test": "node --experimental-strip-types scripts/test-extended-tools.mjs && node scripts/test-project.mjs",
+    "test": "node scripts/test-project.mjs && node scripts/test-extended-tools.mjs",
     "check": "npm run verify:catalog && npm test && npm run typecheck && npm run build"
   },
   "dependencies": {
