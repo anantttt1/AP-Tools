@@ -78,6 +78,20 @@ export const tools: Tool[] = [
     "icon": "file-spreadsheet"
   },
   {
+    "id": "pdf-compress",
+    "name": "Compress PDF",
+    "category": "PDF",
+    "description": "Re-save PDF documents with object streams to reduce avoidable file overhead where possible.",
+    "icon": "file-archive"
+  },
+  {
+    "id": "pdf-repair",
+    "name": "Repair PDF",
+    "category": "PDF",
+    "description": "Rebuild a readable PDF structure by loading and re-saving supported PDF documents.",
+    "icon": "wrench"
+  },
+  {
     "id": "pdf-merge",
     "name": "Merge PDF",
     "category": "PDF",
