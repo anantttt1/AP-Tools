@@ -17,6 +17,7 @@
   <url><loc>https://apcreativetools.vercel.app/tool/pdf-split</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://apcreativetools.vercel.app/tool/pdf-images</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://apcreativetools.vercel.app/tool/images-pdf</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/word-to-pdf</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://apcreativetools.vercel.app/tool/pdf-to-word</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://apcreativetools.vercel.app/tool/pdf-text</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://apcreativetools.vercel.app/tool/pdf-watermark</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
