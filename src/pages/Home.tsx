@@ -54,6 +54,20 @@ export default function Home() {
       <div className="tool-grid">{imageTools.map(t => <ToolCard key={t.id} tool={t} onOpen={() => go('/tool/' + t.id)} />)}</div>
     </section>
 
+    <section className="section">
+      <div className="section-head"><div><label>POPULAR WORKFLOWS</label><h2>Quick guides to common PDF and image tasks</h2><p>Open a dedicated guide, see the steps and launch the matching tool.</p></div></div>
+      <div className="category-grid">
+        <a className="category-card" href="/pdf/merge-pdf/"><div><b>Merge PDF online</b><p>Combine multiple PDF documents.</p></div><ArrowUpRight size={16}/></a>
+        <a className="category-card" href="/pdf/split-pdf/"><div><b>Split PDF online</b><p>Extract selected pages from a PDF.</p></div><ArrowUpRight size={16}/></a>
+        <a className="category-card" href="/pdf/rotate-pdf/"><div><b>Rotate PDF</b><p>Correct sideways or upside-down pages.</p></div><ArrowUpRight size={16}/></a>
+        <a className="category-card" href="/pdf/pdf-to-jpg/"><div><b>PDF to JPG</b><p>Render PDF pages as images.</p></div><ArrowUpRight size={16}/></a>
+        <a className="category-card" href="/pdf/jpg-to-pdf/"><div><b>JPG to PDF</b><p>Combine images into a PDF.</p></div><ArrowUpRight size={16}/></a>
+        <a className="category-card" href="/images/compress-image/"><div><b>Compress image</b><p>Reduce image file size.</p></div><ArrowUpRight size={16}/></a>
+        <a className="category-card" href="/images/resize-image/"><div><b>Resize image</b><p>Change image dimensions.</p></div><ArrowUpRight size={16}/></a>
+        <a className="category-card" href="/pdf/add-watermark/"><div><b>Add PDF watermark</b><p>Label every page with text.</p></div><ArrowUpRight size={16}/></a>
+      </div>
+    </section>
+
     <section className="section seo-copy">
       <label>WHY AP CREATIVE TOOLS</label><h2>Useful tools, without installing desktop software</h2>
       <p>AP Creative Tools is a browser-based collection of PDF, image, file, text and developer utilities. Open a tool, select the supported input and download the result. The platform does not require an account for its current tools.</p>
