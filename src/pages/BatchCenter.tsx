@@ -22,8 +22,8 @@ export default function BatchCenter(){
   const [error,setError]=useState('')
   const [result,setResult]=useState('')
   const chooseFiles=(list:File[])=>{
-    if(list.length>100){setError('Batch processing is limited to 100 files at a time.');return}
-    if(list.reduce((sum,file)=>sum+file.size,0)>120*1024*1024){setError('Selected files exceed the 120 MB batch limit.');return}
+    if(list.length>100){setFiles([]);setError('Batch processing is limited to 100 files at a time.');return}
+    if(list.some(file=>file.size>120*1024*1024)||list.reduce((sum,file)=>sum+file.size,0)>120*1024*1024){setFiles([]);setError('Selected files exceed the 120 MB batch limit.');return}
     setFiles(list);setError('');setResult('')
   }
   const run=async()=>{
