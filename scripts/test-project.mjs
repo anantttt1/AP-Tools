@@ -34,7 +34,7 @@ const relatedTargets = relatedEntries.flatMap(match => [...match[3].matchAll(/['
 const interactive = new Set(['stopwatch', 'countdown', 'pomodoro', 'notes', 'todo'])
 assert.equal(ids.length, 208, `Expected 208 catalog entries, got ${ids.length}`)
 assert.equal(new Set(ids).size, 208, 'Catalog IDs must be unique')
-const sitemapPaths = [...sitemap.matchAll(/<loc>([^<]+)<\\/loc>/g)].map(match => new URL(match[1]).pathname)
+const sitemapPaths = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(match => new URL(match[1]).pathname)
 assert.equal(sitemapPaths.length, 224, `Expected 224 sitemap URLs, got ${sitemapPaths.length}`)
 for (const id of ids) assert.ok(sitemapPaths.includes('/tool/' + id), `Sitemap is missing tool ${id}`)
 for (const privateId of ['stopwatch','countdown','pomodoro','notes','todo']) assert.ok(!sitemapPaths.includes('/tool/' + privateId), `Private utility ${privateId} should not be in the sitemap`)
