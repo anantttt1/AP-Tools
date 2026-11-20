@@ -13,16 +13,16 @@
   <url><loc>https://apcreativetools.vercel.app/tool/text-file</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://apcreativetools.vercel.app/tool/json-file</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://apcreativetools.vercel.app/tool/csv-file</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://apcreativetools.vercel.app/tool/pdf-merge</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://apcreativetools.vercel.app/tool/pdf-split</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://apcreativetools.vercel.app/tool/pdf-images</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://apcreativetools.vercel.app/tool/images-pdf</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://apcreativetools.vercel.app/tool/pdf-text</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://apcreativetools.vercel.app/tool/pdf-watermark</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://apcreativetools.vercel.app/tool/pdf-rotate</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://apcreativetools.vercel.app/tool/pdf-info</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://apcreativetools.vercel.app/tool/pdf-page-numbers</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://apcreativetools.vercel.app/tool/pdf-inspector</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/pdf-merge</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/pdf-split</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/pdf-images</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/images-pdf</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/pdf-text</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/pdf-watermark</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/pdf-rotate</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/pdf-info</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/pdf-page-numbers</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/pdf-inspector</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://apcreativetools.vercel.app/tool/image-compress</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://apcreativetools.vercel.app/tool/image-resize</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://apcreativetools.vercel.app/tool/image-crop</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
@@ -98,6 +98,114 @@
   <url><loc>https://apcreativetools.vercel.app/tool/text-encrypt</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://apcreativetools.vercel.app/tool/text-decrypt</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://apcreativetools.vercel.app/tool/random-number</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/line-breaks-remove</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/line-numbers-add</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/line-numbers-remove</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/lines-prefix</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/lines-suffix</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/lines-reverse</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/lines-shuffle</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/words-sort</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/word-frequency</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/keyword-density</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/sentence-count</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/paragraph-count</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/text-cleaner</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/whitespace-normalizer</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/title-case</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/sentence-case</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/camel-case</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/pascal-case</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/snake-case</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/kebab-case</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/constant-case</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/alternating-case</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/remove-emojis</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/non-ascii-remover</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/extract-emails</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/extract-urls</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/extract-phone-numbers</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/text-to-hex</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/hex-to-text</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/text-to-decimal</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/decimal-to-text</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/unicode-escape</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/unicode-unescape</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/html-unescape</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/html-strip-tags</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/text-to-html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/markdown-toc</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/markdown-table</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/markdown-escape</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/markdown-unescape</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/json-stringify-text</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/json-parse-text</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/lines-to-json</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/json-to-lines</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/csv-to-tsv</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/tsv-to-csv</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/csv-to-markdown</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/csv-to-html</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/json-sort-keys</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/json-flatten</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/json-unflatten</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/xml-formatter</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/xml-minifier</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/json-to-xml</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/xml-to-json</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/css-formatter</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/css-minifier</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/sql-formatter</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/sql-minifier</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/sql-escape</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/url-parser</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/query-string-parser</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/query-string-builder</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/base64url-encoder</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/base64url-decoder</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/hmac-sha256</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/uuid-validator</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/email-validator</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/url-validator</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/ipv4-validator</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/mac-validator</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/hex-color-validator</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/credit-card-validator</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/isbn-validator</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/color-contrast-checker</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/color-shade-generator</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/rgb-to-hex</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/hex-to-rgb</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/px-to-rem</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/rem-to-px</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/aspect-ratio-calculator</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/binary-to-decimal</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/decimal-to-binary</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/decimal-to-hex</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/hex-to-decimal</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/decimal-to-octal</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/roman-to-decimal</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/decimal-to-roman</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/number-to-words</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/prime-checker</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/prime-generator</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/factorial-calculator</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/fibonacci-generator</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/gcd-lcm-calculator</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/percentage-change</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/tip-calculator</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/date-add-days</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/working-days-calculator</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/time-duration-calculator</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/reading-time-estimator</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/pdf-remove-pages</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/pdf-organize-pages</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/pdf-split-every-page</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/pdf-header-footer</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/pdf-metadata-editor</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/pdf-crop</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/pdf-flatten-forms</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/pdf-compare</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://apcreativetools.vercel.app/pdf/merge-pdf/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://apcreativetools.vercel.app/pdf/split-pdf/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://apcreativetools.vercel.app/pdf/rotate-pdf/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
