@@ -1406,6 +1406,62 @@ export const tools: Tool[] = [
     "category": "Text",
     "description": "Estimate reading time from a word count and selected pace.",
     "icon": "book-open"
+  },
+  {
+    "id": "pdf-remove-pages",
+    "name": "Remove Pages from PDF",
+    "category": "PDF",
+    "description": "Delete selected page numbers from a PDF and download a new copy.",
+    "icon": "file-minus"
+  },
+  {
+    "id": "pdf-organize-pages",
+    "name": "Organize PDF Pages",
+    "category": "PDF",
+    "description": "Reorder every PDF page by entering its page sequence.",
+    "icon": "list-ordered"
+  },
+  {
+    "id": "pdf-split-every-page",
+    "name": "Split PDF into Separate Pages",
+    "category": "PDF",
+    "description": "Save each page of a PDF as its own PDF in one ZIP download.",
+    "icon": "files"
+  },
+  {
+    "id": "pdf-header-footer",
+    "name": "Add Header and Footer to PDF",
+    "category": "PDF",
+    "description": "Stamp custom header and footer text on every PDF page.",
+    "icon": "text"
+  },
+  {
+    "id": "pdf-metadata-editor",
+    "name": "Edit PDF Metadata",
+    "category": "PDF",
+    "description": "Set document title, author, subject and keywords.",
+    "icon": "file-pen"
+  },
+  {
+    "id": "pdf-crop",
+    "name": "Crop PDF Pages",
+    "category": "PDF",
+    "description": "Set a crop box for PDF pages using point coordinates.",
+    "icon": "crop"
+  },
+  {
+    "id": "pdf-flatten-forms",
+    "name": "Flatten PDF Forms",
+    "category": "PDF",
+    "description": "Flatten supported AcroForm fields into page content.",
+    "icon": "layers"
+  },
+  {
+    "id": "pdf-compare",
+    "name": "Compare PDF Text",
+    "category": "PDF",
+    "description": "Compare selectable text extracted from two PDF documents.",
+    "icon": "file-diff"
   }
 ]
 
