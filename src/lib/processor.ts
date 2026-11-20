@@ -257,6 +257,35 @@ export async function processTool(id:string, files:File[], input:string, seconda
       const out=await PDFDocument.create();for(const n of indexes){if(!Number.isInteger(n)||n<0||n>=src.getPageCount())throw new Error(`Page ${n+1} does not exist.`);const [p]=await out.copyPages(src,[n]);out.addPage(p)}
       return blobResult(await pdfBlob(out),'split-pages.pdf','pdf')
     }
+    case 'pdf-to-word':{
+      fileRequired(files);assertFileSize(file,60*1024*1024)
+      const pdfjs=await import('pdfjs-dist/legacy/build/pdf.mjs')
+      pdfjs.GlobalWorkerOptions.workerSrc=pdfWorkerUrl
+      const loading=pdfjs.getDocument({data:await file.arrayBuffer(),enableXfa:false})
+      try{
+        const doc=await loading.promise
+        if(doc.numPages>MAX_PDF_PAGES)throw new Error(`PDFs are limited to ${MAX_PDF_PAGES} pages.`)
+        const xmlEscape=(value:string)=>value.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&apos;')
+        const paragraphs:string[]=[]
+        let extracted=0
+        for(let n=1;n<=doc.numPages;n++){
+          const page=await doc.getPage(n),content=await page.getTextContent()
+          const line=(content.items as any[]).map(item=>typeof item.str==='string'?item.str+(item.hasEOL?'\n':' '):'').join('').replace(/[ \t]+\n/g,'\n').trim()
+          if(line){extracted+=line.length;for(const part of line.split(/\n+/)){const value=xmlEscape(part.trim());if(value)paragraphs.push(`<w:p><w:r><w:t xml:space="preserve">${value}</w:t></w:r></w:p>`)}}
+          if(n<doc.numPages)paragraphs.push('<w:p><w:r><w:br w:type="page"/></w:r></w:p>')
+          page.cleanup()
+        }
+        if(!extracted)throw new Error('No selectable text was found. This may be a scanned PDF; use OCR on a text-recognized PDF first.')
+        const zip=new JSZip()
+        zip.file('[Content_Types].xml','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/><Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/></Types>')
+        zip.folder('_rels')!.file('.rels','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>')
+        zip.folder('word')!.file('document.xml',`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>${paragraphs.join('')}<w:sectPr><w:pgSz w:w="12240" w:h="15840"/><w:pgMar w:top="1440" w:right="1440" w:bottom="1440" w:left="1440"/></w:sectPr></w:body></w:document>`)
+        zip.folder('word')!.file('styles.xml','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:style w:type="paragraph" w:default="1" w:styleId="Normal"><w:name w:val="Normal"/><w:rPr><w:rFonts w:ascii="Arial" w:hAnsi="Arial"/><w:sz w:val="22"/></w:rPr></w:style></w:styles>')
+        zip.folder('word')!.folder('_rels')!.file('document.xml.rels','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>')
+        const blob=await zip.generateAsync({type:'blob',compression:'DEFLATE',compressionOptions:{level:5}})
+        return blobResult(new Blob([blob],{type:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'}),'converted-document.docx')
+      }finally{await loading.destroy()}
+    }
     case 'pdf-images':{
       fileRequired(files);assertFileSize(file,60*1024*1024)
       const pdfjs=await import('pdfjs-dist/legacy/build/pdf.mjs')
