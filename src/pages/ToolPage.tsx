@@ -10,7 +10,7 @@ import { processTool, type ProcessResult } from '../lib/processor'
 
 const fileToolIds = new Set([
   'zip-creator','zip-extractor','file-type','file-size','file-hash','file-compare','bulk-rename',
-  'pdf-merge','pdf-split','pdf-extract-pages','pdf-sign-visible','pdf-edit-annotate','pdf-scan-images','pdf-compress','pdf-repair','pdf-images','images-pdf','pdf-text','pdf-watermark','pdf-rotate','pdf-info','pdf-page-numbers','pdf-inspector','pdf-remove-pages','pdf-organize-pages','pdf-split-every-page','pdf-header-footer','pdf-metadata-editor','pdf-crop','pdf-flatten-forms','pdf-compare',
+  'pdf-merge','pdf-split','pdf-to-word','pdf-extract-pages','pdf-sign-visible','pdf-edit-annotate','pdf-scan-images','pdf-compress','pdf-repair','pdf-images','images-pdf','pdf-text','pdf-watermark','pdf-rotate','pdf-info','pdf-page-numbers','pdf-inspector','pdf-remove-pages','pdf-organize-pages','pdf-split-every-page','pdf-header-footer','pdf-metadata-editor','pdf-crop','pdf-flatten-forms','pdf-compare',
   'image-compress','image-resize','image-crop','image-convert','image-rotate','image-flip','image-grayscale','image-watermark','image-base64','image-metadata','image-color','favicon','image-collage','image-pdf'
 ])
 const multipleIds = new Set(['zip-creator','file-compare','bulk-rename','pdf-merge','pdf-compare','images-pdf','image-pdf','pdf-scan-images','image-collage'])
@@ -58,7 +58,8 @@ const help: Record<string,string> = {
   'pdf-extract-pages':'Upload a PDF and enter pages or ranges, e.g. 1,3-5.',
   'pdf-sign-visible':'Upload a PDF and enter the signature text. This places a visible typed signature on page 1; it is not a cryptographic digital signature.',
   'pdf-edit-annotate':'Upload a PDF and enter a short text note to place near the top of page 1.',
-  'pdf-scan-images':'Choose PNG or JPEG scan photos in page order to create a PDF.'
+  'pdf-scan-images':'Choose PNG or JPEG scan photos in page order to create a PDF.',
+  'pdf-to-word':'Upload a PDF. Selectable text is extracted into an editable DOCX file. Scanned pages without a text layer are not OCRed; complex layouts, columns and images may not be preserved.'
 }
 const textPlaceholders: Record<string,string> = {
   'word-counter':'Paste or type text here...','case-converter':'Enter text to convert...','remove-spaces':'Paste text...','duplicate-lines':'Enter lines...','sort-lines':'Enter lines...','reverse-text':'Enter text...','text-diff':'Enter the first text block...','slug-generator':'Enter a title or phrase...','lorem':'3','markdown-preview':'# Hello AP TOOLS\n\nWrite **Markdown** here...','text-binary':'Enter text...','binary-text':'01001000 01101001','text-morse':'Hello world','morse-text':'.... . .-.. .-.. --- / .-- --- .-. .-.. -..',
@@ -352,6 +353,7 @@ const relatedToolMap: Record<string,string[]> = {
   "pdf-sign-visible": ["pdf-compress", "pdf-repair", "pdf-merge", "pdf-split"],
   "pdf-edit-annotate": ["pdf-compress", "pdf-repair", "pdf-merge", "pdf-split"],
   "pdf-scan-images": ["pdf-compress", "pdf-repair", "pdf-merge", "pdf-split"],
+  "pdf-to-word": ["pdf-text", "pdf-images", "pdf-merge", "pdf-split"],
   "text-trim-lines": ["word-counter", "case-converter", "remove-spaces", "duplicate-lines"],
   "text-remove-blank-lines": ["word-counter", "case-converter", "remove-spaces", "duplicate-lines"],
   "text-unique-words": ["word-counter", "case-converter", "remove-spaces", "duplicate-lines"],
