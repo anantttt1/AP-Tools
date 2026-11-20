@@ -257,7 +257,7 @@ const relatedToolMap: Record<string,string[]> = {
   "gcd-lcm-calculator": ["factorial-calculator", "prime-checker", "percentage-change"],
   "percentage-change": ["percentage", "discount", "tip-calculator"],
   "tip-calculator": ["percentage", "gst", "discount"],
-  "reading-time-estimator": ["word-counter", "word-frequency", "sentence-count"]
+  "reading-time-estimator": ["word-counter", "word-frequency", "sentence-count"],
   "zip-creator": ["zip-extractor","bulk-rename","file-type"],
   "zip-extractor": ["zip-creator","file-type","file-size"],
   "file-type": ["file-size","file-hash","file-compare"],
