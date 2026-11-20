@@ -10,7 +10,7 @@ import { processTool, type ProcessResult } from '../lib/processor'
 
 const fileToolIds = new Set([
   'zip-creator','zip-extractor','file-type','file-size','file-hash','file-compare','bulk-rename',
-  'pdf-merge','pdf-split','html-to-pdf','word-to-pdf','pdf-to-word','pdf-extract-pages','pdf-sign-visible','pdf-edit-annotate','pdf-scan-images','pdf-compress','pdf-repair','pdf-images','images-pdf','pdf-text','pdf-watermark','pdf-rotate','pdf-info','pdf-page-numbers','pdf-inspector','pdf-remove-pages','pdf-organize-pages','pdf-split-every-page','pdf-header-footer','pdf-metadata-editor','pdf-crop','pdf-flatten-forms','pdf-compare',
+  'pdf-merge','pdf-split','pdf-to-powerpoint','html-to-pdf','word-to-pdf','pdf-to-word','pdf-extract-pages','pdf-sign-visible','pdf-edit-annotate','pdf-scan-images','pdf-compress','pdf-repair','pdf-images','images-pdf','pdf-text','pdf-watermark','pdf-rotate','pdf-info','pdf-page-numbers','pdf-inspector','pdf-remove-pages','pdf-organize-pages','pdf-split-every-page','pdf-header-footer','pdf-metadata-editor','pdf-crop','pdf-flatten-forms','pdf-compare',
   'image-compress','image-resize','image-crop','image-convert','image-rotate','image-flip','image-grayscale','image-watermark','image-base64','image-metadata','image-color','favicon','image-collage','image-pdf'
 ])
 const multipleIds = new Set(['zip-creator','file-compare','bulk-rename','pdf-merge','pdf-compare','images-pdf','image-pdf','pdf-scan-images','image-collage'])
@@ -60,7 +60,7 @@ const help: Record<string,string> = {
   'pdf-edit-annotate':'Upload a PDF and enter a short text note to place near the top of page 1.',
   'pdf-scan-images':'Choose PNG or JPEG scan photos in page order to create a PDF.',
   'pdf-to-word':'Upload a PDF. Selectable text is extracted into an editable DOCX file. Scanned pages without a text layer are not OCRed; complex layouts, columns and images may not be preserved.',
-  'html-to-pdf':'Upload a local .html or .htm file. It is rendered in your browser as a single-page PDF. Scripts, forms and frames are removed; external images/fonts and complex multi-page layouts may not be preserved.',
+  'pdf-to-powerpoint':'Upload a PDF (maximum 50 pages). Each page becomes a full-slide image in a .pptx presentation. The visual layout is preserved as a picture; text, charts and objects are not individually editable. Everything runs locally in your browser.',\n  'html-to-pdf':'Upload a local .html or .htm file. It is rendered in your browser as a single-page PDF. Scripts, forms and frames are removed; external images/fonts and complex multi-page layouts may not be preserved.',
   'word-to-pdf':'Upload a .docx file. Text and paragraph order are converted locally to PDF. This lightweight browser converter does not preserve the original Word page layout, images, tables or advanced formatting; legacy .doc files are not supported.'
 }
 const textPlaceholders: Record<string,string> = {
@@ -141,7 +141,7 @@ const extendedPlaceholders: Record<string,string> = {
 
 
 const relatedToolMap: Record<string,string[]> = {
-  "html-to-pdf": ["word-to-pdf", "pdf-to-word", "pdf-merge"],
+  "pdf-to-powerpoint": ["pdf-to-word", "pdf-images", "word-to-pdf"],\n  "html-to-pdf": ["word-to-pdf", "pdf-to-word", "pdf-merge"],
   "pdf-merge": ["pdf-split", "pdf-rotate", "pdf-watermark", "pdf-page-numbers", "pdf-remove-pages", "pdf-organize-pages", "pdf-split-every-page"],
   "pdf-remove-pages": ["pdf-organize-pages", "pdf-split-every-page", "pdf-merge", "pdf-compare"],
   "pdf-organize-pages": ["pdf-remove-pages", "pdf-split-every-page", "pdf-merge", "pdf-page-numbers"],
