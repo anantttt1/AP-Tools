@@ -257,6 +257,62 @@ export async function processTool(id:string, files:File[], input:string, seconda
       const out=await PDFDocument.create();for(const n of indexes){if(!Number.isInteger(n)||n<0||n>=src.getPageCount())throw new Error(`Page ${n+1} does not exist.`);const [p]=await out.copyPages(src,[n]);out.addPage(p)}
       return blobResult(await pdfBlob(out),'split-pages.pdf','pdf')
     }
+    case 'word-to-pdf':{
+      fileRequired(files);assertFileSize(file,40*1024*1024)
+      const signature=new Uint8Array(await file.slice(0,4).arrayBuffer())
+      if(signature[0]!==0x50||signature[1]!==0x4b)throw new Error('Upload a valid .docx Word document. Legacy .doc files are not supported.')
+      const zip=await JSZip.loadAsync(file,{checkCRC32:true})
+      const documentFile=zip.file('word/document.xml')
+      if(!documentFile)throw new Error('This DOCX file does not contain a readable Word document.')
+      const xml=await documentFile.async('text')
+      const parsed=new DOMParser().parseFromString(xml,'application/xml')
+      if(parsed.getElementsByTagName('parsererror').length)throw new Error('The Word document XML is invalid or corrupted.')
+      const paragraphs=Array.from(parsed.getElementsByTagNameNS('http://schemas.openxmlformats.org/wordprocessingml/2006/main','p'))
+      if(!paragraphs.length)throw new Error('No readable paragraphs were found in this Word document.')
+      const pdf=await PDFDocument.create(),font=await pdf.embedFont(StandardFonts.Helvetica),bold=await pdf.embedFont(StandardFonts.HelveticaBold)
+      const pageWidth=612,pageHeight=792,margin=54,fontSize=10.5,lineHeight=14,maxWidth=pageWidth-margin*2
+      let page=pdf.addPage([pageWidth,pageHeight]),y=pageHeight-margin,extracted=0
+      const newPage=()=>{page=pdf.addPage([pageWidth,pageHeight]);y=pageHeight-margin}
+      const drawLine=(line:string,isBold=false)=>{
+        if(y<margin+lineHeight)newPage()
+        page.drawText(line,{x:margin,y,size:fontSize,font:isBold?bold:font,color:rgb(.12,.14,.18),maxWidth})
+        y-=lineHeight
+      }
+      const wrap=(value:string,face=font,isBold=false)=>{
+        const words=value.split(/\s+/).filter(Boolean);let line=''
+        for(const word of words){
+          const candidate=line?line+' '+word:word
+          if(face.widthOfTextAtSize(candidate,fontSize)<=maxWidth){line=candidate;continue}
+          if(line)drawLine(line,isBold)
+          if(face.widthOfTextAtSize(word,fontSize)<=maxWidth){line=word;continue}
+          let chunk=''
+          for(const char of word){if(face.widthOfTextAtSize(chunk+char,fontSize)>maxWidth&&chunk){drawLine(chunk,isBold);chunk=char}else chunk+=char}
+          line=chunk
+        }
+        if(line)drawLine(line,isBold)
+      }
+      for(const paragraph of paragraphs){
+        const properties=paragraph.getElementsByTagNameNS('http://schemas.openxmlformats.org/wordprocessingml/2006/main','pPr')[0]
+        const isBold=!!properties?.getElementsByTagNameNS('http://schemas.openxmlformats.org/wordprocessingml/2006/main','b')[0]
+        const pieces:string[]=[]
+        const walk=(node:Node)=>{
+          if(node.nodeType===Node.TEXT_NODE){pieces.push(node.nodeValue||'');return}
+          if(node.nodeType!==Node.ELEMENT_NODE)return
+          const element=node as Element,local=element.localName
+          if(local==='tab'){pieces.push('    ');return}
+          if(local==='br'){pieces.push('\n');return}
+          if(local==='t'){pieces.push(element.textContent||'');return}
+          for(const child of Array.from(node.childNodes))walk(child)
+        }
+        for(const child of Array.from(paragraph.childNodes))walk(child)
+        const text=pieces.join('').replace(/\u00a0/g,' ').replace(/[ \t]+/g,' ').trim()
+        if(text){extracted+=text.length;for(const line of text.split('\n'))wrap(line,isBold?bold:font,isBold)}
+        y-=6
+        if(y<margin+lineHeight)newPage()
+      }
+      if(!extracted)throw new Error('No readable text was found in this Word document.')
+      return blobResult(await pdfBlob(pdf),'converted-document.pdf','pdf')
+    }
     case 'pdf-to-word':{
       fileRequired(files);assertFileSize(file,60*1024*1024)
       const pdfjs=await import('pdfjs-dist/legacy/build/pdf.mjs')
