@@ -10,11 +10,13 @@ import { processTool, type ProcessResult } from '../lib/processor'
 
 const fileToolIds = new Set([
   'zip-creator','zip-extractor','file-type','file-size','file-hash','file-compare','bulk-rename',
-  'pdf-merge','pdf-split','pdf-images','images-pdf','pdf-text','pdf-watermark','pdf-rotate','pdf-info','pdf-page-numbers','pdf-inspector','pdf-remove-pages','pdf-organize-pages','pdf-split-every-page','pdf-header-footer','pdf-metadata-editor','pdf-crop','pdf-flatten-forms','pdf-compare',
+  'pdf-merge','pdf-split','pdf-compress','pdf-repair','pdf-images','images-pdf','pdf-text','pdf-watermark','pdf-rotate','pdf-info','pdf-page-numbers','pdf-inspector','pdf-remove-pages','pdf-organize-pages','pdf-split-every-page','pdf-header-footer','pdf-metadata-editor','pdf-crop','pdf-flatten-forms','pdf-compare',
   'image-compress','image-resize','image-crop','image-convert','image-rotate','image-flip','image-grayscale','image-watermark','image-base64','image-metadata','image-color','favicon','image-collage','image-pdf'
 ])
 const multipleIds = new Set(['zip-creator','file-compare','bulk-rename','pdf-merge','pdf-compare','images-pdf','image-pdf','image-collage'])
 const help: Record<string,string> = {
+  'pdf-compress':'Upload a PDF. The tool re-saves it with PDF object streams; size reduction depends on the document contents.',
+  'pdf-repair':'Upload a readable but problematic PDF. This rebuilds the PDF structure where supported; it cannot restore missing or severely corrupted content.',
   'pdf-split':'Upload a PDF. Enter page numbers separated by commas, e.g. 1,3,5. Leave blank to copy all pages.',
   'image-crop':'Enter crop rectangle as x,y,width,height in source-image pixels, e.g. 0,0,800,600.',
   'image-color':'Enter pixel coordinates as x,y, e.g. 10,10.',
