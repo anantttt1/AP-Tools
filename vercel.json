@@ -85,5 +85,5 @@
       "destination": "/index.html"
     }
   ],
-  "buildCommand": "npm run check"
+  "buildCommand": "npm run build"
 }
