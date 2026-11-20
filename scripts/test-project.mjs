@@ -20,7 +20,11 @@ const dependencies = {...pkg.dependencies, ...pkg.devDependencies}
 
 const ids = [...catalog.matchAll(/"id": "([^"]+)"/g)].map(match => match[1])
 const cases = new Set([processor, extendedProcessor].flatMap(source => [...source.matchAll(/case '([^']+)'/g)].map(match => match[1])))
-const relatedEntries = [...toolPage.matchAll(/^\s*(['"])([^'"]+)\1\s*:\s*\[([^\]]*)\]/gm)]
+const relatedMapStart = toolPage.indexOf('const relatedToolMap: Record<string,string[]> = {')
+const relatedMapEnd = toolPage.indexOf('\n}', relatedMapStart)
+assert.ok(relatedMapStart >= 0 && relatedMapEnd > relatedMapStart, 'Related-tool mapping must be declared')
+const relatedMapText = toolPage.slice(relatedMapStart, relatedMapEnd)
+const relatedEntries = [...relatedMapText.matchAll(/(['"])([^'"]+)\1\s*:\s*\[([^\]]*)\]/g)]
 const relatedKeys = relatedEntries.map(match => match[2])
 const relatedTargets = relatedEntries.flatMap(match => [...match[3].matchAll(/['"]([^'"]+)['"]/g)].map(item => item[1]))
 const interactive = new Set(['stopwatch', 'countdown', 'pomodoro', 'notes', 'todo'])
