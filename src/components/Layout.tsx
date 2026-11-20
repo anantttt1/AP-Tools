@@ -1,6 +1,6 @@
 
 import { useEffect, useState } from 'react'
-import { NavLink, Outlet, useNavigate } from 'react-router-dom'
+import { NavLink, Outlet, useNavigate, Link } from 'react-router-dom'
 import { Layers3, LayoutDashboard, Grid2X2, Heart, History, Workflow, Settings, PanelLeftClose, PanelLeftOpen, Search, Menu, Layers, X } from 'lucide-react'
 import { useAppStore } from '../store/useAppStore'
 
@@ -57,7 +57,7 @@ export default function Layout() {
         <span className="free-tag">● Free tools</span><div className="avatar">AP</div>
       </header>
       <main className="content"><Outlet/></main>
-      <footer>© {new Date().getFullYear()} AP TOOLS <span>Free tools · Private processing · No account required</span></footer>
+      <footer>© {new Date().getFullYear()} AP TOOLS <span>Free tools · Private processing · No account required</span><Link className="footer-privacy-link" to="/privacy">Privacy Policy</Link></footer>
     </section>
     {mobile && <button className="scrim" onClick={() => setMobile(false)} aria-label="Close navigation"/>}
   </div>
