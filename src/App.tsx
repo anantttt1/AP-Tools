@@ -23,8 +23,8 @@ const routeMeta: Record<string,{title:string;description:string;index?:boolean}>
     description: 'Free online PDF, image, file, text, developer and calculator tools. Merge and split PDFs, compress images, convert files and format data in your browser.'
   },
   '/tools': {
-    title: 'All 208 Free Online Tools | AP Creative Tools',
-    description: 'Browse 208 free browser-based PDF, image, file, text, developer, validation and calculator tools in AP Creative Tools.'
+    title: 'All 318 Free Online Tools | AP Creative Tools',
+    description: 'Browse 318 free browser-based PDF, image, file, text, developer, validation and calculator tools in AP Creative Tools.'
   },
   '/batch': {
     title: 'Batch File Tools Online | AP Creative Tools',
