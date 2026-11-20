@@ -21,7 +21,7 @@ const dependencies = {...pkg.dependencies, ...pkg.devDependencies}
 const ids = [...catalog.matchAll(/"id": "([^"]+)"/g)].map(match => match[1])
 const cases = new Set([processor, extendedProcessor].flatMap(source => [...source.matchAll(/case '([^']+)'/g)].map(match => match[1])))
 const interactive = new Set(['stopwatch', 'countdown', 'pomodoro', 'notes', 'todo'])
-assert.equal(ids.length, 200, `Expected 208 catalog entries, got ${ids.length}`)
+assert.equal(ids.length, 208, `Expected 208 catalog entries, got ${ids.length}`)
 assert.equal(new Set(ids).size, 208, 'Catalog IDs must be unique')
 for (const id of ids) assert.ok(cases.has(id) || interactive.has(id), `Missing processor/widget for ${id}`)
 
@@ -70,4 +70,4 @@ assert.equal([...toolPage.matchAll(/'image-rotate':/g)].length, 1, 'Tool help ob
 assert.ok(settings.includes('Browser storage could not be cleared'), 'Settings must handle browser storage errors')
 
 assert.ok(extendedProcessor.includes('hmac-sha256') && extendedProcessor.includes('color-contrast-checker') && extendedProcessor.includes('json-unflatten'), 'Extended processors must include cryptographic, colour and nested-data utilities')
-console.log('Project checks passed: 200 tools mapped; dependencies declared; localhost-only Vite; PDF/ZIP/image/text hardening; regex isolation; CSV formula protection; workflow and batch bounds; and browser security headers.')
+console.log('Project checks passed: 208 tools mapped; dependencies declared; localhost-only Vite; PDF/ZIP/image/text hardening; regex isolation; CSV formula protection; workflow and batch bounds; and browser security headers.')
