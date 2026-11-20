@@ -120,6 +120,13 @@ export const tools: Tool[] = [
     "icon": "file-image"
   },
   {
+    "id": "html-to-pdf",
+    "name": "HTML to PDF",
+    "category": "PDF",
+    "description": "Render a local HTML file to PDF in your browser. Scripts and active embedded content are removed; external resources may not render.",
+    "icon": "file-code"
+  },
+  {
     "id": "word-to-pdf",
     "name": "Word to PDF",
     "category": "PDF",
