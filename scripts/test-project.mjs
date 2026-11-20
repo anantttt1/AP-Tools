@@ -18,7 +18,7 @@ const settings = read('src/pages/Settings.tsx')
 const dependencies = {...pkg.dependencies, ...pkg.devDependencies}
 
 const ids = [...catalog.matchAll(/"id": "([^"]+)"/g)].map(match => match[1])
-const cases = new Set([...processor, ...extendedProcessor].flatMap(source => [...source.matchAll(/case '([^']+)'/g)].map(match => match[1])))
+const cases = new Set([processor, extendedProcessor].flatMap(source => [...source.matchAll(/case '([^']+)'/g)].map(match => match[1])))
 const interactive = new Set(['stopwatch', 'countdown', 'pomodoro', 'notes', 'todo'])
 assert.equal(ids.length, 200, `Expected 200 catalog entries, got ${ids.length}`)
 assert.equal(new Set(ids).size, 100, 'Catalog IDs must be unique')
