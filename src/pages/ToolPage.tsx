@@ -148,7 +148,7 @@ const relatedToolMap: Record<string,string[]> = {
   'csv-to-tsv':['tsv-to-csv','csv-json','csv-to-markdown'],'tsv-to-csv':['csv-to-tsv','csv-json','json-csv'],
   'json-format':['json-minify','json-sort-keys','json-flatten'],'json-minify':['json-format','json-sort-keys','json-flatten'],
   'json-flatten':['json-unflatten','json-format','json-sort-keys'],'json-unflatten':['json-flatten','json-format','json-sort-keys'],
-  'pdf-merge':['pdf-split','pdf-rotate','pdf-watermark','pdf-page-numbers'],'pdf-split':['pdf-merge','pdf-page-numbers','pdf-info'],
+  'pdf-split':['pdf-merge','pdf-page-numbers','pdf-info'],
   'pdf-images':['images-pdf','image-compress','image-convert'],'images-pdf':['pdf-images','pdf-merge','pdf-info'],'image-pdf':['pdf-images','pdf-merge','image-compress'],
   'pdf-text':['word-counter','text-diff','html-strip-tags'],'pdf-watermark':['pdf-page-numbers','pdf-rotate','pdf-merge'],
   'pdf-rotate':['pdf-merge','pdf-split','pdf-page-numbers'],'pdf-page-numbers':['pdf-merge','pdf-watermark','pdf-split'],
