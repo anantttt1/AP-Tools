@@ -30,7 +30,10 @@ export default function Home() {
       <p>Free online PDF, image, file and productivity tools. Merge PDF files, split pages, add watermarks, convert images and manage everyday documents in one browser workspace.</p>
       <div className="hero-search"><Search /><input value={q} onChange={e => setQ(e.target.value)} onKeyDown={e => e.key === 'Enter' && go('/tools?q=' + encodeURIComponent(q))} placeholder="Search PDF, image and file tools..." /><button onClick={() => go('/tools?q=' + encodeURIComponent(q))}>Explore tools <ArrowRight size={16} /></button></div>
       <div className="hero-foot"><ShieldCheck size={15} /> Browser-based processing · No account required · Free to use</div>
-      <div className="hero-art"><div /><div /><div /></div>
+      <a className="hero-art" href="https://ap-creativestudio.vercel.app/" target="_blank" rel="noopener noreferrer" aria-label="Explore AP Creative Studio — opens in a new tab">
+        <img src="/ap-creative-studio-logo.webp" alt="AP Creative Studio logo" />
+        <span className="hero-art-copy"><strong>Explore More</strong><small>Discover AP Creative Studio <ArrowUpRight size={14} /></small></span>
+      </a>
     </section>
 
     <section className="section">
