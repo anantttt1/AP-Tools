@@ -362,6 +362,63 @@ export async function processTool(id:string, files:File[], input:string, seconda
         return blobResult(new Blob([blob],{type:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'}),'converted-document.docx')
       }finally{await loading.destroy()}
     }
+    case 'pdf-to-powerpoint':{
+      fileRequired(files);assertFileSize(file,60*1024*1024)
+      const signature=new Uint8Array(await file.slice(0,5).arrayBuffer())
+      if(signature[0]!==0x25||signature[1]!==0x50||signature[2]!==0x44||signature[3]!==0x46)throw new Error('Upload a valid PDF file.')
+      const pdfjs=await import('pdfjs-dist/legacy/build/pdf.mjs')
+      pdfjs.GlobalWorkerOptions.workerSrc=pdfWorkerUrl
+      const loading=pdfjs.getDocument({data:await file.arrayBuffer(),enableXfa:false})
+      try{
+        const doc=await loading.promise
+        if(!doc.numPages)throw new Error('The PDF has no pages.')
+        if(doc.numPages>50)throw new Error('PowerPoint export is limited to 50 PDF pages to keep the presentation manageable.')
+        const zip=new JSZip()
+        const slideIds:string[]=[]
+        const slideRels:string[]=[]
+        const contentTypes:string[]=[]
+        let totalPixels=0,totalBytes=0
+        const emu=914400,slideW=13.333333*emu,slideH=7.5*emu
+        for(let n=1;n<=doc.numPages;n++){
+          const page=await doc.getPage(n)
+          const viewport=page.getViewport({scale:1.25})
+          const w=Math.ceil(viewport.width),h=Math.ceil(viewport.height),pixels=w*h
+          if(pixels>MAX_PDF_RENDER_PIXELS||totalPixels+pixels>MAX_PDF_TOTAL_RENDER_PIXELS){page.cleanup();throw new Error('PDF rendering exceeds the safe pixel limit for this browser. Try a smaller PDF or fewer pages.')}
+          totalPixels+=pixels
+          const canvas=makeCanvas(w,h)
+          const ctx=canvas.getContext('2d')
+          if(!ctx){page.cleanup();throw new Error('Canvas is unavailable in this browser.')}
+          ctx.fillStyle='#ffffff';ctx.fillRect(0,0,w,h)
+          await page.render({canvas,canvasContext:ctx,viewport,background:'#ffffff'}).promise
+          const jpg=await canvasBlob(canvas,'image/jpeg',0.88)
+          canvas.width=0;canvas.height=0;page.cleanup()
+          totalBytes+=jpg.size
+          if(totalBytes>MAX_ARCHIVE_OUTPUT_BYTES)throw new Error('The PowerPoint would exceed the 120 MB safe output limit.')
+          const imageName='image'+n+'.jpg'
+          zip.file('ppt/media/'+imageName,jpg)
+          const relId='rId'+(n+1)
+          const imageRelId='rId2'
+          const sw=slideW,sh=slideH,ratio=Math.min(sw/w,sh/h),drawW=Math.round(w*ratio),drawH=Math.round(h*ratio),x=Math.round((sw-drawW)/2),y=Math.round((sh-drawH)/2)
+          const slideXml='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><p:sld xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:p="http://schemas.openxmlformats.org/presentationml/2006/main"><p:cSld><p:spTree><p:nvGrpSpPr><p:cNvPr id="1" name=""/><p:cNvGrpSpPr/><p:nvGrpSpPr/></p:nvGrpSpPr><p:grpSpPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="0" cy="0"/><a:chOff x="0" y="0"/><a:chExt cx="0" cy="0"/></a:xfrm></p:grpSpPr><p:pic><p:nvPicPr><p:cNvPr id="2" name="PDF page '+n+'"/><p:cNvPicPr><a:picLocks noChangeAspect="1"/></p:cNvPicPr><p:nvPr/></p:nvPicPr><p:blipFill><a:blip r:embed="'+imageRelId+'"/><a:stretch><a:fillRect/></a:stretch></p:blipFill><p:spPr><a:xfrm><a:off x="'+x+'" y="'+y+'"/><a:ext cx="'+drawW+'" cy="'+drawH+'"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></p:spPr></p:pic></p:spTree></p:cSld><p:clrMapOvr><a:masterClrMapping/></p:clrMapOvr></p:sld>'
+          zip.file('ppt/slides/slide'+n+'.xml',slideXml)
+          zip.file('ppt/slides/_rels/slide'+n+'.xml.rels','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideLayout" Target="../slideLayouts/slideLayout1.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="../media/'+imageName+'"/></Relationships>')
+          slideIds.push('<p:sldId id="'+(255+n)+'" r:id="'+relId+'"/>')
+          slideRels.push('<Relationship Id="'+relId+'" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/slide" Target="slides/slide'+n+'.xml"/>')
+          contentTypes.push('<Override PartName="/ppt/slides/slide'+n+'.xml" ContentType="application/vnd.openxmlformats-officedocument.presentationml.slide+xml"/>')
+        }
+        zip.file('[Content_Types].xml','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Default Extension="jpg" ContentType="image/jpeg"/><Override PartName="/ppt/presentation.xml" ContentType="application/vnd.openxmlformats-officedocument.presentationml.presentation.main+xml"/><Override PartName="/ppt/slideMasters/slideMaster1.xml" ContentType="application/vnd.openxmlformats-officedocument.presentationml.slideMaster+xml"/><Override PartName="/ppt/slideLayouts/slideLayout1.xml" ContentType="application/vnd.openxmlformats-officedocument.presentationml.slideLayout+xml"/><Override PartName="/ppt/theme/theme1.xml" ContentType="application/vnd.openxmlformats-officedocument.theme+xml"/>'+contentTypes.join('')+'</Types>')
+        zip.folder('_rels')!.file('.rels','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="ppt/presentation.xml"/></Relationships>')
+        zip.file('ppt/presentation.xml','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><p:presentation xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:p="http://schemas.openxmlformats.org/presentationml/2006/main"><p:sldMasterIdLst><p:sldMasterId id="2147483648" r:id="rId1"/></p:sldMasterIdLst><p:sldIdLst>'+slideIds.join('')+'</p:sldIdLst><p:sldSz cx="12192000" cy="6858000" type="screen16x9"/><p:notesSz cx="6858000" cy="9144000"/></p:presentation>')
+        zip.folder('ppt')!.folder('_rels')!.file('presentation.xml.rels','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideMaster" Target="slideMasters/slideMaster1.xml"/>'+slideRels.join('')+'</Relationships>')
+        zip.file('ppt/slideMasters/slideMaster1.xml','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><p:sldMaster xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:p="http://schemas.openxmlformats.org/presentationml/2006/main"><p:cSld><p:spTree><p:nvGrpSpPr><p:cNvPr id="1" name=""/><p:cNvGrpSpPr/><p:nvGrpSpPr/></p:nvGrpSpPr><p:grpSpPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="0" cy="0"/><a:chOff x="0" y="0"/><a:chExt cx="0" cy="0"/></a:xfrm></p:grpSpPr></p:spTree></p:cSld><p:clrMap accent1="4F81BD" accent2="C0504D" accent3="9BBB59" accent4="8064A2" accent5="4BACC6" accent6="F79646" bg1="lt1" bg2="lt2" tx1="dk1" tx2="dk2" hlink="hlink" folHlink="folHlink"/><p:sldLayoutIdLst><p:sldLayoutId id="1" r:id="rId1"/></p:sldLayoutIdLst><p:txStyles><p:titleStyle/><p:bodyStyle/><p:otherStyle/></p:txStyles></p:sldMaster>')
+        zip.folder('ppt/slideMasters')!.folder('_rels')!.file('slideMaster1.xml.rels','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideLayout" Target="../slideLayouts/slideLayout1.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme" Target="../theme/theme1.xml"/></Relationships>')
+        zip.file('ppt/slideLayouts/slideLayout1.xml','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><p:sldLayout xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:p="http://schemas.openxmlformats.org/presentationml/2006/main" type="blank" preserve="1"><p:cSld name="Blank"><p:spTree><p:nvGrpSpPr><p:cNvPr id="1" name=""/><p:cNvGrpSpPr/><p:nvGrpSpPr/></p:nvGrpSpPr><p:grpSpPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="0" cy="0"/><a:chOff x="0" y="0"/><a:chExt cx="0" cy="0"/></a:xfrm></p:grpSpPr></p:spTree></p:cSld><p:clrMapOvr><a:masterClrMapping/></p:clrMapOvr></p:sldLayout>')
+        zip.folder('ppt/slideLayouts')!.folder('_rels')!.file('slideLayout1.xml.rels','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideMaster" Target="../slideMasters/slideMaster1.xml"/></Relationships>')
+        zip.file('ppt/theme/theme1.xml','<?xml version="1.0" encoding="UTF-8" standalone="yes"?><a:theme xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" name="AP Tools"><a:themeElements><a:clrScheme name="AP Tools"><a:dk1><a:srgbClr val="000000"/></a:dk1><a:lt1><a:srgbClr val="FFFFFF"/></a:lt1><a:dk2><a:srgbClr val="1F1F1F"/></a:dk2><a:lt2><a:srgbClr val="F2F2F2"/></a:lt2><a:accent1><a:srgbClr val="4F81BD"/></a:accent1><a:accent2><a:srgbClr val="C0504D"/></a:accent2><a:accent3><a:srgbClr val="9BBB59"/></a:accent3><a:accent4><a:srgbClr val="8064A2"/></a:accent4><a:accent5><a:srgbClr val="4BACC6"/></a:accent5><a:accent6><a:srgbClr val="F79646"/></a:accent6><a:hlink><a:srgbClr val="0000FF"/></a:hlink><a:folHlink><a:srgbClr val="800080"/></a:folHlink></a:clrScheme><a:fontScheme name="Arial"><a:majorFont><a:latin typeface="Arial"/></a:majorFont><a:minorFont><a:latin typeface="Arial"/></a:minorFont></a:fontScheme><a:fmtScheme name="AP Tools"><a:fillStyleLst><a:solidFill><a:schemeClr val="phClr"/></a:solidFill></a:fillStyleLst><a:lnStyleLst><a:ln w="6350"><a:solidFill><a:schemeClr val="phClr"/></a:solidFill></a:ln></a:lnStyleLst><a:effectStyleLst><a:effectStyle><a:effectLst/></a:effectStyle></a:effectStyleLst><a:bgFillStyleLst><a:solidFill><a:schemeClr val="phClr"/></a:solidFill></a:bgFillStyleLst></a:fmtScheme></a:themeElements></a:theme>')
+        const output=await zip.generateAsync({type:'blob',compression:'DEFLATE',compressionOptions:{level:4}})
+        return blobResult(new Blob([output],{type:'application/vnd.openxmlformats-officedocument.presentationml.presentation'}),'converted-presentation.pptx')
+      }finally{await loading.destroy()}
+    }
     case 'pdf-images':{
       fileRequired(files);assertFileSize(file,60*1024*1024)
       const pdfjs=await import('pdfjs-dist/legacy/build/pdf.mjs')
