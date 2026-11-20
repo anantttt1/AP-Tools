@@ -5,3 +5,12 @@
   Permissions-Policy: camera=(), microphone=(), geolocation=()
   Cross-Origin-Opener-Policy: same-origin
   Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: blob:; font-src 'self' data: https://fonts.gstatic.com; connect-src 'self'; worker-src 'self' blob:; frame-src 'self' blob:
+
+/settings*
+  X-Robots-Tag: noindex, follow
+/favorites*
+  X-Robots-Tag: noindex, follow
+/recent*
+  X-Robots-Tag: noindex, follow
+/workspace*
+  X-Robots-Tag: noindex, follow
