@@ -211,3 +211,14 @@ html{scroll-behavior:smooth;scroll-padding-top:24px}
 @media(max-width:900px){.privacy-layout{grid-template-columns:220px minmax(0,1fr);gap:16px}.privacy-article{padding:24px}}
 @media(max-width:760px){.privacy-page{gap:16px}.privacy-hero{padding:24px 20px;border-radius:15px}.privacy-hero-row{margin-top:19px}.privacy-hero h1{font-size:34px}.privacy-hero p{font-size:12px}.privacy-hero-icon{width:58px;height:58px;flex-basis:58px;border-radius:17px}.privacy-hero-icon svg{width:30px}.privacy-layout{grid-template-columns:1fr}.privacy-toc{position:relative;top:auto;max-height:none}.privacy-toc nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2px 8px}.privacy-toc nav a{font-size:9px}.privacy-article{padding:20px 17px;border-radius:13px}.privacy-section{padding:22px 0}.privacy-section h2{font-size:16px}.privacy-section p,.privacy-section li{font-size:11px}.privacy-bottom-actions{flex-wrap:wrap}.privacy-home-button,.privacy-top-button{flex:1}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.privacy-page *{animation:none!important;transition:none!important}}
+
+
+/* Terms & Conditions page shares the legal-document layout */
+.terms-hero{background:radial-gradient(ellipse at 88% 8%,rgba(99,91,255,.13),transparent 38%),linear-gradient(135deg,#fff 0%,#fbfbff 100%)}
+.terms-hero .privacy-hero-icon{color:#5548d8}
+.terms-intro-note{background:#f8f7ff;border-color:#e6e5ff}
+.terms-endnote{background:#f7f7ff;border-color:#e7e5ff;color:#635bff}
+.terms-endnote strong{color:#5145c8}
+.terms-endnote p{color:#7772a6}
+.footer-legal-links{display:flex;align-items:center;gap:18px}
+@media(max-width:760px){.footer-legal-links{gap:12px;flex-wrap:wrap}}
