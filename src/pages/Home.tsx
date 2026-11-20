@@ -1,3 +1,70 @@
-import{motion}from'framer-motion';import{useNavigate}from'react-router-dom';import{useState}from'react';import{Search,ArrowRight,ArrowUpRight,FileText,Image,Code2,Archive,ShieldCheck,Zap}from'lucide-react';import{tools}from'../data/tools';import ToolCard from'../components/ToolCard'
-const cats=[['Files','Compress, archive and manage files',Archive],['PDF','Merge, split and edit documents',FileText],['Images','Resize, convert and optimize images',Image],['Developer','Format, encode and debug data',Code2]] as const
-export default function Home(){const[q,setQ]=useState(''),go=useNavigate(),popular=['image-compress','pdf-merge','zip-extractor','json-format','qr-generator','password'].map(id=>tools.find(t=>t.id===id)!).filter(Boolean);return <motion.div className="stack" initial={{opacity:0,y:8}} animate={{opacity:1,y:0}}><section className="hero"><div className="eyebrow">● YOUR EVERYDAY DIGITAL TOOLKIT</div><h1>Everything you need.<br/><span>One powerful workspace.</span></h1><p>Simple, useful tools for your files, images, PDFs and everyday digital tasks. All in one place.</p><div className="hero-search"><Search/><input value={q} onChange={e=>setQ(e.target.value)} onKeyDown={e=>e.key==='Enter'&&go('/tools?q='+encodeURIComponent(q))} placeholder="What do you want to do today? Try ‘compress image’"/><button onClick={()=>go('/tools?q='+encodeURIComponent(q))}>Explore tools <ArrowRight size={16}/></button></div><div className="hero-foot"><ShieldCheck size={15}/> Browser-based processing　·　No account required　·　Free to use</div><div className="hero-art"><div/><div/><div/></div></section><section className="section"><div className="section-head"><div><label>GET STARTED</label><h2>Explore categories</h2><p>Find the right tool for the job.</p></div><button className="link-btn" onClick={()=>go('/tools')}>View all tools <ArrowUpRight size={16}/></button></div><div className="category-grid">{cats.map(([name,desc,Icon])=><motion.button whileHover={{y:-3}} className="category-card" key={name} onClick={()=>go('/tools?category='+name)}><div className="category-icon"><Icon/></div><div><b>{name} tools</b><p>{desc}</p></div><ArrowUpRight className="cat-arrow" size={16}/></motion.button>)}</div></section><section className="section"><div className="section-head"><div><label>QUICK ACCESS</label><h2>Popular tools</h2><p>Get things done in fewer clicks.</p></div><button className="link-btn" onClick={()=>go('/tools')}>Browse all <ArrowRight size={16}/></button></div><div className="tool-grid">{popular.map(t=><ToolCard key={t.id} tool={t} onOpen={()=>go('/tool/'+t.id)}/>)}</div></section><div className="benefits"><div><Zap/><b>Fast by design</b><p>Lightweight tools with focused interfaces.</p></div><div><ShieldCheck/><b>Privacy first</b><p>Supported tasks run locally in your browser.</p></div><div><Image/><b>Always useful</b><p>A growing collection of everyday utilities.</p></div></div></motion.div>}
+import { motion } from 'framer-motion'
+import { useNavigate } from 'react-router-dom'
+import { useState } from 'react'
+import { Search, ArrowRight, ArrowUpRight, FileText, Image, Code2, Archive, ShieldCheck, Zap } from 'lucide-react'
+import { tools } from '../data/tools'
+import ToolCard from '../components/ToolCard'
+
+const cats = [
+  ['Files', 'Compress, archive and manage files', Archive],
+  ['PDF', 'Merge, split and manage PDF documents', FileText],
+  ['Images', 'Resize, convert and optimize images', Image],
+  ['Developer', 'Format, encode and debug data', Code2],
+] as const
+
+const pdfToolIds = ['pdf-merge', 'pdf-split', 'pdf-rotate', 'pdf-watermark', 'pdf-page-numbers', 'pdf-text', 'pdf-images', 'images-pdf', 'pdf-inspector']
+const imageToolIds = ['image-compress', 'image-resize', 'image-convert', 'image-crop', 'image-rotate', 'image-watermark']
+const getTools = (ids: string[]) => ids.map(id => tools.find(tool => tool.id === id)).filter((tool): tool is (typeof tools)[number] => Boolean(tool))
+
+export default function Home() {
+  const [q, setQ] = useState('')
+  const go = useNavigate()
+  const popular = ['image-compress', 'pdf-merge', 'zip-extractor', 'json-format', 'qr-generator', 'password'].map(id => tools.find(t => t.id === id)!).filter(Boolean)
+  const pdfTools = getTools(pdfToolIds)
+  const imageTools = getTools(imageToolIds)
+
+  return <motion.div className="stack" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
+    <section className="hero">
+      <div className="eyebrow">● YOUR EVERYDAY DIGITAL TOOLKIT</div>
+      <h1>Everything you need.<br /><span>One powerful workspace.</span></h1>
+      <p>Free online PDF, image, file and productivity tools. Merge PDF files, split pages, add watermarks, convert images and manage everyday documents in one browser workspace.</p>
+      <div className="hero-search"><Search /><input value={q} onChange={e => setQ(e.target.value)} onKeyDown={e => e.key === 'Enter' && go('/tools?q=' + encodeURIComponent(q))} placeholder="Search PDF, image and file tools..." /><button onClick={() => go('/tools?q=' + encodeURIComponent(q))}>Explore tools <ArrowRight size={16} /></button></div>
+      <div className="hero-foot"><ShieldCheck size={15} /> Browser-based processing · No account required · Free to use</div>
+      <div className="hero-art"><div /><div /><div /></div>
+    </section>
+
+    <section className="section">
+      <div className="section-head"><div><label>GET STARTED</label><h2>Explore categories</h2><p>Find the right tool for the job.</p></div><button className="link-btn" onClick={() => go('/tools')}>View all tools <ArrowUpRight size={16} /></button></div>
+      <div className="category-grid">{cats.map(([name, desc, Icon]) => <motion.button whileHover={{ y: -3 }} className="category-card" key={name} onClick={() => go('/tools?category=' + name)}><div className="category-icon"><Icon /></div><div><b>{name} tools</b><p>{desc}</p></div><ArrowUpRight className="cat-arrow" size={16} /></motion.button>)}</div>
+    </section>
+
+    <section className="section">
+      <div className="section-head"><div><label>QUICK ACCESS</label><h2>Popular free online tools</h2><p>Get common file tasks done in fewer clicks.</p></div><button className="link-btn" onClick={() => go('/tools')}>Browse all <ArrowRight size={16} /></button></div>
+      <div className="tool-grid">{popular.map(t => <ToolCard key={t.id} tool={t} onOpen={() => go('/tool/' + t.id)} />)}</div>
+    </section>
+
+    <section className="section">
+      <div className="section-head"><div><label>PDF WORKSPACE</label><h2>Free online PDF tools</h2><p>Work with common PDF tasks directly in your browser. Select a tool to open its workspace.</p></div><button className="link-btn" onClick={() => go('/tools?category=PDF')}>All PDF tools <ArrowRight size={16} /></button></div>
+      <div className="tool-grid">{pdfTools.map(t => <ToolCard key={t.id} tool={t} onOpen={() => go('/tool/' + t.id)} />)}</div>
+      <p className="seo-copy">Use the PDF merger to combine documents, split a PDF to extract selected pages, rotate pages, add a text watermark or page numbers, extract selectable text, and inspect page dimensions. You can also turn PDF pages into images or combine images into a PDF. Processing for these supported tools takes place in your browser; file-size and browser-memory limits apply.</p>
+    </section>
+
+    <section className="section">
+      <div className="section-head"><div><label>IMAGE WORKSPACE</label><h2>Free image converter and editor tools</h2><p>Prepare images for websites, documents, forms and everyday sharing.</p></div><button className="link-btn" onClick={() => go('/tools?category=Images')}>All image tools <ArrowRight size={16} /></button></div>
+      <div className="tool-grid">{imageTools.map(t => <ToolCard key={t.id} tool={t} onOpen={() => go('/tool/' + t.id)} />)}</div>
+    </section>
+
+    <section className="section seo-copy">
+      <label>WHY AP CREATIVE TOOLS</label><h2>Useful tools, without installing desktop software</h2>
+      <p>AP Creative Tools is a browser-based collection of PDF, image, file, text and developer utilities. Open a tool, select the supported input and download the result. The platform does not require an account for its current tools.</p>
+      <p><strong>Privacy:</strong> Supported file operations run locally in your browser and are not uploaded to an AP Creative Tools processing server. Your browser and device still control local file access and memory, so avoid using shared devices for sensitive documents.</p>
+      <h2>Frequently asked questions</h2>
+      <h3>Is AP Creative Tools free?</h3><p>The tools currently listed on the site are available without an account or paid subscription.</p>
+      <h3>Are my PDF and image files uploaded?</h3><p>For supported local tools, processing happens in your browser. The site does not send selected files to an AP Creative Tools backend.</p>
+      <h3>Can I merge or split PDF files online?</h3><p>Yes. Open Merge PDF to combine multiple PDF documents, or Split PDF to extract selected pages. Other available PDF utilities include rotation, watermarks, page numbers and text extraction.</p>
+      <h3>Does AP Creative Tools support every PDF conversion?</h3><p>No. The available tools are listed in the PDF workspace. Office document conversion, OCR and other unsupported workflows should not be assumed to work until they are added.</p>
+    </section>
+
+    <div className="benefits"><div><Zap /><b>Fast by design</b><p>Lightweight tools with focused interfaces.</p></div><div><ShieldCheck /><b>Privacy first</b><p>Supported tasks run locally in your browser.</p></div><div><Image /><b>Always useful</b><p>A growing collection of everyday utilities.</p></div></div>
+  </motion.div>
+}
