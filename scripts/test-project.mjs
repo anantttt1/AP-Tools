@@ -7,6 +7,7 @@ const read = file => fs.readFileSync(path.join(root, file), 'utf8')
 const pkg = JSON.parse(read('package.json'))
 const catalog = read('src/data/tools.ts')
 const processor = read('src/lib/processor.ts')
+const extendedProcessor = read('src/lib/extendedProcessor.ts')
 const toolPage = read('src/pages/ToolPage.tsx')
 const vite = read('vite.config.ts')
 const serviceWorker = read('public/sw.js')
@@ -17,14 +18,14 @@ const settings = read('src/pages/Settings.tsx')
 const dependencies = {...pkg.dependencies, ...pkg.devDependencies}
 
 const ids = [...catalog.matchAll(/"id": "([^"]+)"/g)].map(match => match[1])
-const cases = new Set([...processor.matchAll(/case '([^']+)'/g)].map(match => match[1]))
+const cases = new Set([...processor, ...extendedProcessor].flatMap(source => [...source.matchAll(/case '([^']+)'/g)].map(match => match[1])))
 const interactive = new Set(['stopwatch', 'countdown', 'pomodoro', 'notes', 'todo'])
-assert.equal(ids.length, 100, `Expected 100 catalog entries, got ${ids.length}`)
+assert.equal(ids.length, 200, `Expected 200 catalog entries, got ${ids.length}`)
 assert.equal(new Set(ids).size, 100, 'Catalog IDs must be unique')
 for (const id of ids) assert.ok(cases.has(id) || interactive.has(id), `Missing processor/widget for ${id}`)
 
 const importedPackages = new Set()
-for (const file of ['src/main.tsx', 'src/App.tsx', 'src/components/Layout.tsx', 'src/components/ToolCard.tsx', 'src/pages/Home.tsx', 'src/pages/Tools.tsx', 'src/pages/ToolPage.tsx', 'src/pages/BatchCenter.tsx', 'src/pages/Workflows.tsx', 'src/pages/Workspace.tsx', 'src/pages/Settings.tsx', 'src/store/useAppStore.ts', 'src/lib/processor.ts', 'vite.config.ts']) {
+for (const file of ['src/main.tsx', 'src/App.tsx', 'src/components/Layout.tsx', 'src/components/ToolCard.tsx', 'src/pages/Home.tsx', 'src/pages/Tools.tsx', 'src/pages/ToolPage.tsx', 'src/pages/BatchCenter.tsx', 'src/pages/Workflows.tsx', 'src/pages/Workspace.tsx', 'src/pages/Settings.tsx', 'src/store/useAppStore.ts', 'src/lib/processor.ts', 'src/lib/extendedProcessor.ts', 'vite.config.ts']) {
   const source = read(file)
   for (const match of source.matchAll(/from\s*['"]([^./][^'"]*)['"]|import\s*['"]([^./][^'"]*)['"]/g)) {
     const specifier = match[1] || match[2]
@@ -64,4 +65,5 @@ assert.ok(toolPage.includes('requestId.current') && toolPage.includes("id==='ran
 assert.equal([...toolPage.matchAll(/'image-rotate':/g)].length, 1, 'Tool help object must not contain a duplicate image-rotate key')
 assert.ok(settings.includes('Browser storage could not be cleared'), 'Settings must handle browser storage errors')
 
-console.log('Project checks passed: 100 tools mapped; dependencies declared; localhost-only Vite; PDF/ZIP/image/text hardening; regex isolation; CSV formula protection; workflow and batch bounds; and browser security headers.')
+assert.ok(extendedProcessor.includes('hmac-sha256') && extendedProcessor.includes('color-contrast-checker') && extendedProcessor.includes('json-unflatten'), 'Extended processors must include cryptographic, colour and nested-data utilities')
+console.log('Project checks passed: 200 tools mapped; dependencies declared; localhost-only Vite; PDF/ZIP/image/text hardening; regex isolation; CSV formula protection; workflow and batch bounds; and browser security headers.')
