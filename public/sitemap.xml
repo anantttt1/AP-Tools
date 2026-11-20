@@ -98,4 +98,14 @@
   <url><loc>https://apcreativetools.vercel.app/tool/text-encrypt</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://apcreativetools.vercel.app/tool/text-decrypt</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://apcreativetools.vercel.app/tool/random-number</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/pdf/merge-pdf/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/pdf/split-pdf/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/pdf/rotate-pdf/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/pdf/add-watermark/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/pdf/add-page-numbers/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/pdf/pdf-to-jpg/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/pdf/jpg-to-pdf/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/pdf/extract-text/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/images/compress-image/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/images/resize-image/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
 </urlset>
