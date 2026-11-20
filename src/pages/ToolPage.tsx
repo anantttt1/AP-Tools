@@ -299,7 +299,7 @@ const relatedToolMap: Record<string,string[]> = {
   "color-convert": ["rgb-to-hex","hex-to-rgb","color-contrast-checker"],
   "random-string": ["password","password-strength","uuid"],
   "hash-text": ["hmac-sha256","file-hash","text-encrypt"],
-  "regex-escape": ["regex","text-diff","regex-escape"],
+  "regex-escape": ["regex","text-diff","url-encode"],
   "html-preview": ["markdown-preview","text-to-html","html-strip-tags"],
   "calculator": ["percentage","average","ratio"],
   "percentage": ["discount","gst","percentage-change"],
