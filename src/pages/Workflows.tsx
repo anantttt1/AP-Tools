@@ -66,8 +66,12 @@ export default function Workflows() {
       setError('Workflow text exceeds the 10 MB safety limit.')
       return
     }
-    if (files.length > 250 || files.reduce((sum, file) => sum + file.size, 0) > 80 * 1024 * 1024) {
+    if (files.some(file => file.size > 80 * 1024 * 1024) || files.length > 250 || files.reduce((sum, file) => sum + file.size, 0) > 80 * 1024 * 1024) {
       setError('Starting files are limited to 250 files and 80 MB total.')
+      return
+    }
+    if (steps.some(step => !tools.some(tool => tool.id === step.id))) {
+      setError('This workflow contains an unsupported tool. Remove or replace that step before running.')
       return
     }
     setBusy(true)
