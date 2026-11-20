@@ -410,29 +410,7 @@ export default function ToolPage() {
   useEffect(()=>{if(output?.kind!=='blob'){setPreviewUrl('');return}const url=URL.createObjectURL(output.blob);setPreviewUrl(url);return()=>URL.revokeObjectURL(url)},[output])
   useEffect(()=>{requestId.current+=1;if(tool)addRecent(tool.id);setFiles([]);setInput('');setSecondary(id==='case-converter'?'upper':id==='image-flip'?'horizontal':'');setOutput(null);setError('');setBusy(false);setQuality(80);setWidth(1200);setHeight(1200);setFormat('image/webp');setPrefix('file');setStart(1);setFlags('g')},[tool,id,addRecent])
 
-  useEffect(()=>{
-    if(!tool)return
-    const title=`${tool.name} Online Free | AP Creative Tools`
-    const description=`${tool.name}: ${tool.description} Use this free online ${tool.category.toLowerCase()} tool in your browser with no account required.`
-    const canonical=`https://apcreativetools.vercel.app/tool/${tool.id}`
-    document.title=title
-    const setMeta=(name:string,content:string,property=false)=>{
-      const selector=property?`meta[property="${name}"]`:`meta[name="${name}"]`
-      let element=document.head.querySelector<HTMLMetaElement>(selector)
-      if(!element){element=document.createElement('meta');if(property)element.setAttribute('property',name);else element.name=name;document.head.appendChild(element)}
-      element.content=content
-    }
-    setMeta('description',description)
-    setMeta('robots','index,follow')
-    setMeta('og:title',title,true)
-    setMeta('og:description',description,true)
-    setMeta('og:url',canonical,true)
-    setMeta('og:type','website',true)
-    let link=document.head.querySelector<HTMLLinkElement>('link[rel="canonical"]')
-    if(!link){link=document.createElement('link');link.rel='canonical';document.head.appendChild(link)}
-    link.href=canonical
-    return ()=>{document.title='AP Creative Tools — Free Online PDF, Image & File Tools'}
-  },[tool])
+
 
   
   if(!tool)return <div className="empty-state"><strong>Tool not found</strong><Link to="/tools">Back to tools</Link></div>
