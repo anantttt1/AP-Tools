@@ -62,7 +62,7 @@ export default function Tools(){const[p,setP]=useSearchParams(),[q,setQ]=useStat
   'unit-data':['data storage converter','bytes to mb','mb to gb','kb to mb','gb to tb'],
   'unit-speed':['speed converter','kmh to mph','mph to kmh']
 }
-const normalizeSearch = (value:string) => value.toLowerCase().normalize('NFKD').replace(/[\\u0300-\\u036f]/g,'').replace(/[^a-z0-9]+/g,' ').trim().replace(/\\s+/g,' ')
+const normalizeSearch = (value:string) => value.toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,' ').trim().replace(/\s+/g,' ')
 const normalizedQuery=normalizeSearch(q)
 const list=useMemo(()=>tools.filter(t=>{
   if(cat!=='All Tools'&&t.category!==cat)return false
