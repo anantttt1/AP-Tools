@@ -57,7 +57,7 @@ export default function Layout() {
         <span className="free-tag">● Free tools</span><div className="avatar">AP</div>
       </header>
       <main className="content"><Outlet/></main>
-      <footer>© {new Date().getFullYear()} AP TOOLS <span>Free tools · Private processing · No account required</span><Link className="footer-privacy-link" to="/privacy">Privacy Policy</Link></footer>
+      <footer>© {new Date().getFullYear()} AP TOOLS <span>Free tools · Private processing · No account required</span><div className="footer-legal-links"><Link className="footer-privacy-link" to="/privacy">Privacy Policy</Link><Link className="footer-privacy-link" to="/terms">Terms &amp; Conditions</Link></div></footer>
     </section>
     {mobile && <button className="scrim" onClick={() => setMobile(false)} aria-label="Close navigation"/>}
   </div>
