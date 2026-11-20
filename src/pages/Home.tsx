@@ -65,10 +65,14 @@ export default function Home() {
         <a className="category-card" href="/images/compress-image/"><div><b>Compress image</b><p>Reduce image file size.</p></div><ArrowUpRight size={16}/></a>
         <a className="category-card" href="/images/resize-image/"><div><b>Resize image</b><p>Change image dimensions.</p></div><ArrowUpRight size={16}/></a>
         <a className="category-card" href="/pdf/add-watermark/"><div><b>Add PDF watermark</b><p>Label every page with text.</p></div><ArrowUpRight size={16}/></a>
-        <a className="category-card" href="/tool/pdf-remove-pages"><div><b>Remove PDF pages</b><p>Delete selected pages from a document.</p></div><ArrowUpRight size={16}/></a>
-        <a className="category-card" href="/tool/pdf-organize-pages"><div><b>Organize PDF pages</b><p>Reorder pages by page number.</p></div><ArrowUpRight size={16}/></a>
-        <a className="category-card" href="/tool/pdf-split-every-page"><div><b>Split every PDF page</b><p>Download each page as a separate PDF.</p></div><ArrowUpRight size={16}/></a>
-        <a className="category-card" href="/tool/pdf-compare"><div><b>Compare PDF text</b><p>Compare selectable text from two PDFs.</p></div><ArrowUpRight size={16}/></a>
+        <a className="category-card" href="/pdf/remove-pages/"><div><b>Remove PDF pages</b><p>Delete selected pages from a document.</p></div><ArrowUpRight size={16}/></a>
+        <a className="category-card" href="/pdf/organize-pages/"><div><b>Organize PDF pages</b><p>Reorder pages by page number.</p></div><ArrowUpRight size={16}/></a>
+        <a className="category-card" href="/pdf/split-every-page/"><div><b>Split every PDF page</b><p>Download each page as a separate PDF.</p></div><ArrowUpRight size={16}/></a>
+        <a className="category-card" href="/pdf/compare-pdf/"><div><b>Compare PDF text</b><p>Compare selectable text from two PDFs.</p></div><ArrowUpRight size={16}/></a>
+        <a className="category-card" href="/pdf/header-footer/"><div><b>Add PDF header and footer</b><p>Stamp text on every page.</p></div><ArrowUpRight size={16}/></a>
+        <a className="category-card" href="/pdf/edit-metadata/"><div><b>Edit PDF metadata</b><p>Update document title and author.</p></div><ArrowUpRight size={16}/></a>
+        <a className="category-card" href="/pdf/crop-pdf/"><div><b>Crop PDF pages</b><p>Set a consistent page crop area.</p></div><ArrowUpRight size={16}/></a>
+        <a className="category-card" href="/pdf/flatten-forms/"><div><b>Flatten PDF forms</b><p>Flatten supported form fields.</p></div><ArrowUpRight size={16}/></a>
       </div>
     </section>
 
