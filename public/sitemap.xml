@@ -331,4 +331,5 @@
   <url><loc>https://apcreativetools.vercel.app/tool/pace-calculator</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://apcreativetools.vercel.app/tool/fuel-cost-calculator</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://apcreativetools.vercel.app/tool/date-weekday</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://apcreativetools.vercel.app/tool/html-to-pdf</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
 </urlset>
