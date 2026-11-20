@@ -10,6 +10,7 @@ import Workspace from './pages/Workspace'
 import Settings from './pages/Settings'
 import Workflows from './pages/Workflows'
 import BatchCenter from './pages/BatchCenter'
+import Privacy from './pages/Privacy'
 
 function NotFound() {
   return <div className="empty"><strong>Page not found</strong><p>The page you're looking for doesn't exist.</p></div>
@@ -47,7 +48,7 @@ const routeMeta: Record<string,{title:string;description:string;index?:boolean}>
     description: 'Your locally stored recent tools in AP Creative Tools.',
     index: false
   },
-  '/settings': {
+  '/privacy': {\n    title: 'Privacy Policy | AP Creative Tools',\n    description: 'Read how AP Creative Tools handles information, browser-based file processing, local storage, third-party services and your privacy choices.'\n  },\n  '/settings': {
     title: 'Settings | AP Creative Tools',
     description: 'Manage local AP Creative Tools preferences.',
     index: false
@@ -117,7 +118,7 @@ export default function App() {
     <Route path="/workspace" element={<Workspace mode="workspace"/>}/>
     <Route path="/favorites" element={<Workspace mode="favorites"/>}/>
     <Route path="/recent" element={<Workspace mode="recent"/>}/>
-    <Route path="/settings" element={<Settings/>}/>
+    <Route path="/settings" element={<Settings/>}/>\n    <Route path="/privacy" element={<Privacy/>}/>
     <Route path="*" element={<NotFound/>}/>
   </Route></Routes>
 }
