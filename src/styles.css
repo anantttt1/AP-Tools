@@ -125,3 +125,40 @@
 @media(prefers-reduced-motion:reduce){
   .hero-art img{transition:none!important;will-change:auto}
 }
+
+
+/* Final contrast pass: preserve the original full-strength Studio emblem */
+.hero-art::after{content:none!important;display:none!important}
+.hero-art img{
+  opacity:1!important;
+  mix-blend-mode:normal!important;
+  filter:drop-shadow(0 9px 16px rgba(13,18,35,.26))!important;
+}
+.hero-art:hover img{opacity:1!important}
+.hero-art-copy strong{
+  color:#171b2d;
+  -webkit-text-stroke:1.1px rgba(255,255,255,.98);
+  paint-order:stroke fill;
+  text-shadow:0 2px 8px rgba(255,255,255,.72);
+}
+.hero-art-copy small{
+  color:#5548d8;
+  -webkit-text-stroke:.55px rgba(255,255,255,.98);
+  paint-order:stroke fill;
+  text-shadow:0 1px 5px rgba(255,255,255,.9);
+}
+.hero-art-copy em{
+  color:#fff;
+  -webkit-text-stroke:0;
+  text-shadow:none;
+}
+.hero-art-tilt-hint{
+  color:#596174;
+  -webkit-text-stroke:.35px rgba(255,255,255,.95);
+  paint-order:stroke fill;
+  text-shadow:0 1px 5px rgba(255,255,255,.9);
+}
+@media(max-width:760px){
+  .hero-art::after{content:none!important;display:none!important}
+  .hero-art img{opacity:1!important;mix-blend-mode:normal!important}
+}
