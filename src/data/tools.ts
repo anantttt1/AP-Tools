@@ -1476,6 +1476,90 @@ export const tools: Tool[] = [
     "category": "PDF",
     "description": "Compare selectable text extracted from two PDF documents.",
     "icon": "file-diff"
+  },
+  {
+    "id": "pdf-to-word",
+    "name": "PDF to Word",
+    "category": "PDF",
+    "description": "Convert selectable PDF text into an editable Word-compatible HTML document. Layout and images may not be preserved.",
+    "icon": "file-type"
+  },
+  {
+    "id": "word-to-pdf",
+    "name": "Word to PDF",
+    "category": "PDF",
+    "description": "Convert supported DOCX documents to a PDF using a compatible local document engine; if unavailable, show a clear error.",
+    "icon": "file-text"
+  },
+  {
+    "id": "pdf-to-powerpoint",
+    "name": "PDF to PowerPoint",
+    "category": "PDF",
+    "description": "Create a PowerPoint-compatible slide deck from PDF page previews.",
+    "icon": "presentation"
+  },
+  {
+    "id": "powerpoint-to-pdf",
+    "name": "PowerPoint to PDF",
+    "category": "PDF",
+    "description": "Convert PPTX presentations to PDF using a compatible document engine.",
+    "icon": "file-type"
+  },
+  {
+    "id": "pdf-to-excel",
+    "name": "PDF to Excel",
+    "category": "PDF",
+    "description": "Extract selectable PDF text into a CSV worksheet; scanned tables require OCR.",
+    "icon": "file-spreadsheet"
+  },
+  {
+    "id": "excel-to-pdf",
+    "name": "Excel to PDF",
+    "category": "PDF",
+    "description": "Convert spreadsheet documents to PDF using a compatible document engine.",
+    "icon": "file-spreadsheet"
+  },
+  {
+    "id": "html-to-pdf",
+    "name": "HTML to PDF",
+    "category": "PDF",
+    "description": "Create a PDF from supplied HTML content using browser print-to-PDF.",
+    "icon": "file-code"
+  },
+  {
+    "id": "pdf-protect",
+    "name": "Protect PDF",
+    "category": "PDF",
+    "description": "Add password-based PDF encryption when a supported encryption engine is configured.",
+    "icon": "lock"
+  },
+  {
+    "id": "pdf-unlock",
+    "name": "Unlock PDF",
+    "category": "PDF",
+    "description": "Remove PDF password protection when the correct password and a supported engine are available.",
+    "icon": "unlock"
+  },
+  {
+    "id": "pdf-redact",
+    "name": "Redact PDF",
+    "category": "PDF",
+    "description": "Permanently remove selected page regions using rasterized page replacement.",
+    "icon": "eye-off"
+  },
+  {
+    "id": "pdf-ocr",
+    "name": "OCR PDF",
+    "category": "PDF",
+    "description": "Recognize text in scanned PDF pages using an OCR engine when configured.",
+    "icon": "scan-text"
+  },
+  {
+    "id": "pdfa-convert",
+    "name": "PDF to PDF/A",
+    "category": "PDF",
+    "description": "Convert a PDF to an archival PDF/A profile using a standards-compliant converter.",
+    "icon": "archive"
   }
 ]
 
