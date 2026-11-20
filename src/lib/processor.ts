@@ -219,6 +219,34 @@ export async function processTool(id:string, files:File[], input:string, seconda
       const filename=id==='pdf-compress'?'compressed.pdf':'repaired.pdf'
       return blobResult(new Blob([bytes],{type:'application/pdf'}),filename,'pdf')
     }
+    case 'pdf-extract-pages':{
+      fileRequired(files);assertFileSize(file,60*1024*1024)
+      const src=await PDFDocument.load(await file.arrayBuffer()),count=src.getPageCount()
+      if(count>MAX_PDF_PAGES)throw new Error('PDFs are limited to 250 pages.')
+      if(!input.trim()||!/^[0-9,\s-]+$/.test(input))throw new Error('Enter page numbers or ranges, e.g. 1,3-5.')
+      const indexes:number[]=[]
+      for(const part of input.split(',')){const bits=part.trim().split('-').map(Number);if(bits.length>2||bits.some(n=>!Number.isInteger(n)||n<1||n>count))throw new Error('Page selection is outside this PDF.');const start=bits[0],end=bits[1]||start;if(end<start||end-start>MAX_PDF_PAGES)throw new Error('Invalid page range.');for(let n=start;n<=end;n++)indexes.push(n-1)}
+      if(new Set(indexes).size!==indexes.length||indexes.length>MAX_PDF_PAGES)throw new Error('Do not repeat pages; select at most 250 pages.')
+      const out=await PDFDocument.create();(await out.copyPages(src,indexes)).forEach(page=>out.addPage(page))
+      return blobResult(await pdfBlob(out),'extracted-pages.pdf','pdf')
+    }
+    case 'pdf-edit-annotate':case 'pdf-sign-visible':{
+      fileRequired(files);assertFileSize(file,60*1024*1024)
+      if(!input.trim()||input.length>300)throw new Error('Enter text to place on the PDF (maximum 300 characters).')
+      const pdf=await PDFDocument.load(await file.arrayBuffer())
+      if(pdf.getPageCount()>MAX_PDF_PAGES)throw new Error('PDFs are limited to 250 pages.')
+      const page=pdf.getPages()[0],font=await pdf.embedFont(StandardFonts.Helvetica)
+      const {width,height}=page.getSize()
+      const isSign=id==='pdf-sign-visible'
+      page.drawText(input,{x:isSign?Math.min(72,width/4):48,y:isSign?Math.max(48,height/5):Math.max(48,height-72),size:isSign?20:12,font,color:rgb(.08,.18,.48),maxWidth:width-96})
+      return blobResult(await pdfBlob(pdf),isSign?'signed-visual.pdf':'annotated.pdf','pdf')
+    }
+    case 'pdf-scan-images':case 'image-pdf':{
+      fileRequired(files);if(files.length>50)throw new Error('Choose no more than 50 scanned images.');assertFilesSize(files,80*1024*1024)
+      const pdf=await PDFDocument.create();let total=0
+      for(const f of files){assertFileSize(f);const sig=new Uint8Array(await f.slice(0,8).arrayBuffer());const png=[137,80,78,71,13,10,26,10].every((v,i)=>sig[i]===v),jpg=sig[0]===255&&sig[1]===216&&sig[2]===255;if(!png&&!jpg)throw new Error(f.name+': only PNG and JPEG scans are supported.');const b=await getImage(f);total+=b.width*b.height;b.close();if(total>MAX_PDF_TOTAL_RENDER_PIXELS)throw new Error('Scanned images exceed the safe combined pixel limit.');const bytes=await f.arrayBuffer(),img=png?await pdf.embedPng(bytes):await pdf.embedJpg(bytes),page=pdf.addPage([img.width,img.height]);page.drawImage(img,{x:0,y:0,width:img.width,height:img.height})}
+      return blobResult(await pdfBlob(pdf),'scanned-document.pdf','pdf')
+    }
     case 'pdf-merge':{
       fileRequired(files,2);if(files.length>MAX_PDF_PAGES)throw new Error(`Choose no more than ${MAX_PDF_PAGES} PDFs.`);assertFilesSize(files, 80 * 1024 * 1024);const out=await PDFDocument.create()
       for(const f of files){assertFileSize(f);const src=await PDFDocument.load(await f.arrayBuffer());if(src.getPageCount()+out.getPageCount()>MAX_PDF_PAGES)throw new Error(`PDF output is limited to ${MAX_PDF_PAGES} pages.`);(await out.copyPages(src,src.getPageIndices())).forEach(p=>out.addPage(p))}
