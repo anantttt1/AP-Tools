@@ -20,10 +20,19 @@ const dependencies = {...pkg.dependencies, ...pkg.devDependencies}
 
 const ids = [...catalog.matchAll(/"id": "([^"]+)"/g)].map(match => match[1])
 const cases = new Set([processor, extendedProcessor].flatMap(source => [...source.matchAll(/case '([^']+)'/g)].map(match => match[1])))
+const relatedMapText = toolPage.match(/const relatedToolMap: Record<string,string\\[\\]> = \\{([\\s\\S]*?)\\n\\}/)?.[1] || ''
+const relatedKeys = [...relatedMapText.matchAll(/^\\s*['"]([^'"]+)['"]\\s*:/gm)].map(match => match[1])
+const relatedTargets = [...relatedMapText.matchAll(/\\[([^\\]]*)\\]/g)].flatMap(match => [...match[1].matchAll(/['"]([^'"]+)['"]/g)].map(item => item[1]))
 const interactive = new Set(['stopwatch', 'countdown', 'pomodoro', 'notes', 'todo'])
 assert.equal(ids.length, 208, `Expected 208 catalog entries, got ${ids.length}`)
 assert.equal(new Set(ids).size, 208, 'Catalog IDs must be unique')
 for (const id of ids) assert.ok(cases.has(id) || interactive.has(id), `Missing processor/widget for ${id}`)
+assert.equal(new Set(relatedKeys).size, relatedKeys.length, 'Related-tool map must not contain duplicate keys')
+for (const id of [...relatedKeys, ...relatedTargets]) assert.ok(ids.includes(id), `Related-tool mapping references unknown tool ${id}`)
+for (const [from, to] of [['text-encrypt','text-decrypt'],['base64url-encoder','base64url-decoder'],['csv-to-tsv','tsv-to-csv'],['json-to-xml','xml-to-json'],['pdf-remove-pages','pdf-organize-pages']]) {
+  const entry = relatedMapText.match(new RegExp(`^\\\\s*['"]${from}['"]\\\\s*:\\\\s*\\\\[([^\\\\]]*)\\\\]`, 'm'))
+  assert.ok(entry && entry[1].includes(to), `Expected related workflow ${from} → ${to}`)
+}
 
 const importedPackages = new Set()
 for (const file of ['src/main.tsx', 'src/App.tsx', 'src/components/Layout.tsx', 'src/components/ToolCard.tsx', 'src/pages/Home.tsx', 'src/pages/Tools.tsx', 'src/pages/ToolPage.tsx', 'src/pages/BatchCenter.tsx', 'src/pages/Workflows.tsx', 'src/pages/Workspace.tsx', 'src/pages/Settings.tsx', 'src/store/useAppStore.ts', 'src/lib/processor.ts', 'src/lib/extendedProcessor.ts', 'vite.config.ts']) {
