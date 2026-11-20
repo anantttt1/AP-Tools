@@ -499,6 +499,7 @@ export async function processTool(id:string, files:File[], input:string, seconda
         }
       }
       const bytes=await pdf.save({useObjectStreams:true})
+      if(bytes.byteLength>MAX_ARCHIVE_OUTPUT_BYTES)throw new Error('The converted PDF exceeds the 120 MB output limit.')
       return blobResult(new Blob([bytes],{type:'application/pdf'}),safeName(file.name.replace(/\.pptx$/i,'')||'presentation')+'.pdf','pdf')
     }
     case 'pdf-images':{
