@@ -8,7 +8,7 @@ AP TOOLS is a frontend-first utility platform built with React 19.3, React Route
 
 - Minimal light-theme interface with advanced micro-interactions
 - Responsive collapsible sidebar
-- Homepage, searchable 100-tool directory, favorites, recent tools and settings
+- Homepage, searchable 208-tool directory, favorites, recent tools and settings
 - Dedicated reusable tool workspaces
 - Batch Center for applying supported operations to multiple files and downloading results as ZIP
 - Workflow Studio for chaining supported browser processors, including a second input for tools that need one
@@ -48,13 +48,13 @@ Deploy the generated `dist` folder to Cloudflare Pages or another static host.
 ## Browser-only processing notes
 
 - ZIP support is ZIP format via JSZip; it is not a universal RAR/7z extractor.
-- PDF merge, page extraction, page numbering, rotation, watermark, page inspection, text extraction and PDF-to-image rendering are included. Password encryption is not included; the similarly named directory entry is explicitly a PDF page inspector.
+- PDF merge, selected-page extraction/removal, full page reordering, split-to-one-PDF-per-page, page numbering, rotation, watermark, headers/footers, crop boxes, metadata editing, AcroForm flattening, selectable-text comparison, page inspection, text extraction and PDF-to-JPEG rendering are included. PDF password encryption/decryption, OCR and Office document conversion are not included.
 - Image operations use Canvas and browser image decoding. Input formats depend on the browser.
 - PDF-to-image and PDF text extraction use PDF.js with eval/XFA features disabled, explicit page and rendering-pixel limits, and cleanup after processing.
 - Batch operations process selected files one by one in the browser (up to 100 files / 120 MB input and 160 MB output).
 - Workflow Studio passes supported text or generated-file outputs from one step to the next (up to 20 steps). Not every possible combination of tools is meaningful. Saved workflow content is stored in unencrypted browser local storage; do not save passwords or private data. Any non-empty encryption-password field is blocked from workflow saves.
 - Notes, tasks, favorites and recent tool IDs are stored in local browser storage. Original files are not retained by history.
-- AI generation, cloud storage, cross-device sync, user accounts, payment processing, PDF password encryption, OCR and server-only website checks are intentionally not included because this build has no backend or paid API.
+- AI generation, cloud storage, cross-device sync, user accounts, payment processing, PDF password encryption, OCR, Word/Excel/PowerPoint conversion and server-only website checks are intentionally not included because this build has no backend or paid API.
 - Browser memory is finite: archive extraction, PDF/image work and batch operations have explicit limits; stay below those limits on mobile devices. The regex tester runs patterns inside a disposable worker and terminates runs that exceed its time limit.
 - The UI loads Google Fonts from Google when online; local processing does not send selected file contents to Google.
 
@@ -69,7 +69,7 @@ AP TOOLS does not upload selected files to an AP TOOLS server. Processing is loc
 ```text
 src/
   components/   Shared layout and tool cards
-  data/         100-tool catalog
+  data/         208-tool catalog
   lib/          Browser-side processing engine
   pages/        Homepage, directory, workspace, batch, workflows, settings
   store/        Local UI state
