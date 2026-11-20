@@ -108,5 +108,7 @@ assert.ok(processor.includes("case 'pdf-to-powerpoint':"), 'PDF to PowerPoint pr
 assert.ok(processor.includes('ppt/presentation.xml') && processor.includes('ppt/slides/slide'), 'PDF to PowerPoint must create a PPTX presentation and slide parts')
 assert.ok(toolPage.includes("'pdf-to-powerpoint'"), 'PDF to PowerPoint must be wired to the upload interface')
 assert.ok(processor.includes("case 'powerpoint-to-pdf':"), 'PowerPoint to PDF processor must be implemented')
+assert.ok(processor.includes('entries.length>1000') && processor.includes('declaredBytes>200*1024*1024'), 'PowerPoint archive entry and expanded-size limits must be enforced')
+assert.ok(processor.includes('ppt/media/') && processor.includes('unsupported external or unsafe image relationship'), 'PowerPoint image relationships must be constrained to local media assets')
 assert.ok(toolPage.includes("'powerpoint-to-pdf'"), 'PowerPoint to PDF must be wired to the upload interface')
 console.log('Project checks passed: 318 tools mapped; dependencies declared; localhost-only Vite; PDF/ZIP/image/text hardening; regex isolation; CSV formula protection; workflow and batch bounds; and browser security headers.')
