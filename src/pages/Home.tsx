@@ -39,11 +39,16 @@ export default function Home() {
     let shift = 0
     const handleOrientation = (event: DeviceOrientationEvent) => {
       if (typeof event.gamma !== 'number' || !Number.isFinite(event.gamma)) return
+
+      // Map the full left/right tilt range across the complete promo card.
+      // Rotation follows the distance travelled, like a real rolling tyre.
       const tilt = Math.max(-32, Math.min(32, event.gamma))
-      const targetRoll = tilt * 2.4
-      const targetShift = tilt * 0.42
-      roll += (targetRoll - roll) * 0.32
-      shift += (targetShift - shift) * 0.32
+      const targetShift = ((tilt + 32) / 64) * 260 - 35
+      const targetRoll = (targetShift / 74) * (180 / Math.PI)
+
+      // A little easing keeps sensor noise from making the logo jitter.
+      roll += (targetRoll - roll) * 0.22
+      shift += (targetShift - shift) * 0.22
       wheel.style.setProperty('--studio-wheel-roll', roll.toFixed(2) + 'deg')
       wheel.style.setProperty('--studio-wheel-x', shift.toFixed(2) + 'px')
     }
