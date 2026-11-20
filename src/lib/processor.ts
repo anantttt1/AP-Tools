@@ -5,6 +5,7 @@ import QRCode from 'qrcode'
 import JsBarcode from 'jsbarcode'
 import pdfWorkerUrl from 'pdfjs-dist/legacy/build/pdf.worker.mjs?url'
 import Papa from 'papaparse'
+import { processExtendedTool } from './extendedProcessor'
 
 export type ProcessResult = { kind: 'text'; value: string } | { kind: 'blob'; blob: Blob; filename: string; preview?: 'image' | 'pdf' } | { kind: 'html'; value: string }
 
@@ -416,6 +417,6 @@ export async function processTool(id:string, files:File[], input:string, seconda
     case 'stopwatch':case 'countdown':case 'pomodoro':case 'notes':case 'todo':{
       return textResult('Use the interactive controls in this tool workspace. Your notes and task list are stored only in this browser.')
     }
-    default:throw new Error('This tool is not available in this build.')
+    default:return processExtendedTool(id,input,secondary)
   }
 }
