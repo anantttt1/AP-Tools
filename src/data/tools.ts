@@ -120,6 +120,13 @@ export const tools: Tool[] = [
     "icon": "file-image"
   },
   {
+    "id": "pdf-to-powerpoint",
+    "name": "PDF to PowerPoint",
+    "category": "PDF",
+    "description": "Convert each PDF page into a visual PowerPoint slide. Runs locally in the browser; slide contents are images rather than editable text.",
+    "icon": "presentation"
+  },
+  {
     "id": "html-to-pdf",
     "name": "HTML to PDF",
     "category": "PDF",
