@@ -102,6 +102,9 @@ export default function Home() {
     <section className="section">
       <div className="section-head"><div><label>POPULAR WORKFLOWS</label><h2>Quick guides to common PDF and image tasks</h2><p>Open a dedicated guide, see the steps and launch the matching tool.</p></div></div>
       <div className="category-grid">
+        <a className="category-card" href="/qr-code-generator/"><div><b>QR Code Generator</b><p>Create a QR code from a URL or text.</p></div><ArrowUpRight size={16}/></a>
+        <a className="category-card" href="/pdf-to-ppt/"><div><b>PDF to PPT converter</b><p>Turn PDF pages into PowerPoint slides.</p></div><ArrowUpRight size={16}/></a>
+        <a className="category-card" href="/ppt-to-pdf/"><div><b>PPT to PDF converter</b><p>Convert supported PPTX presentations to PDF.</p></div><ArrowUpRight size={16}/></a>
         <a className="category-card" href="/pdf/merge-pdf/"><div><b>Merge PDF online</b><p>Combine multiple PDF documents.</p></div><ArrowUpRight size={16}/></a>
         <a className="category-card" href="/pdf/split-pdf/"><div><b>Split PDF online</b><p>Extract selected pages from a PDF.</p></div><ArrowUpRight size={16}/></a>
         <a className="category-card" href="/pdf/rotate-pdf/"><div><b>Rotate PDF</b><p>Correct sideways or upside-down pages.</p></div><ArrowUpRight size={16}/></a>
