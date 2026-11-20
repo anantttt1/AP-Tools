@@ -32,8 +32,11 @@ assert.equal(ids.length, 208, `Expected 208 catalog entries, got ${ids.length}`)
 assert.equal(new Set(ids).size, 208, 'Catalog IDs must be unique')
 for (const id of ids) assert.ok(cases.has(id) || interactive.has(id), `Missing processor/widget for ${id}`)
 assert.equal(new Set(relatedKeys).size, relatedKeys.length, 'Related-tool map must not contain duplicate keys')
+assert.equal(relatedKeys.length, ids.length, 'Every tool must have a contextual next-step recommendation map')
+assert.deepEqual([...relatedKeys].sort(), [...ids].sort(), 'Related-tool map must cover every catalog tool')
+for (const entry of relatedEntries) assert.ok(!entry[3].includes(`'${entry[2]}'`) && !entry[3].includes(`\"${entry[2]}\"`), `Tool ${entry[2]} must not recommend itself`)
 for (const id of [...relatedKeys, ...relatedTargets]) assert.ok(ids.includes(id), `Related-tool mapping references unknown tool ${id}`)
-for (const [from, to] of [['text-encrypt','text-decrypt'],['base64url-encoder','base64url-decoder'],['csv-to-tsv','tsv-to-csv'],['json-to-xml','xml-to-json'],['pdf-remove-pages','pdf-organize-pages']]) {
+for (const [from, to] of [['text-encrypt','text-decrypt'],['text-decrypt','text-encrypt'],['base64url-encoder','base64url-decoder'],['base64url-decoder','base64url-encoder'],['csv-to-tsv','tsv-to-csv'],['tsv-to-csv','csv-to-tsv'],['json-to-xml','xml-to-json'],['xml-to-json','json-to-xml'],['pdf-remove-pages','pdf-organize-pages'],['pdf-organize-pages','pdf-remove-pages']]) {
   const entry = relatedEntries.find(match => match[2] === from)
   assert.ok(entry && (entry[3].includes(`'${to}'`) || entry[3].includes(`"${to}"`)), `Expected related workflow ${from} → ${to}`)
 }
