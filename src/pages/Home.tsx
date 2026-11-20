@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { Search, ArrowRight, ArrowUpRight, FileText, Image, Code2, Archive, ShieldCheck, Zap } from 'lucide-react'
 import { tools } from '../data/tools'
@@ -7,9 +7,17 @@ import ToolCard from '../components/ToolCard'
 
 const cats = [
   ['Files', 'Compress, archive and manage files', Archive],
-  ['PDF', 'Merge, split and manage PDF documents', FileText],
+  ['PDF', 'Merge, split, convert and manage documents', FileText],
   ['Images', 'Resize, convert and optimize images', Image],
-  ['Developer', 'Format, encode and debug data', Code2],
+  ['Text', 'Clean, compare and transform text', FileText],
+  ['Developer', 'Format, validate and inspect data', Code2],
+  ['Encoding', 'Encode and decode text and data', Code2],
+  ['Validation', 'Validate common data formats', ShieldCheck],
+  ['Calculators', 'Solve everyday maths and date tasks', Zap],
+  ['Converters', 'Convert units and number formats', Archive],
+  ['Security', 'Generate hashes and secure text locally', ShieldCheck],
+  ['QR & Barcode', 'Create QR codes and barcodes', Image],
+  ['Utilities', 'Use practical productivity helpers', Zap],
 ] as const
 
 const pdfToolIds = ['pdf-merge', 'pdf-split', 'pdf-rotate', 'pdf-watermark', 'pdf-page-numbers', 'pdf-text', 'pdf-images', 'images-pdf', 'pdf-inspector', 'pdf-remove-pages', 'pdf-organize-pages', 'pdf-split-every-page', 'pdf-header-footer', 'pdf-metadata-editor', 'pdf-crop', 'pdf-flatten-forms', 'pdf-compare']
@@ -38,7 +46,7 @@ export default function Home() {
 
     <section className="section">
       <div className="section-head"><div><label>GET STARTED</label><h2>Explore categories</h2><p>Find the right tool for the job.</p></div><button className="link-btn" onClick={() => go('/tools')}>View all tools <ArrowUpRight size={16} /></button></div>
-      <div className="category-grid">{cats.map(([name, desc, Icon]) => <motion.button whileHover={{ y: -3 }} className="category-card" key={name} onClick={() => go('/tools?category=' + name)}><div className="category-icon"><Icon /></div><div><b>{name} tools</b><p>{desc}</p></div><ArrowUpRight className="cat-arrow" size={16} /></motion.button>)}</div>
+      <div className="category-grid">{cats.map(([name, desc, Icon]) => <Link className="category-card" key={name} to={'/tools?category=' + encodeURIComponent(name)}><div className="category-icon"><Icon /></div><div><b>{name} tools</b><p>{desc}</p></div><ArrowUpRight className="cat-arrow" size={16} /></Link>)}</div>
     </section>
 
     <section className="section">
