@@ -12,7 +12,7 @@ const cats = [
   ['Developer', 'Format, encode and debug data', Code2],
 ] as const
 
-const pdfToolIds = ['pdf-merge', 'pdf-split', 'pdf-rotate', 'pdf-watermark', 'pdf-page-numbers', 'pdf-text', 'pdf-images', 'images-pdf', 'pdf-inspector']
+const pdfToolIds = ['pdf-merge', 'pdf-split', 'pdf-rotate', 'pdf-watermark', 'pdf-page-numbers', 'pdf-text', 'pdf-images', 'images-pdf', 'pdf-inspector', 'pdf-remove-pages', 'pdf-organize-pages', 'pdf-split-every-page', 'pdf-header-footer', 'pdf-metadata-editor', 'pdf-crop', 'pdf-flatten-forms', 'pdf-compare']
 const imageToolIds = ['image-compress', 'image-resize', 'image-convert', 'image-crop', 'image-rotate', 'image-watermark']
 const getTools = (ids: string[]) => ids.map(id => tools.find(tool => tool.id === id)).filter((tool): tool is (typeof tools)[number] => Boolean(tool))
 
@@ -65,6 +65,10 @@ export default function Home() {
         <a className="category-card" href="/images/compress-image/"><div><b>Compress image</b><p>Reduce image file size.</p></div><ArrowUpRight size={16}/></a>
         <a className="category-card" href="/images/resize-image/"><div><b>Resize image</b><p>Change image dimensions.</p></div><ArrowUpRight size={16}/></a>
         <a className="category-card" href="/pdf/add-watermark/"><div><b>Add PDF watermark</b><p>Label every page with text.</p></div><ArrowUpRight size={16}/></a>
+        <a className="category-card" href="/tool/pdf-remove-pages"><div><b>Remove PDF pages</b><p>Delete selected pages from a document.</p></div><ArrowUpRight size={16}/></a>
+        <a className="category-card" href="/tool/pdf-organize-pages"><div><b>Organize PDF pages</b><p>Reorder pages by page number.</p></div><ArrowUpRight size={16}/></a>
+        <a className="category-card" href="/tool/pdf-split-every-page"><div><b>Split every PDF page</b><p>Download each page as a separate PDF.</p></div><ArrowUpRight size={16}/></a>
+        <a className="category-card" href="/tool/pdf-compare"><div><b>Compare PDF text</b><p>Compare selectable text from two PDFs.</p></div><ArrowUpRight size={16}/></a>
       </div>
     </section>
 
