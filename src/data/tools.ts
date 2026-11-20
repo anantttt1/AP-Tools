@@ -1478,88 +1478,725 @@ export const tools: Tool[] = [
     "icon": "file-diff"
   },
   {
-    "id": "pdf-to-word",
-    "name": "PDF to Word",
+    "id": "pdf-extract-pages",
+    "name": "Extract PDF Pages",
     "category": "PDF",
-    "description": "Convert selectable PDF text into an editable Word-compatible HTML document. Layout and images may not be preserved.",
-    "icon": "file-type"
+    "description": "Extract selected page ranges from a PDF into a new document.",
+    "icon": "file-output"
   },
   {
-    "id": "word-to-pdf",
-    "name": "Word to PDF",
+    "id": "pdf-sign-visible",
+    "name": "Add Signature to PDF",
     "category": "PDF",
-    "description": "Convert supported DOCX documents to a PDF using a compatible local document engine; if unavailable, show a clear error.",
-    "icon": "file-text"
+    "description": "Place a typed visual signature on the first PDF page; this is not a certificate-backed digital signature.",
+    "icon": "signature"
   },
   {
-    "id": "pdf-to-powerpoint",
-    "name": "PDF to PowerPoint",
+    "id": "pdf-edit-annotate",
+    "name": "Add Text to PDF",
     "category": "PDF",
-    "description": "Create a PowerPoint-compatible slide deck from PDF page previews.",
-    "icon": "presentation"
+    "description": "Add a text note to the first page of a PDF document.",
+    "icon": "file-pen"
   },
   {
-    "id": "powerpoint-to-pdf",
-    "name": "PowerPoint to PDF",
+    "id": "pdf-scan-images",
+    "name": "Scan Images to PDF",
     "category": "PDF",
-    "description": "Convert PPTX presentations to PDF using a compatible document engine.",
-    "icon": "file-type"
+    "description": "Combine photos or scanned page images into a PDF document.",
+    "icon": "scan"
   },
   {
-    "id": "pdf-to-excel",
-    "name": "PDF to Excel",
-    "category": "PDF",
-    "description": "Extract selectable PDF text into a CSV worksheet; scanned tables require OCR.",
-    "icon": "file-spreadsheet"
+    "id": "text-trim-lines",
+    "name": "Text Trim Lines",
+    "category": "Text",
+    "description": "Perform text trim lines locally in your browser with input validation.",
+    "icon": "wrench"
   },
   {
-    "id": "excel-to-pdf",
-    "name": "Excel to PDF",
-    "category": "PDF",
-    "description": "Convert spreadsheet documents to PDF using a compatible document engine.",
-    "icon": "file-spreadsheet"
+    "id": "text-remove-blank-lines",
+    "name": "Text Remove Blank Lines",
+    "category": "Text",
+    "description": "Perform text remove blank lines locally in your browser with input validation.",
+    "icon": "wrench"
   },
   {
-    "id": "html-to-pdf",
-    "name": "HTML to PDF",
-    "category": "PDF",
-    "description": "Create a PDF from supplied HTML content using browser print-to-PDF.",
-    "icon": "file-code"
+    "id": "text-unique-words",
+    "name": "Text Unique Words",
+    "category": "Text",
+    "description": "Perform text unique words locally in your browser with input validation.",
+    "icon": "wrench"
   },
   {
-    "id": "pdf-protect",
-    "name": "Protect PDF",
-    "category": "PDF",
-    "description": "Add password-based PDF encryption when a supported encryption engine is configured.",
-    "icon": "lock"
+    "id": "text-word-sort",
+    "name": "Text Word Sort",
+    "category": "Text",
+    "description": "Perform text word sort locally in your browser with input validation.",
+    "icon": "wrench"
   },
   {
-    "id": "pdf-unlock",
-    "name": "Unlock PDF",
-    "category": "PDF",
-    "description": "Remove PDF password protection when the correct password and a supported engine are available.",
-    "icon": "unlock"
+    "id": "text-char-frequency",
+    "name": "Character Frequency Counter",
+    "category": "Text",
+    "description": "Count character frequency in text.",
+    "icon": "wrench"
   },
   {
-    "id": "pdf-redact",
-    "name": "Redact PDF",
-    "category": "PDF",
-    "description": "Permanently remove selected page regions using rasterized page replacement.",
-    "icon": "eye-off"
+    "id": "text-reading-stats",
+    "name": "Text Statistics",
+    "category": "Text",
+    "description": "Show words, characters, sentences, paragraphs and average word length.",
+    "icon": "wrench"
   },
   {
-    "id": "pdf-ocr",
-    "name": "OCR PDF",
-    "category": "PDF",
-    "description": "Recognize text in scanned PDF pages using an OCR engine when configured.",
-    "icon": "scan-text"
+    "id": "text-remove-punctuation",
+    "name": "Text Remove Punctuation",
+    "category": "Text",
+    "description": "Perform text remove punctuation locally in your browser with input validation.",
+    "icon": "wrench"
   },
   {
-    "id": "pdfa-convert",
-    "name": "PDF to PDF/A",
-    "category": "PDF",
-    "description": "Convert a PDF to an archival PDF/A profile using a standards-compliant converter.",
-    "icon": "archive"
+    "id": "text-remove-numbers",
+    "name": "Text Remove Numbers",
+    "category": "Text",
+    "description": "Perform text remove numbers locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "text-keep-numbers",
+    "name": "Text Keep Numbers",
+    "category": "Text",
+    "description": "Perform text keep numbers locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "text-keep-letters",
+    "name": "Text Keep Letters",
+    "category": "Text",
+    "description": "Perform text keep letters locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "text-replace",
+    "name": "Text Replace",
+    "category": "Text",
+    "description": "Perform text replace locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "text-prefix-lines",
+    "name": "Text Prefix Lines",
+    "category": "Text",
+    "description": "Perform text prefix lines locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "text-suffix-lines",
+    "name": "Text Suffix Lines",
+    "category": "Text",
+    "description": "Perform text suffix lines locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "text-sort-desc",
+    "name": "Text Sort Desc",
+    "category": "Text",
+    "description": "Perform text sort desc locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "text-sort-numeric",
+    "name": "Text Sort Numeric",
+    "category": "Text",
+    "description": "Perform text sort numeric locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "text-dedupe-case-insensitive",
+    "name": "Text Dedupe Case Insensitive",
+    "category": "Text",
+    "description": "Perform text dedupe case insensitive locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "text-reverse-lines",
+    "name": "Text Reverse Lines",
+    "category": "Text",
+    "description": "Perform text reverse lines locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "text-indent",
+    "name": "Text Indent",
+    "category": "Text",
+    "description": "Perform text indent locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "text-unindent",
+    "name": "Text Unindent",
+    "category": "Text",
+    "description": "Perform text unindent locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "text-tab-to-space",
+    "name": "Text Tab To Space",
+    "category": "Text",
+    "description": "Perform text tab to space locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "text-space-to-tab",
+    "name": "Text Space To Tab",
+    "category": "Text",
+    "description": "Perform text space to tab locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "text-normalize-quotes",
+    "name": "Text Normalize Quotes",
+    "category": "Text",
+    "description": "Perform text normalize quotes locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "text-remove-accents",
+    "name": "Text Remove Accents",
+    "category": "Text",
+    "description": "Perform text remove accents locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "text-count-unique-lines",
+    "name": "Text Count Unique Lines",
+    "category": "Text",
+    "description": "Perform text count unique lines locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "text-extract-hashtags",
+    "name": "Text Extract Hashtags",
+    "category": "Text",
+    "description": "Perform text extract hashtags locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "text-extract-mentions",
+    "name": "Text Extract Mentions",
+    "category": "Text",
+    "description": "Perform text extract mentions locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "text-extract-ipv4",
+    "name": "Text Extract Ipv4",
+    "category": "Text",
+    "description": "Perform text extract ipv4 locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "text-extract-domains",
+    "name": "Text Extract Domains",
+    "category": "Text",
+    "description": "Perform text extract domains locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "text-extract-dates",
+    "name": "Text Extract Dates",
+    "category": "Text",
+    "description": "Perform text extract dates locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "text-mask-email",
+    "name": "Text Mask Email",
+    "category": "Text",
+    "description": "Perform text mask email locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "text-mask-phone",
+    "name": "Text Mask Phone",
+    "category": "Text",
+    "description": "Perform text mask phone locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "text-mask-card",
+    "name": "Text Mask Card",
+    "category": "Text",
+    "description": "Perform text mask card locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "text-to-upper",
+    "name": "Text To Upper",
+    "category": "Text",
+    "description": "Perform text to upper locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "text-to-lower",
+    "name": "Text To Lower",
+    "category": "Text",
+    "description": "Perform text to lower locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "text-to-title",
+    "name": "Text To Title",
+    "category": "Text",
+    "description": "Perform text to title locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "text-to-sentence",
+    "name": "Text To Sentence",
+    "category": "Text",
+    "description": "Perform text to sentence locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "text-to-mirror",
+    "name": "Text To Mirror",
+    "category": "Text",
+    "description": "Perform text to mirror locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "text-wrap-80",
+    "name": "Text Wrap 80",
+    "category": "Text",
+    "description": "Perform text wrap 80 locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "text-unwrap",
+    "name": "Text Unwrap",
+    "category": "Text",
+    "description": "Perform text unwrap locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "json-validate",
+    "name": "JSON Validator",
+    "category": "Developer",
+    "description": "Validate JSON and report whether it parses successfully.",
+    "icon": "wrench"
+  },
+  {
+    "id": "json-to-yaml-lite",
+    "name": "JSON to YAML",
+    "category": "Developer",
+    "description": "Convert JSON values into a safe YAML subset.",
+    "icon": "wrench"
+  },
+  {
+    "id": "yaml-validate-lite",
+    "name": "YAML Basic Validator",
+    "category": "Developer",
+    "description": "Check indentation and common structural errors in a YAML subset.",
+    "icon": "wrench"
+  },
+  {
+    "id": "url-parse",
+    "name": "URL Parser",
+    "category": "Developer",
+    "description": "Parse a URL into protocol, host, path, query and fragment.",
+    "icon": "wrench"
+  },
+  {
+    "id": "url-query-encode",
+    "name": "Url Query Encode",
+    "category": "Developer",
+    "description": "Perform url query encode locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "url-query-decode",
+    "name": "Url Query Decode",
+    "category": "Developer",
+    "description": "Perform url query decode locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "html-escape-advanced",
+    "name": "Html Escape Advanced",
+    "category": "Developer",
+    "description": "Perform html escape advanced locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "html-unescape-advanced",
+    "name": "Html Unescape Advanced",
+    "category": "Developer",
+    "description": "Perform html unescape advanced locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "css-color-to-rgb",
+    "name": "Css Color To Rgb",
+    "category": "Developer",
+    "description": "Perform css color to rgb locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "css-rgb-to-hex",
+    "name": "Css Rgb To Hex",
+    "category": "Developer",
+    "description": "Perform css rgb to hex locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "css-rem-to-em",
+    "name": "Css Rem To Em",
+    "category": "Developer",
+    "description": "Perform css rem to em locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "css-em-to-rem",
+    "name": "Css Em To Rem",
+    "category": "Developer",
+    "description": "Perform css em to rem locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "css-clamp-generator",
+    "name": "Css Clamp Generator",
+    "category": "Developer",
+    "description": "Perform css clamp generator locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "css-media-query",
+    "name": "Css Media Query",
+    "category": "Developer",
+    "description": "Perform css media query locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "css-flex-center",
+    "name": "Css Flex Center",
+    "category": "Developer",
+    "description": "Perform css flex center locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "css-grid-generator",
+    "name": "Css Grid Generator",
+    "category": "Developer",
+    "description": "Perform css grid generator locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "html-meta-generator",
+    "name": "Html Meta Generator",
+    "category": "Developer",
+    "description": "Perform html meta generator locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "html-link-generator",
+    "name": "Html Link Generator",
+    "category": "Developer",
+    "description": "Perform html link generator locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "html-image-tag",
+    "name": "Html Image Tag",
+    "category": "Developer",
+    "description": "Perform html image tag locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "sql-in-list",
+    "name": "Sql In List",
+    "category": "Developer",
+    "description": "Perform sql in list locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "sql-quote",
+    "name": "Sql Quote",
+    "category": "Developer",
+    "description": "Perform sql quote locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "regex-email-check",
+    "name": "Regex Email Check",
+    "category": "Developer",
+    "description": "Perform regex email check locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "regex-url-check",
+    "name": "Regex Url Check",
+    "category": "Developer",
+    "description": "Perform regex url check locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "regex-password-check",
+    "name": "Regex Password Check",
+    "category": "Developer",
+    "description": "Perform regex password check locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "base64url-encode",
+    "name": "Base64URL Encoder",
+    "category": "Developer",
+    "description": "Encode UTF-8 text using URL-safe Base64.",
+    "icon": "wrench"
+  },
+  {
+    "id": "base64url-decode",
+    "name": "Base64URL Decoder",
+    "category": "Developer",
+    "description": "Decode URL-safe Base64 as UTF-8 text.",
+    "icon": "wrench"
+  },
+  {
+    "id": "hex-validator",
+    "name": "Hex Validator",
+    "category": "Developer",
+    "description": "Perform hex validator locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "credit-card-luhn",
+    "name": "Credit Card Luhn",
+    "category": "Developer",
+    "description": "Perform credit card luhn locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "iban-format-check",
+    "name": "Iban Format Check",
+    "category": "Developer",
+    "description": "Perform iban format check locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "binary-to-octal",
+    "name": "Binary To Octal",
+    "category": "Converters",
+    "description": "Perform binary to octal locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "octal-to-binary",
+    "name": "Octal To Binary",
+    "category": "Converters",
+    "description": "Perform octal to binary locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "hex-to-binary",
+    "name": "Hex To Binary",
+    "category": "Developer",
+    "description": "Perform hex to binary locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "binary-to-hex",
+    "name": "Binary To Hex",
+    "category": "Converters",
+    "description": "Perform binary to hex locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "decimal-to-base",
+    "name": "Decimal To Base",
+    "category": "Converters",
+    "description": "Perform decimal to base locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "base-to-decimal",
+    "name": "Base To Decimal",
+    "category": "Converters",
+    "description": "Perform base to decimal locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "celsius-to-fahrenheit",
+    "name": "Celsius To Fahrenheit",
+    "category": "Converters",
+    "description": "Perform celsius to fahrenheit locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "fahrenheit-to-celsius",
+    "name": "Fahrenheit To Celsius",
+    "category": "Converters",
+    "description": "Perform fahrenheit to celsius locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "kg-to-lb",
+    "name": "Kg To Lb",
+    "category": "Converters",
+    "description": "Perform kg to lb locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "lb-to-kg",
+    "name": "Lb To Kg",
+    "category": "Converters",
+    "description": "Perform lb to kg locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "cm-to-inch",
+    "name": "Cm To Inch",
+    "category": "Converters",
+    "description": "Perform cm to inch locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "inch-to-cm",
+    "name": "Inch To Cm",
+    "category": "Converters",
+    "description": "Perform inch to cm locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "km-to-mile",
+    "name": "Km To Mile",
+    "category": "Converters",
+    "description": "Perform km to mile locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "mile-to-km",
+    "name": "Mile To Km",
+    "category": "Converters",
+    "description": "Perform mile to km locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "litre-to-gallon",
+    "name": "Litre To Gallon",
+    "category": "Converters",
+    "description": "Perform litre to gallon locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "gallon-to-litre",
+    "name": "Gallon To Litre",
+    "category": "Converters",
+    "description": "Perform gallon to litre locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "bytes-to-mb",
+    "name": "Bytes To Mb",
+    "category": "Converters",
+    "description": "Perform bytes to mb locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "mb-to-bytes",
+    "name": "Mb To Bytes",
+    "category": "Converters",
+    "description": "Perform mb to bytes locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "unix-ms-to-date",
+    "name": "Unix Ms To Date",
+    "category": "Converters",
+    "description": "Perform unix ms to date locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "date-to-unix-ms",
+    "name": "Date To Unix Ms",
+    "category": "Converters",
+    "description": "Perform date to unix ms locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "loan-interest-only",
+    "name": "Loan Interest Only",
+    "category": "Converters",
+    "description": "Perform loan interest only locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "compound-growth",
+    "name": "Compound Growth",
+    "category": "Calculators",
+    "description": "Perform compound growth locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "profit-margin",
+    "name": "Profit Margin",
+    "category": "Calculators",
+    "description": "Perform profit margin locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "markup-calculator",
+    "name": "Markup Calculator",
+    "category": "Calculators",
+    "description": "Perform markup calculator locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "sales-tax-calculator",
+    "name": "Sales Tax Calculator",
+    "category": "Calculators",
+    "description": "Perform sales tax calculator locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "percentage-of-number",
+    "name": "Percentage Of Number",
+    "category": "Converters",
+    "description": "Perform percentage of number locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "break-even-calculator",
+    "name": "Break Even Calculator",
+    "category": "Calculators",
+    "description": "Perform break even calculator locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "average-speed-calculator",
+    "name": "Average Speed Calculator",
+    "category": "Calculators",
+    "description": "Perform average speed calculator locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "pace-calculator",
+    "name": "Pace Calculator",
+    "category": "Calculators",
+    "description": "Perform pace calculator locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "fuel-cost-calculator",
+    "name": "Fuel Cost Calculator",
+    "category": "Calculators",
+    "description": "Perform fuel cost calculator locally in your browser with input validation.",
+    "icon": "wrench"
+  },
+  {
+    "id": "date-weekday",
+    "name": "Date Weekday",
+    "category": "Converters",
+    "description": "Perform date weekday locally in your browser with input validation.",
+    "icon": "wrench"
   }
 ]
 
