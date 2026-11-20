@@ -20,9 +20,9 @@ const dependencies = {...pkg.dependencies, ...pkg.devDependencies}
 
 const ids = [...catalog.matchAll(/"id": "([^"]+)"/g)].map(match => match[1])
 const cases = new Set([processor, extendedProcessor].flatMap(source => [...source.matchAll(/case '([^']+)'/g)].map(match => match[1])))
-const relatedMapText = toolPage.match(/const relatedToolMap: Record<string,string\\[\\]> = \\{([\\s\\S]*?)\\n\\}/)?.[1] || ''
-const relatedKeys = [...relatedMapText.matchAll(/^\\s*['"]([^'"]+)['"]\\s*:/gm)].map(match => match[1])
-const relatedTargets = [...relatedMapText.matchAll(/\\[([^\\]]*)\\]/g)].flatMap(match => [...match[1].matchAll(/['"]([^'"]+)['"]/g)].map(item => item[1]))
+const relatedEntries = [...toolPage.matchAll(/^\\s*(['"])([^'"]+)\\1\\s*:\\s*\\[([^\\]]*)\\]/gm)]
+const relatedKeys = relatedEntries.map(match => match[2])
+const relatedTargets = relatedEntries.flatMap(match => [...match[3].matchAll(/['"]([^'"]+)['"]/g)].map(item => item[1]))
 const interactive = new Set(['stopwatch', 'countdown', 'pomodoro', 'notes', 'todo'])
 assert.equal(ids.length, 208, `Expected 208 catalog entries, got ${ids.length}`)
 assert.equal(new Set(ids).size, 208, 'Catalog IDs must be unique')
@@ -30,8 +30,8 @@ for (const id of ids) assert.ok(cases.has(id) || interactive.has(id), `Missing p
 assert.equal(new Set(relatedKeys).size, relatedKeys.length, 'Related-tool map must not contain duplicate keys')
 for (const id of [...relatedKeys, ...relatedTargets]) assert.ok(ids.includes(id), `Related-tool mapping references unknown tool ${id}`)
 for (const [from, to] of [['text-encrypt','text-decrypt'],['base64url-encoder','base64url-decoder'],['csv-to-tsv','tsv-to-csv'],['json-to-xml','xml-to-json'],['pdf-remove-pages','pdf-organize-pages']]) {
-  const entry = relatedMapText.match(new RegExp(`^\\\\s*['"]${from}['"]\\\\s*:\\\\s*\\\\[([^\\\\]]*)\\\\]`, 'm'))
-  assert.ok(entry && entry[1].includes(to), `Expected related workflow ${from} → ${to}`)
+  const entry = relatedEntries.find(match => match[2] === from)
+  assert.ok(entry && (entry[3].includes(`'${to}'`) || entry[3].includes(`"${to}"`)), `Expected related workflow ${from} → ${to}`)
 }
 
 const importedPackages = new Set()
@@ -72,7 +72,7 @@ assert.ok(processor.includes('isPng=') && processor.includes('isJpeg='), 'Images
 assert.ok(processor.includes('Mode: ${modeText}') && processor.includes('frequencies=new Map'), 'Average calculator must include mode as well as mean and median')
 assert.ok(processor.includes("type==='image/jpeg'"), 'JPEG conversion must fill transparency with a white background')
 assert.ok(workflows.includes('secondary: string') && workflows.includes('Saved workflows are stored unencrypted'), 'Workflow secondary inputs and storage warning must be explicit')
-assert.ok(workflows.includes('step.secondary.length > 0'), 'Workflow save must block whitespace-only encryption passwords too')
+assert.ok(workflows.includes('step.secondary.length > 0') && workflows.includes("'hmac-sha256'"), 'Workflow save must block secret-key fields, including whitespace-only values')
 assert.ok(batchCenter.includes('list.length>100') && batchCenter.includes('120*1024*1024'), 'Batch selection limits must be enforced before processing')
 assert.ok(toolPage.includes('requestId.current') && toolPage.includes("id==='random-string'"), 'Tool runs must ignore stale results and expose random-string length')
 assert.equal([...toolPage.matchAll(/'image-rotate':/g)].length, 1, 'Tool help object must not contain a duplicate image-rotate key')
