@@ -74,7 +74,7 @@ assert.ok(!processor.includes('isEvalSupported:'), 'Removed PDF.js options must 
 assert.ok(processor.includes('enableXfa:false'), 'PDF.js XFA support must be disabled')
 assert.ok(processor.includes('safeZipPath'), 'ZIP paths must be validated before archive writes')
 assert.ok(headers.includes('Content-Security-Policy:'), 'Static hosting security headers are required')
-assert.equal(vercel.buildCommand, 'npm run check', 'Vercel must run repository checks before deployment')
+assert.equal(vercel.buildCommand, 'npm run build', 'Vercel must run the production TypeScript and Vite build')
 const deployedHeaderKeys = new Set((vercel.headers || []).flatMap(item => item.headers.map(header => header.key)))
 for (const key of ['Content-Security-Policy','X-Content-Type-Options','X-Frame-Options','Referrer-Policy','Strict-Transport-Security']) assert.ok(deployedHeaderKeys.has(key), `Vercel response header ${key} is required`)
 assert.ok(headers.includes("object-src 'none'"), 'CSP must disable embedded objects')
