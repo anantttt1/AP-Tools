@@ -120,6 +120,13 @@ export const tools: Tool[] = [
     "icon": "file-image"
   },
   {
+    "id": "pdf-to-word",
+    "name": "PDF to Word",
+    "category": "PDF",
+    "description": "Extract selectable PDF text into an editable Word document, processed locally in your browser.",
+    "icon": "file-text"
+  },
+  {
     "id": "pdf-text",
     "name": "PDF Text Extractor",
     "category": "PDF",
