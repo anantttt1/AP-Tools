@@ -43,7 +43,7 @@ export default function Workflows() {
       setError('A workflow must contain 1–20 steps and no more than 10 MB of text in total.')
       return
     }
-    if (steps.some(step => ['text-encrypt', 'text-decrypt'].includes(step.id) && step.secondary.length > 0)) {
+    if (steps.some(step => ['text-encrypt', 'text-decrypt', 'hmac-sha256'].includes(step.id) && step.secondary.length > 0)) {
       setError('For privacy, remove encryption passwords before saving this workflow. Saved workflows are stored unencrypted in this browser.')
       return
     }
