@@ -257,6 +257,26 @@ export async function processTool(id:string, files:File[], input:string, seconda
       const out=await PDFDocument.create();for(const n of indexes){if(!Number.isInteger(n)||n<0||n>=src.getPageCount())throw new Error(`Page ${n+1} does not exist.`);const [p]=await out.copyPages(src,[n]);out.addPage(p)}
       return blobResult(await pdfBlob(out),'split-pages.pdf','pdf')
     }
+    case 'html-to-pdf':{
+      fileRequired(files);assertFileSize(file,15*1024*1024)
+      if(!/\.html?$/i.test(file.name)&&file.type!=='text/html')throw new Error('Upload an .html or .htm file.')
+      const source=await file.text();if(!source.trim())throw new Error('The HTML file is empty.')
+      if(source.length>5_000_000)throw new Error('HTML source is limited to 5 MB.')
+      const parsed=new DOMParser().parseFromString(source,'text/html')
+      parsed.querySelectorAll('script,iframe,object,embed,form,video,audio,link[rel="stylesheet"]').forEach(node=>node.remove())
+      parsed.querySelectorAll('*').forEach(node=>{for(const attr of Array.from(node.attributes)){if(/^on/i.test(attr.name)||((attr.name==='src'||attr.name==='href')&&/^\s*javascript:/i.test(attr.value)))node.removeAttribute(attr.name)}})
+      const style=parsed.createElement('style');style.textContent='*{box-sizing:border-box}html,body{margin:0;padding:0;background:#fff;color:#111;font-family:Arial,sans-serif;font-size:14px;line-height:1.45}body{padding:32px;overflow-wrap:anywhere}img{max-width:100%;height:auto}table{border-collapse:collapse;max-width:100%}td,th{border:1px solid #777;padding:5px}pre{white-space:pre-wrap}h1{font-size:26px}h2{font-size:21px}h3{font-size:17px}';parsed.head.append(style)
+      const html='<!doctype html>'+parsed.documentElement.outerHTML
+      const width=794,height=1123;const svg='<svg xmlns="http://www.w3.org/2000/svg" width="'+width+'" height="'+height+'"><foreignObject width="100%" height="100%"><div xmlns="http://www.w3.org/1999/xhtml" style="width:'+width+'px;min-height:'+height+'px;background:white">'+html.replace(/&/g,'&amp;')+'</div></foreignObject></svg>'
+      const url=URL.createObjectURL(new Blob([svg],{type:'image/svg+xml;charset=utf-8'}))
+      try{const image=new Image();image.decoding='sync';await new Promise((resolve,reject)=>{image.onload=resolve;image.onerror=()=>reject(new Error('This browser could not render the HTML file. Try simpler HTML without external resources.'));image.src=url})
+        const canvas=document.createElement('canvas');canvas.width=width;canvas.height=height;const context=canvas.getContext('2d');if(!context)throw new Error('Canvas is unavailable.')
+        context.fillStyle='#fff';context.fillRect(0,0,width,height);context.drawImage(image,0,0,width,height)
+        const png=await new Promise((resolve,reject)=>canvas.toBlob(blob=>blob?resolve(blob):reject(new Error('Could not render HTML.')),'image/png'))
+        const pdf=await PDFDocument.create();const embedded=await pdf.embedPng(new Uint8Array(await png.arrayBuffer()));const page=pdf.addPage([595.28,841.89]);page.drawImage(embedded,{x:0,y:0,width:595.28,height:841.89})
+        return blobResult(await pdfBlob(pdf),'html-to-pdf.pdf','pdf')
+      }finally{URL.revokeObjectURL(url)}
+    }
     case 'word-to-pdf':{
       fileRequired(files);assertFileSize(file,40*1024*1024)
       const signature=new Uint8Array(await file.slice(0,4).arrayBuffer())
