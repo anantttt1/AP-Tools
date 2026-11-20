@@ -175,7 +175,7 @@ const relatedToolMap: Record<string,string[]> = {
   'roman-to-decimal':['decimal-to-roman','number-to-words','factorial-calculator'],'prime-checker':['prime-generator','factorial-calculator','gcd-lcm-calculator'],
   'prime-generator':['prime-checker','fibonacci-generator','factorial-calculator'],'hmac-sha256':['text-encrypt','text-decrypt','hash-text'],
   'date-add-days':['date-difference','working-days-calculator','age'],'working-days-calculator':['date-add-days','date-difference','age'],
-  'time-duration-calculator':['timestamp','stopwatch','countdown']
+  'time-duration-calculator':['timestamp','stopwatch','countdown'],
   "line-numbers-add": ["line-numbers-remove", "lines-reverse", "sort-lines"],
   "line-numbers-remove": ["line-numbers-add", "sort-lines", "duplicate-lines"],
   "lines-prefix": ["lines-suffix", "line-breaks-remove", "line-numbers-add"],
