@@ -132,6 +132,15 @@ const extendedPlaceholders: Record<string,string> = {
 
 
 const relatedToolMap: Record<string,string[]> = {
+  'pdf-merge':['pdf-split','pdf-rotate','pdf-watermark','pdf-page-numbers','pdf-remove-pages','pdf-organize-pages','pdf-split-every-page'],
+  'pdf-remove-pages':['pdf-organize-pages','pdf-split-every-page','pdf-merge','pdf-compare'],
+  'pdf-organize-pages':['pdf-remove-pages','pdf-split-every-page','pdf-merge','pdf-page-numbers'],
+  'pdf-split-every-page':['pdf-merge','pdf-remove-pages','pdf-organize-pages','pdf-compare'],
+  'pdf-header-footer':['pdf-watermark','pdf-page-numbers','pdf-metadata-editor'],
+  'pdf-metadata-editor':['pdf-info','pdf-inspector','pdf-header-footer'],
+  'pdf-crop':['pdf-rotate','pdf-images','pdf-watermark'],
+  'pdf-flatten-forms':['pdf-metadata-editor','pdf-compare','pdf-merge'],
+  'pdf-compare':['pdf-text','pdf-merge','pdf-remove-pages'],
   'text-encrypt':['text-decrypt','password','password-strength'],'text-decrypt':['text-encrypt','password','password-strength'],
   'base64-encode':['base64-decode','base64url-encoder','text-to-hex'],'base64-decode':['base64-encode','base64url-decoder','hex-to-text'],
   'base64url-encoder':['base64url-decoder','base64-encode'],'base64url-decoder':['base64url-encoder','base64-decode'],
@@ -316,7 +325,7 @@ export default function ToolPage() {
         {id==='regex'&&<label className="field-label">Regex flags<input maxLength={7} value={flags} onChange={e=>setFlags(e.target.value)} placeholder="g"/></label>}
         {id==='regex'&&<label className="field-label">Text to test<textarea maxLength={200_000} value={input} onChange={e=>setInput(e.target.value)} rows={5} placeholder="Text to test against regex..."/></label>}
         {!['regex'].includes(id)&&!needsFiles&&<label className="field-label">Input<textarea maxLength={10_000_000} value={input} onChange={e=>setInput(e.target.value)} rows={6} placeholder={extendedPlaceholders[id]||textPlaceholders[id]||'Enter text or value...'}/></label>}
-        {needsFiles&&['pdf-split','pdf-remove-pages','pdf-organize-pages','pdf-header-footer','pdf-metadata-editor','pdf-crop','image-crop','image-color','pdf-watermark','pdf-rotate','image-watermark'].includes(id)&&<label className="field-label">{id==='pdf-split'?'Pages to extract':id==='pdf-remove-pages'?'Page numbers to remove':id==='pdf-organize-pages'?'New page order':id==='pdf-header-footer'?'Header | Footer':id==='pdf-metadata-editor'?'Metadata JSON':id==='pdf-crop'?'Crop rectangle (x,y,width,height) in points':id==='image-crop'?'Crop rectangle (x,y,width,height)':id==='image-color'?'Pixel coordinate (x,y)':id==='pdf-rotate'?'Rotation degrees':id==='image-watermark'?'Watermark text':'Watermark text'}{id==='pdf-metadata-editor'?<textarea rows={5} maxLength={10000} value={input} onChange={e=>setInput(e.target.value)} placeholder={extendedHelp[id]||help[id]||textPlaceholders[id]||'Enter the required values...'}/>:<input maxLength={10000} value={input} onChange={e=>setInput(e.target.value)} placeholder={extendedHelp[id]||help[id]||textPlaceholders[id]||'Enter the required values...'}/ >}</label>}
+        {needsFiles&&['pdf-split','pdf-remove-pages','pdf-organize-pages','pdf-header-footer','pdf-metadata-editor','pdf-crop','image-crop','image-color','pdf-watermark','pdf-rotate','image-watermark'].includes(id)&&<label className="field-label">{id==='pdf-split'?'Pages to extract':id==='pdf-remove-pages'?'Page numbers to remove':id==='pdf-organize-pages'?'New page order':id==='pdf-header-footer'?'Header | Footer':id==='pdf-metadata-editor'?'Metadata JSON':id==='pdf-crop'?'Crop rectangle (x,y,width,height) in points':id==='image-crop'?'Crop rectangle (x,y,width,height)':id==='image-color'?'Pixel coordinate (x,y)':id==='pdf-rotate'?'Rotation degrees':id==='image-watermark'?'Watermark text':'Watermark text'}{id==='pdf-metadata-editor'?<textarea rows={5} maxLength={10000} value={input} onChange={e=>setInput(e.target.value)} placeholder={extendedHelp[id]||help[id]||textPlaceholders[id]||'Enter the required values...'}/>:<input maxLength={10000} value={input} onChange={e=>setInput(e.target.value)} placeholder={extendedHelp[id]||help[id]||textPlaceholders[id]||'Enter the required values...'}/>}</label>}
         {(help[id]||extendedHelp[id])&&<div className="subtle-hint">{help[id]||extendedHelp[id]}</div>}
         <div className="workspace-actions"><button className="button-primary" disabled={busy} onClick={run}>{busy?'Processing...':'Run tool'} <span>→</span></button><button className="button-secondary" onClick={()=>{requestId.current+=1;setBusy(false);setInput('');setSecondary('');setFiles([]);setOutput(null);setError('')}}><RotateCcw size={15}/> Reset</button></div>
       </>}
