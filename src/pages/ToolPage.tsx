@@ -10,7 +10,7 @@ import { processTool, type ProcessResult } from '../lib/processor'
 
 const fileToolIds = new Set([
   'zip-creator','zip-extractor','file-type','file-size','file-hash','file-compare','bulk-rename',
-  'pdf-merge','pdf-split','word-to-pdf','pdf-to-word','pdf-extract-pages','pdf-sign-visible','pdf-edit-annotate','pdf-scan-images','pdf-compress','pdf-repair','pdf-images','images-pdf','pdf-text','pdf-watermark','pdf-rotate','pdf-info','pdf-page-numbers','pdf-inspector','pdf-remove-pages','pdf-organize-pages','pdf-split-every-page','pdf-header-footer','pdf-metadata-editor','pdf-crop','pdf-flatten-forms','pdf-compare',
+  'pdf-merge','pdf-split','html-to-pdf','word-to-pdf','pdf-to-word','pdf-extract-pages','pdf-sign-visible','pdf-edit-annotate','pdf-scan-images','pdf-compress','pdf-repair','pdf-images','images-pdf','pdf-text','pdf-watermark','pdf-rotate','pdf-info','pdf-page-numbers','pdf-inspector','pdf-remove-pages','pdf-organize-pages','pdf-split-every-page','pdf-header-footer','pdf-metadata-editor','pdf-crop','pdf-flatten-forms','pdf-compare',
   'image-compress','image-resize','image-crop','image-convert','image-rotate','image-flip','image-grayscale','image-watermark','image-base64','image-metadata','image-color','favicon','image-collage','image-pdf'
 ])
 const multipleIds = new Set(['zip-creator','file-compare','bulk-rename','pdf-merge','pdf-compare','images-pdf','image-pdf','pdf-scan-images','image-collage'])
@@ -60,6 +60,7 @@ const help: Record<string,string> = {
   'pdf-edit-annotate':'Upload a PDF and enter a short text note to place near the top of page 1.',
   'pdf-scan-images':'Choose PNG or JPEG scan photos in page order to create a PDF.',
   'pdf-to-word':'Upload a PDF. Selectable text is extracted into an editable DOCX file. Scanned pages without a text layer are not OCRed; complex layouts, columns and images may not be preserved.',
+  'html-to-pdf':'Upload a local .html or .htm file. It is rendered in your browser as a single-page PDF. Scripts, forms and frames are removed; external images/fonts and complex multi-page layouts may not be preserved.',
   'word-to-pdf':'Upload a .docx file. Text and paragraph order are converted locally to PDF. This lightweight browser converter does not preserve the original Word page layout, images, tables or advanced formatting; legacy .doc files are not supported.'
 }
 const textPlaceholders: Record<string,string> = {
@@ -140,6 +141,7 @@ const extendedPlaceholders: Record<string,string> = {
 
 
 const relatedToolMap: Record<string,string[]> = {
+  "html-to-pdf": ["word-to-pdf", "pdf-to-word", "pdf-merge"],
   "pdf-merge": ["pdf-split", "pdf-rotate", "pdf-watermark", "pdf-page-numbers", "pdf-remove-pages", "pdf-organize-pages", "pdf-split-every-page"],
   "pdf-remove-pages": ["pdf-organize-pages", "pdf-split-every-page", "pdf-merge", "pdf-compare"],
   "pdf-organize-pages": ["pdf-remove-pages", "pdf-split-every-page", "pdf-merge", "pdf-page-numbers"],
@@ -565,7 +567,7 @@ export default function ToolPage() {
       <div className="workspace-top"><div><strong>Tool workspace</strong><p>Runs locally in your browser. Files are not sent to an AP TOOLS server.</p></div><span className="local-badge"><span/> Local processing</span></div>
       {special?<UtilityWidget id={id}/>:<>
         {needsFiles&&<div className="upload-zone" onDragOver={e=>{e.preventDefault();e.currentTarget.classList.add('dragging')}} onDragLeave={e=>e.currentTarget.classList.remove('dragging')} onDrop={e=>{e.preventDefault();e.currentTarget.classList.remove('dragging');chooseToolFiles(Array.from(e.dataTransfer.files))}}>
-          <input id="tool-file-input" type="file" multiple={multipleIds.has(id)} accept={id==='images-pdf'||id==='image-pdf'||id==='pdf-scan-images'?'.jpg,.jpeg,.png,image/jpeg,image/png':id==='word-to-pdf'?'.docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document':id.includes('pdf')?'.pdf,application/pdf':id.includes('image')||id.includes('favicon')||id.includes('collage')?'image/*':undefined} onChange={e=>{chooseToolFiles(Array.from(e.target.files||[]));e.currentTarget.value=''}}/>
+          <input id="tool-file-input" type="file" multiple={multipleIds.has(id)} accept={id==='images-pdf'||id==='image-pdf'||id==='pdf-scan-images'?'.jpg,.jpeg,.png,image/jpeg,image/png':id==='word-to-pdf'?'.docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document':id==='html-to-pdf'?'.html,.htm,text/html':id.includes('pdf')?'.pdf,application/pdf':id.includes('image')||id.includes('favicon')||id.includes('collage')?'image/*':undefined} onChange={e=>{chooseToolFiles(Array.from(e.target.files||[]));e.currentTarget.value=''}}/>
           <label htmlFor="tool-file-input"><FileUp size={28}/><strong>Drop files here or browse</strong><span>{multipleIds.has(id)?'Select multiple files if needed.':'Select a file from your device.'}</span></label>
           {files.length>0&&<div className="selected-files">{files.map((f,i)=><div key={`${f.name}-${i}`}>{f.name}<span>{(f.size/1024).toFixed(1)} KB</span></div>)}</div>}
         </div>}
