@@ -226,11 +226,6 @@
   <url><loc>https://apcreativetools.vercel.app/pdf/compare-pdf/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://apcreativetools.vercel.app/tool/pdf-compress</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://apcreativetools.vercel.app/tool/pdf-repair</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://apcreativetools.vercel.app/tool/stopwatch</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://apcreativetools.vercel.app/tool/countdown</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://apcreativetools.vercel.app/tool/pomodoro</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://apcreativetools.vercel.app/tool/notes</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://apcreativetools.vercel.app/tool/todo</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://apcreativetools.vercel.app/tool/pdf-extract-pages</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://apcreativetools.vercel.app/tool/pdf-sign-visible</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://apcreativetools.vercel.app/tool/pdf-edit-annotate</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
