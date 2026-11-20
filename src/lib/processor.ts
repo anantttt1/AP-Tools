@@ -209,6 +209,16 @@ export async function processTool(id:string, files:File[], input:string, seconda
     case 'csv-file':return blobResult(new Blob([input],{type:'text/csv'}),'created.csv')
 
     // PDF
+    case 'pdf-compress':case 'pdf-repair':{
+      fileRequired(files);assertFileSize(file,60*1024*1024)
+      let pdf:PDFDocument
+      try{pdf=await PDFDocument.load(await file.arrayBuffer(),{ignoreEncryption:false,updateMetadata:false})}
+      catch(error){throw new Error(id==='pdf-repair'?'This PDF could not be opened by the repair engine. It may be encrypted, severely damaged or use unsupported features.':'This PDF could not be opened for compression. Check that it is a valid, unencrypted PDF.')}
+      if(pdf.getPageCount()>MAX_PDF_PAGES)throw new Error('PDFs are limited to 250 pages.')
+      const bytes=await pdf.save({useObjectStreams:true,addDefaultPage:false,objectsPerTick:50})
+      const filename=id==='pdf-compress'?'compressed.pdf':'repaired.pdf'
+      return blobResult(new Blob([bytes],{type:'application/pdf'}),filename,'pdf')
+    }
     case 'pdf-merge':{
       fileRequired(files,2);if(files.length>MAX_PDF_PAGES)throw new Error(`Choose no more than ${MAX_PDF_PAGES} PDFs.`);assertFilesSize(files, 80 * 1024 * 1024);const out=await PDFDocument.create()
       for(const f of files){assertFileSize(f);const src=await PDFDocument.load(await f.arrayBuffer());if(src.getPageCount()+out.getPageCount()>MAX_PDF_PAGES)throw new Error(`PDF output is limited to ${MAX_PDF_PAGES} pages.`);(await out.copyPages(src,src.getPageIndices())).forEach(p=>out.addPage(p))}
