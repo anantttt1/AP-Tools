@@ -281,7 +281,7 @@ export async function processTool(id:string, files:File[], input:string, seconda
       fileRequired(files);assertFileSize(file,40*1024*1024)
       const signature=new Uint8Array(await file.slice(0,4).arrayBuffer())
       if(signature[0]!==0x50||signature[1]!==0x4b)throw new Error('Upload a valid .docx Word document. Legacy .doc files are not supported.')
-      const zip=await JSZip.loadAsync(file,{checkCRC32:true})
+      const zip=await JSZip.loadAsync(file)
       const documentFile=zip.file('word/document.xml')
       if(!documentFile)throw new Error('This DOCX file does not contain a readable Word document.')
       const xml=await documentFile.async('text')
@@ -473,7 +473,7 @@ export async function processTool(id:string, files:File[], input:string, seconda
         }
         const page=pdf.addPage([pageW,pageH])
         page.drawRectangle({x:0,y:0,width:pageW,height:pageH,color:rgb(1,1,1)})
-        if(imageBytes&&imageKind){
+        if(imageBytes&&imageKind&&slideDoc.getElementsByTagName('a:t').length===0){
           const image=imageKind==='jpg'?await pdf.embedJpg(imageBytes):await pdf.embedPng(imageBytes)
           const scale=Math.min(pageW/image.width,pageH/image.height)
           const width=image.width*scale,height=image.height*scale
