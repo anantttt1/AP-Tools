@@ -269,10 +269,10 @@ export async function processTool(id:string, files:File[], input:string, seconda
       const html='<!doctype html>'+parsed.documentElement.outerHTML
       const width=794,height=1123;const svg='<svg xmlns="http://www.w3.org/2000/svg" width="'+width+'" height="'+height+'"><foreignObject width="100%" height="100%"><div xmlns="http://www.w3.org/1999/xhtml" style="width:'+width+'px;min-height:'+height+'px;background:white">'+html.replace(/&/g,'&amp;')+'</div></foreignObject></svg>'
       const url=URL.createObjectURL(new Blob([svg],{type:'image/svg+xml;charset=utf-8'}))
-      try{const image=new Image();image.decoding='sync';await new Promise((resolve,reject)=>{image.onload=resolve;image.onerror=()=>reject(new Error('This browser could not render the HTML file. Try simpler HTML without external resources.'));image.src=url})
+      try{const image=new Image();image.decoding='sync';await new Promise<void>((resolve,reject)=>{image.onload=()=>resolve();image.onerror=()=>reject(new Error('This browser could not render the HTML file. Try simpler HTML without external resources.'));image.src=url})
         const canvas=document.createElement('canvas');canvas.width=width;canvas.height=height;const context=canvas.getContext('2d');if(!context)throw new Error('Canvas is unavailable.')
         context.fillStyle='#fff';context.fillRect(0,0,width,height);context.drawImage(image,0,0,width,height)
-        const png=await new Promise((resolve,reject)=>canvas.toBlob(blob=>blob?resolve(blob):reject(new Error('Could not render HTML.')),'image/png'))
+        const png=await new Promise<Blob>((resolve,reject)=>canvas.toBlob(blob=>blob?resolve(blob):reject(new Error('Could not render HTML.')),'image/png'))
         const pdf=await PDFDocument.create();const embedded=await pdf.embedPng(new Uint8Array(await png.arrayBuffer()));const page=pdf.addPage([595.28,841.89]);page.drawImage(embedded,{x:0,y:0,width:595.28,height:841.89})
         return blobResult(await pdfBlob(pdf),'html-to-pdf.pdf','pdf')
       }finally{URL.revokeObjectURL(url)}
