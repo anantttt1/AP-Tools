@@ -104,4 +104,7 @@ assert.equal([...toolPage.matchAll(/'image-rotate':/g)].length, 1, 'Tool help ob
 assert.ok(settings.includes('Browser storage could not be cleared'), 'Settings must handle browser storage errors')
 
 assert.ok(extendedProcessor.includes('hmac-sha256') && extendedProcessor.includes('color-contrast-checker') && extendedProcessor.includes('json-unflatten'), 'Extended processors must include cryptographic, colour and nested-data utilities')
-console.log('Project checks passed: 316 tools mapped; dependencies declared; localhost-only Vite; PDF/ZIP/image/text hardening; regex isolation; CSV formula protection; workflow and batch bounds; and browser security headers.')
+assert.ok(processor.includes("case 'pdf-to-powerpoint':"), 'PDF to PowerPoint processor must be implemented')
+assert.ok(processor.includes('ppt/presentation.xml') && processor.includes('ppt/slides/slide'), 'PDF to PowerPoint must create a PPTX presentation and slide parts')
+assert.ok(toolPage.includes("'pdf-to-powerpoint'"), 'PDF to PowerPoint must be wired to the upload interface')
+console.log('Project checks passed: 317 tools mapped; dependencies declared; localhost-only Vite; PDF/ZIP/image/text hardening; regex isolation; CSV formula protection; workflow and batch bounds; and browser security headers.')
