@@ -1,6 +1,14 @@
 import assert from 'node:assert/strict'
 import { createHmac, webcrypto } from 'node:crypto'
-import { processExtendedTool } from '../src/lib/extendedProcessor.ts'
+import fs from 'node:fs'
+import path from 'node:path'
+import { pathToFileURL } from 'node:url'
+import ts from 'typescript'
+
+const tempPath = path.join(process.cwd(), 'scripts', '.extended-processor-test.mjs')
+const source = fs.readFileSync(path.join(process.cwd(), 'src/lib/extendedProcessor.ts'), 'utf8')
+fs.writeFileSync(tempPath, ts.transpile(source, { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022 }))
+const { processExtendedTool } = await import(pathToFileURL(tempPath).href + '?test=' + Date.now())
 
 if (!globalThis.crypto) globalThis.crypto = webcrypto
 
@@ -73,7 +81,7 @@ await same('tip-calculator', '1200,10,3', 'Tip: 120.00\nTotal: 1320.00\nPer pers
 await same('date-add-days', '2026-01-31,1', '2026-02-01')
 await same('working-days-calculator', '2026-01-05,2026-01-09', 'Weekdays (inclusive): 5\nWeekends excluded: yes\nPublic holidays excluded: no')
 assert.match(await run('time-duration-calculator', '09:30,17:45'), /Duration: 8 hours, 15 minutes, 0 seconds/)
-assert.match(await run('reading-time-estimator', 'one two three four', '200'), /4 words/)
+assert.match(await run('reading-time-estimator', 'one two three four', '200'), /Words: 4/)
 const message = 'AP Creative Tools HMAC check'
 const key = 'local-test-secret'
 const expectedHmac = createHmac('sha256', key).update(message).digest('hex')
@@ -88,3 +96,5 @@ await assert.rejects(() => run('base64url-decoder', '%%%'), /Base64/i)
 await assert.rejects(() => run('hmac-sha256', message, ''), /secret key/i)
 
 console.log('Extended processor tests passed: transformations, encodings, JSON/CSV, HMAC, validators, colour, number systems, maths, dates, HTML escaping and invalid-input handling.')
+
+fs.rmSync(tempPath, { force: true })
