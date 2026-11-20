@@ -15,6 +15,7 @@ const headers = read('_headers')
 const workflows = read('src/pages/Workflows.tsx')
 const batchCenter = read('src/pages/BatchCenter.tsx')
 const settings = read('src/pages/Settings.tsx')
+const vercel = JSON.parse(read('vercel.json'))
 const dependencies = {...pkg.dependencies, ...pkg.devDependencies}
 
 const ids = [...catalog.matchAll(/"id": "([^"]+)"/g)].map(match => match[1])
@@ -46,6 +47,9 @@ assert.ok(!processor.includes('isEvalSupported:'), 'Removed PDF.js options must 
 assert.ok(processor.includes('enableXfa:false'), 'PDF.js XFA support must be disabled')
 assert.ok(processor.includes('safeZipPath'), 'ZIP paths must be validated before archive writes')
 assert.ok(headers.includes('Content-Security-Policy:'), 'Static hosting security headers are required')
+assert.equal(vercel.buildCommand, 'npm run check', 'Vercel must run repository checks before deployment')
+const deployedHeaderKeys = new Set((vercel.headers || []).flatMap(item => item.headers.map(header => header.key)))
+for (const key of ['Content-Security-Policy','X-Content-Type-Options','X-Frame-Options','Referrer-Policy','Strict-Transport-Security']) assert.ok(deployedHeaderKeys.has(key), `Vercel response header ${key} is required`)
 assert.ok(headers.includes("object-src 'none'"), 'CSP must disable embedded objects')
 assert.ok(serviceWorker.includes("url.search) return"), 'Service worker must not cache query/API responses')
 assert.ok(serviceWorker.includes("startsWith('/assets/')"), 'Service worker must cache only app assets')
