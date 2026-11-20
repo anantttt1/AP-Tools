@@ -422,7 +422,14 @@ export async function processTool(id:string, files:File[], input:string, seconda
     case 'powerpoint-to-pdf':{
       fileRequired(files);assertFileSize(file,80*1024*1024)
       if(!/\.pptx$/i.test(file.name))throw new Error('Upload a PowerPoint .pptx file. Legacy .ppt files are not supported.')
+      const signature=new Uint8Array(await file.slice(0,4).arrayBuffer())
+      if(signature[0]!==0x50||signature[1]!==0x4b)throw new Error('This file is not a valid PowerPoint .pptx archive.')
       const zip=await JSZip.loadAsync(file,{checkCRC32:true})
+      const entries=Object.values(zip.files)
+      if(entries.length>1000)throw new Error('This presentation contains too many archive entries to process safely.')
+      const declaredBytes=entries.reduce((sum,entry)=>sum+(((entry as unknown as {_data?:{uncompressedSize?:number}})._data?.uncompressedSize)||0),0)
+      if(declaredBytes>200*1024*1024)throw new Error('The expanded PowerPoint archive exceeds the 200 MB safety limit.')
+      if(!zip.file('[Content_Types].xml')||!zip.file('ppt/presentation.xml'))throw new Error('This file is missing required PowerPoint presentation parts.')
       const slidePaths=Object.keys(zip.files).filter(name=>/^ppt\/slides\/slide\d+\.xml$/.test(name)).sort((a,b)=>Number(a.match(/slide(\d+)/)?.[1])-Number(b.match(/slide(\d+)/)?.[1]))
       if(!slidePaths.length)throw new Error('No PowerPoint slides were found. Make sure this is a valid .pptx file.')
       if(slidePaths.length>100)throw new Error('PowerPoint conversion is limited to 100 slides per file.')
@@ -433,8 +440,13 @@ export async function processTool(id:string, files:File[], input:string, seconda
         const slideFile=zip.file(slidePath)
         if(!slideFile)continue
         const xml=await slideFile.async('text')
+        if(xml.length>5*1024*1024)throw new Error('A slide XML part exceeds the 5 MB safety limit.')
+        const slideDoc=new DOMParser().parseFromString(xml,'application/xml')
+        if(slideDoc.getElementsByTagName('parsererror').length)throw new Error('A slide contains invalid XML and could not be read.')
         const relPath=slidePath.replace('slides/','slides/_rels/')+'.rels'
-        const relXml=await zip.file(relPath)?.async('text')
+        const relFile=zip.file(relPath)
+        const relXml=relFile?await relFile.async('text'):undefined
+        if(relXml&&relXml.length>2*1024*1024)throw new Error('A slide relationship file exceeds the 2 MB safety limit.')
         let imageBytes:Uint8Array|undefined
         let imageKind:'jpg'|'png'|undefined
         if(relXml){
@@ -442,10 +454,12 @@ export async function processTool(id:string, files:File[], input:string, seconda
           const imageRel=Array.from(relDoc.getElementsByTagName('Relationship')).find(el=>(el.getAttribute('Type')||'').endsWith('/image'))
           if(imageRel){
             const target=imageRel.getAttribute('Target')||''
+            if(!target||target.startsWith('/')||/^[a-z]+:/i.test(target)||target.includes('\\'))throw new Error('The presentation contains an unsupported external or unsafe image relationship.')
             const base=slidePath.slice(0,slidePath.lastIndexOf('/')+1)
             const parts=(base+target).split('/')
             const resolved:string[]=[]
             for(const part of parts){if(!part||part==='.')continue;if(part==='..')resolved.pop();else resolved.push(part)}
+            if(!resolved.join('/').startsWith('ppt/media/'))throw new Error('A slide image points outside the PowerPoint media folder.')
             const media=zip.file(resolved.join('/'))
             if(media){
               const bytes=await media.async('uint8array')
@@ -465,8 +479,7 @@ export async function processTool(id:string, files:File[], input:string, seconda
           const width=image.width*scale,height=image.height*scale
           page.drawImage(image,{x:(pageW-width)/2,y:(pageH-height)/2,width,height})
         }else{
-          const doc=new DOMParser().parseFromString(xml,'application/xml')
-          if(doc.getElementsByTagName('parsererror').length)throw new Error('A slide contains invalid XML and could not be read.')
+          const doc=slideDoc
           const lines=Array.from(doc.getElementsByTagName('a:t')).map(el=>(el.textContent||'').trim()).filter(Boolean)
           const font=await pdf.embedFont(StandardFonts.Helvetica)
           const bold=await pdf.embedFont(StandardFonts.HelveticaBold)
