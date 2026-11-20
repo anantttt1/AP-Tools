@@ -63,8 +63,8 @@ const deepSort = (value: any): any => {
 const parseClock = (value: string) => { const m=/^(\d{1,3}):([0-5]\d)(?::([0-5]\d))?$/.exec(value.trim()); if(!m)throw new Error('Enter time as HH:MM or HH:MM:SS.'); return Number(m[1])*3600+Number(m[2])*60+Number(m[3]||0) }
 const spreadsheetSafeCell = (value: unknown) => {
   const cell = String(value ?? '')
-  const trimmed = cell.replace(/^[\\t\\r ]+/, '')
-  const formula = /^[=+@]/.test(trimmed) || /^-(?!\\d+(?:\\.\\d+)?$)/.test(trimmed)
+  const trimmed = cell.replace(/^[\t\r ]+/, '')
+  const formula = /^[=+@]/.test(trimmed) || /^-(?!\d+(?:\.\d+)?$)/.test(trimmed)
   return formula ? "'" + cell : cell
 }
 const mapSqlOutsideLiterals = (source: string, transform: (chunk: string) => string) => {
@@ -75,16 +75,14 @@ const mapSqlOutsideLiterals = (source: string, transform: (chunk: string) => str
     if (quote) {
       output += char
       if (char === quote) {
-        if (source[i + 1] === quote && quote !== ']') { output += source[++i] }
+        if (source[i + 1] === quote && quote !== ']') output += source[++i]
         else quote = ''
-      } else if (char === '\\\\' && source[i + 1]) { output += source[++i] }
-    } else if (char === "'" || char === '"' || char === '`') {
+      } else if (char === '\\' && source[i + 1]) output += source[++i]
+    } else if (char === "'" || char === '"' || char === '\x60') {
       flush(); quote = char; output += char
     } else if (char === '[') {
       flush(); quote = ']'; output += char
-    } else {
-      chunk += char
-    }
+    } else chunk += char
   }
   flush()
   return output
@@ -96,20 +94,19 @@ const removeSqlComments = (source: string) => {
     if (quote) {
       output += char; i++
       if (char === quote) {
-        if (source[i] === quote && quote !== ']') { output += source[i++ ] }
+        if (source[i] === quote && quote !== ']') output += source[i++]
         else quote = ''
-      } else if (char === '\\\\' && i < source.length) { output += source[i++] }
+      } else if (char === '\\' && i < source.length) output += source[i++]
       continue
     }
-    if (char === "'" || char === '"' || char === '`') { quote = char; output += char; i++; continue }
+    if (char === "'" || char === '"' || char === '\x60') { quote = char; output += char; i++; continue }
     if (char === '[') { quote = ']'; output += char; i++; continue }
-    if (char === '-' && next === '-') { i += 2; while (i < source.length && source[i] !== '\\n') i++; continue }
+    if (char === '-' && next === '-') { i += 2; while (i < source.length && source[i] !== '\n') i++; continue }
     if (char === '/' && next === '*') { i += 2; const end = source.indexOf('*/', i); if (end < 0) throw new Error('SQL block comment is not closed.'); i = end + 2; continue }
     output += char; i++
   }
   return output
 }
-
 export async function processExtendedTool(id: string, rawInput: string, secondary: string): Promise<Result> {
   const input = limit(rawInput)
   switch (id) {
@@ -180,8 +177,8 @@ export async function processExtendedTool(id: string, rawInput: string, secondar
     case 'json-parse-text': { const v=JSON.parse(input);if(typeof v!=='string')throw new Error('The JSON value must be a string literal.');return text(v) }
     case 'lines-to-json': return text(JSON.stringify(lines(input).filter((x,i,a)=>x.length||i<a.length-1),null,2))
     case 'json-to-lines': { const v=JSON.parse(input);if(!Array.isArray(v)||v.some(x=>x!==null&&typeof x==='object'))throw new Error('Enter a JSON array of scalar values.');return text(v.map(x=>x===null?'null':String(x)).join('\n')) }
-    case 'csv-to-tsv': return text(csvOutput(splitCsv(input),'\t'))
-    case 'tsv-to-csv': return text(csvOutput(splitCsv(input,'\t'),','))
+    case 'csv-to-tsv': return text(csvOutput(splitCsv(input).map(row=>row.map(spreadsheetSafeCell)),'\t'))
+    case 'tsv-to-csv': return text(csvOutput(splitCsv(input,'\t').map(row=>row.map(spreadsheetSafeCell)),','))
     case 'csv-to-markdown': { const rows=splitCsv(input);if(rows.length<2)throw new Error('Enter CSV with a header and at least one row.');const w=Math.max(...rows.map(r=>r.length)),p=rows.map(r=>Array.from({length:w},(_,i)=>String(r[i]||'').replace(/\|/g,'\\|').replace(/\n/g,' ')));return text('| '+p[0].join(' | ')+' |\n| '+p[0].map(()=> '---').join(' | ')+' |\n'+p.slice(1).map(r=>'| '+r.join(' | ')+' |').join('\n')) }
     case 'csv-to-html': { const rows=splitCsv(input);if(!rows.length)throw new Error('Enter CSV data.');const body=rows.map((r,i)=>'<tr>'+r.map(c=>(i===0?'<th>':'<td>')+escapeHtml(String(c))+(i===0?'</th>':'</td>')).join('')+'</tr>').join('');return {kind:'html',value:'<!doctype html><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src \'none\'; style-src \'unsafe-inline\'"><style>body{font:14px system-ui;padding:20px}table{border-collapse:collapse}td,th{border:1px solid #ddd;padding:8px;text-align:left}</style><table>'+body+'</table>'} }
     case 'json-sort-keys': return text(JSON.stringify(deepSort(JSON.parse(input)),null,2))
@@ -220,8 +217,8 @@ export async function processExtendedTool(id: string, rawInput: string, secondar
     }
     case 'css-formatter': return text(input.replace(/\/\*[\s\S]*?\*\//g,'').replace(/\s*{\s*/g,' {\n  ').replace(/\s*;\s*/g,';\n  ').replace(/\s*}\s*/g,'\n}\n').replace(/,\s*/g,',\n').replace(/[ \t]+/g,' ').trim())
     case 'css-minifier': return text(input.replace(/\/\*[\s\S]*?\*\//g,'').replace(/\s*([{}:;,])\s*/g,'$1').replace(/;}/g,'}').replace(/\s+/g,' ').trim())
-    case 'sql-formatter': { const re=/\b(SELECT|FROM|WHERE|GROUP BY|ORDER BY|HAVING|LIMIT|JOIN|LEFT JOIN|RIGHT JOIN|INNER JOIN|OUTER JOIN|ON|VALUES|INSERT INTO|UPDATE|SET|DELETE FROM|CREATE TABLE|ALTER TABLE|UNION|AND|OR)\b/gi;return text(input.replace(/\s+/g,' ').replace(re,m=>'\n'+m.toUpperCase()).trim().replace(/,\s*/g,',\n  ').replace(/^\n/,'')) }
-    case 'sql-minifier': return text(input.replace(/--[^\n]*/g,'').replace(/\/\*[\s\S]*?\*\//g,'').replace(/\s+/g,' ').trim())
+    case 'sql-formatter': { const re=/\b(SELECT|FROM|WHERE|GROUP BY|ORDER BY|HAVING|LIMIT|JOIN|LEFT JOIN|RIGHT JOIN|INNER JOIN|OUTER JOIN|ON|VALUES|INSERT INTO|UPDATE|SET|DELETE FROM|CREATE TABLE|ALTER TABLE|UNION|AND|OR)\b/gi;const safe=mapSqlOutsideLiterals(input,chunk=>chunk.replace(re,m=>'\n'+m.toUpperCase()));return text(safe.replace(/\s+/g,' ').trim().replace(/,\s*/g,',\n  ').replace(/^\n/,'')) }
+    case 'sql-minifier': return text(removeSqlComments(input).replace(/\s+/g,' ').trim())
     case 'sql-escape': return text("'"+input.replace(/\u0000/g,'').replace(/'/g,"''")+"'")
     case 'url-parser': { let u:URL;try{u=new URL(input.trim())}catch{throw new Error('Enter a complete URL including https:// or http://.')};return text(['Href: '+u.href,'Protocol: '+u.protocol,'Username: '+(u.username||'—'),'Hostname: '+u.hostname,'Port: '+(u.port||'—'),'Pathname: '+u.pathname,'Query: '+(u.search||'—'),'Hash: '+(u.hash||'—')].join('\n')) }
     case 'query-string-parser': { let q=input.trim().replace(/^\?/,'');if(/^https?:\/\//i.test(q)){try{q=new URL(q).search.replace(/^\?/,'')}catch{throw new Error('Enter a valid URL or query string.')}};const out:Record<string,string[]>={};new URLSearchParams(q).forEach((v,k)=>(out[k] ||= []).push(v));return text(JSON.stringify(Object.fromEntries(Object.entries(out).map(([k,v])=>[k,v.length===1?v[0]:v])),null,2)) }
