@@ -10,10 +10,10 @@ import { processTool, type ProcessResult } from '../lib/processor'
 
 const fileToolIds = new Set([
   'zip-creator','zip-extractor','file-type','file-size','file-hash','file-compare','bulk-rename',
-  'pdf-merge','pdf-split','pdf-images','images-pdf','pdf-text','pdf-watermark','pdf-rotate','pdf-info','pdf-page-numbers','pdf-inspector',
+  'pdf-merge','pdf-split','pdf-images','images-pdf','pdf-text','pdf-watermark','pdf-rotate','pdf-info','pdf-page-numbers','pdf-inspector','pdf-remove-pages','pdf-organize-pages','pdf-split-every-page','pdf-header-footer','pdf-metadata-editor','pdf-crop','pdf-flatten-forms','pdf-compare',
   'image-compress','image-resize','image-crop','image-convert','image-rotate','image-flip','image-grayscale','image-watermark','image-base64','image-metadata','image-color','favicon','image-collage','image-pdf'
 ])
-const multipleIds = new Set(['zip-creator','file-compare','bulk-rename','pdf-merge','images-pdf','image-pdf','image-collage'])
+const multipleIds = new Set(['zip-creator','file-compare','bulk-rename','pdf-merge','pdf-compare','images-pdf','image-pdf','image-collage'])
 const help: Record<string,string> = {
   'pdf-split':'Upload a PDF. Enter page numbers separated by commas, e.g. 1,3,5. Leave blank to copy all pages.',
   'image-crop':'Enter crop rectangle as x,y,width,height in source-image pixels, e.g. 0,0,800,600.',
@@ -86,6 +86,11 @@ const extendedHelp: Record<string,string> = {
   'hmac-sha256':'Enter the message below and the secret key in Additional input. The key remains in this browser session.',
   'credit-card-validator':'Enter digits only or a card number with spaces/hyphens. This checks the Luhn checksum only.',
   'isbn-validator':'Enter an ISBN-10 or ISBN-13; spaces and hyphens are optional.',
+  'pdf-remove-pages':'Enter page numbers to remove, separated by commas, e.g. 2,4.',
+  'pdf-organize-pages':'Enter every page exactly once in the new order, e.g. 3,1,2. The number of entries must match the PDF page count.',
+  'pdf-header-footer':'Enter header text, |, then footer text. Example: CONFIDENTIAL | Page copy.',
+  'pdf-metadata-editor':'Enter JSON with supported fields: title, author, subject, keywords, creator, producer.',
+  'pdf-crop':'Enter crop x,y,width,height in PDF points, e.g. 20,20,550,750. Must fit every page.',
   'reading-time-estimator':'Paste text below. Optional Additional input sets reading speed in words per minute (50–1,000); default is 200.'
 }
 const extendedPlaceholders: Record<string,string> = {
@@ -262,9 +267,9 @@ export default function ToolPage() {
   const special=['stopwatch','countdown','pomodoro','notes','todo'].includes(id)
   const chooseToolFiles=(list:File[])=>{
     if(!multipleIds.has(id)&&list.length>1){setError('This tool accepts one file at a time. The first selected file is kept.');setFiles(list.slice(0,1));return}
-    const maxCount:number=['images-pdf','image-pdf','image-collage'].includes(id)?50:id==='file-compare'?2:250
+    const maxCount:number=['images-pdf','image-pdf','image-collage'].includes(id)?50:(id==='file-compare'||id==='pdf-compare')?2:250
     if(list.length>maxCount){setError(`Choose no more than ${maxCount} file${maxCount===1?'':'s'} for this tool.`);return}
-    const maxBytes=id==='file-compare'?20*1024*1024:id==='zip-extractor'?60*1024*1024:80*1024*1024
+    const maxBytes=id==='file-compare'?20*1024*1024:id==='zip-extractor'?60*1024*1024:id==='pdf-compare'?120*1024*1024:80*1024*1024
     if(list.reduce((sum,file)=>sum+file.size,0)>maxBytes){setError(`Selected files exceed this tool's ${Math.round(maxBytes/1024/1024)} MB input limit.`);return}
     setFiles(list);setError('')
   }
@@ -311,7 +316,7 @@ export default function ToolPage() {
         {id==='regex'&&<label className="field-label">Regex flags<input maxLength={7} value={flags} onChange={e=>setFlags(e.target.value)} placeholder="g"/></label>}
         {id==='regex'&&<label className="field-label">Text to test<textarea maxLength={200_000} value={input} onChange={e=>setInput(e.target.value)} rows={5} placeholder="Text to test against regex..."/></label>}
         {!['regex'].includes(id)&&!needsFiles&&<label className="field-label">Input<textarea maxLength={10_000_000} value={input} onChange={e=>setInput(e.target.value)} rows={6} placeholder={extendedPlaceholders[id]||textPlaceholders[id]||'Enter text or value...'}/></label>}
-        {needsFiles&&['pdf-split','image-crop','image-color','pdf-watermark','pdf-rotate','image-watermark'].includes(id)&&<label className="field-label">{id==='pdf-split'?'Pages to extract':id==='image-crop'?'Crop rectangle (x,y,width,height)':id==='image-color'?'Pixel coordinate (x,y)':id==='pdf-rotate'?'Rotation degrees':id==='image-watermark'?'Watermark text':'Watermark text'}<input value={id==='image-watermark'?secondary:input} onChange={e=>id==='image-watermark'?setSecondary(e.target.value):setInput(e.target.value)} placeholder={help[id]}/></label>}
+        {needsFiles&&['pdf-split','pdf-remove-pages','pdf-organize-pages','pdf-header-footer','pdf-metadata-editor','pdf-crop','image-crop','image-color','pdf-watermark','pdf-rotate','image-watermark'].includes(id)&&<label className="field-label">{id==='pdf-split'?'Pages to extract':id==='pdf-remove-pages'?'Page numbers to remove':id==='pdf-organize-pages'?'New page order':id==='pdf-header-footer'?'Header | Footer':id==='pdf-metadata-editor'?'Metadata JSON':id==='pdf-crop'?'Crop rectangle (x,y,width,height) in points':id==='image-crop'?'Crop rectangle (x,y,width,height)':id==='image-color'?'Pixel coordinate (x,y)':id==='pdf-rotate'?'Rotation degrees':id==='image-watermark'?'Watermark text':'Watermark text'}{id==='pdf-metadata-editor'?<textarea rows={5} maxLength={10000} value={input} onChange={e=>setInput(e.target.value)} placeholder={extendedHelp[id]||help[id]||textPlaceholders[id]||'Enter the required values...'}/>:<input maxLength={10000} value={input} onChange={e=>setInput(e.target.value)} placeholder={extendedHelp[id]||help[id]||textPlaceholders[id]||'Enter the required values...'}/ >}</label>}
         {(help[id]||extendedHelp[id])&&<div className="subtle-hint">{help[id]||extendedHelp[id]}</div>}
         <div className="workspace-actions"><button className="button-primary" disabled={busy} onClick={run}>{busy?'Processing...':'Run tool'} <span>→</span></button><button className="button-secondary" onClick={()=>{requestId.current+=1;setBusy(false);setInput('');setSecondary('');setFiles([]);setOutput(null);setError('')}}><RotateCcw size={15}/> Reset</button></div>
       </>}
