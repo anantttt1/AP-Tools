@@ -10,10 +10,10 @@ import { processTool, type ProcessResult } from '../lib/processor'
 
 const fileToolIds = new Set([
   'zip-creator','zip-extractor','file-type','file-size','file-hash','file-compare','bulk-rename',
-  'pdf-merge','pdf-split','pdf-compress','pdf-repair','pdf-images','images-pdf','pdf-text','pdf-watermark','pdf-rotate','pdf-info','pdf-page-numbers','pdf-inspector','pdf-remove-pages','pdf-organize-pages','pdf-split-every-page','pdf-header-footer','pdf-metadata-editor','pdf-crop','pdf-flatten-forms','pdf-compare',
+  'pdf-merge','pdf-split','pdf-extract-pages','pdf-sign-visible','pdf-edit-annotate','pdf-scan-images','pdf-compress','pdf-repair','pdf-images','images-pdf','pdf-text','pdf-watermark','pdf-rotate','pdf-info','pdf-page-numbers','pdf-inspector','pdf-remove-pages','pdf-organize-pages','pdf-split-every-page','pdf-header-footer','pdf-metadata-editor','pdf-crop','pdf-flatten-forms','pdf-compare',
   'image-compress','image-resize','image-crop','image-convert','image-rotate','image-flip','image-grayscale','image-watermark','image-base64','image-metadata','image-color','favicon','image-collage','image-pdf'
 ])
-const multipleIds = new Set(['zip-creator','file-compare','bulk-rename','pdf-merge','pdf-compare','images-pdf','image-pdf','image-collage'])
+const multipleIds = new Set(['zip-creator','file-compare','bulk-rename','pdf-merge','pdf-compare','images-pdf','image-pdf','pdf-scan-images','image-collage'])
 const help: Record<string,string> = {
   'pdf-compress':'Upload a PDF. The tool re-saves it with PDF object streams; size reduction depends on the document contents.',
   'pdf-repair':'Upload a readable but problematic PDF. This rebuilds the PDF structure where supported; it cannot restore missing or severely corrupted content.',
@@ -54,7 +54,11 @@ const help: Record<string,string> = {
   'bulk-rename':'Choose files. Files are not renamed in place; a ZIP with renamed copies is created.',
   'images-pdf':'Choose JPG or PNG images. Each image becomes one PDF page.',
   'image-collage':'Choose two or more images to create a simple grid collage.',
-  'pdf-inspector':'Inspect page count, dimensions and metadata for the selected PDF.'
+  'pdf-inspector':'Inspect page count, dimensions and metadata for the selected PDF.',
+  'pdf-extract-pages':'Upload a PDF and enter pages or ranges, e.g. 1,3-5.',
+  'pdf-sign-visible':'Upload a PDF and enter the signature text. This places a visible typed signature on page 1; it is not a cryptographic digital signature.',
+  'pdf-edit-annotate':'Upload a PDF and enter a short text note to place near the top of page 1.',
+  'pdf-scan-images':'Choose PNG or JPEG scan photos in page order to create a PDF.'
 }
 const textPlaceholders: Record<string,string> = {
   'word-counter':'Paste or type text here...','case-converter':'Enter text to convert...','remove-spaces':'Paste text...','duplicate-lines':'Enter lines...','sort-lines':'Enter lines...','reverse-text':'Enter text...','text-diff':'Enter the first text block...','slug-generator':'Enter a title or phrase...','lorem':'3','markdown-preview':'# Hello AP TOOLS\n\nWrite **Markdown** here...','text-binary':'Enter text...','binary-text':'01001000 01101001','text-morse':'Hello world','morse-text':'.... . .-.. .-.. --- / .-- --- .-. .-.. -..',
@@ -452,7 +456,7 @@ export default function ToolPage() {
       <div className="workspace-top"><div><strong>Tool workspace</strong><p>Runs locally in your browser. Files are not sent to an AP TOOLS server.</p></div><span className="local-badge"><span/> Local processing</span></div>
       {special?<UtilityWidget id={id}/>:<>
         {needsFiles&&<div className="upload-zone" onDragOver={e=>{e.preventDefault();e.currentTarget.classList.add('dragging')}} onDragLeave={e=>e.currentTarget.classList.remove('dragging')} onDrop={e=>{e.preventDefault();e.currentTarget.classList.remove('dragging');chooseToolFiles(Array.from(e.dataTransfer.files))}}>
-          <input id="tool-file-input" type="file" multiple={multipleIds.has(id)} accept={id==='images-pdf'||id==='image-pdf'?'.jpg,.jpeg,.png,image/jpeg,image/png':id.includes('pdf')?'.pdf,application/pdf':id.includes('image')||id.includes('favicon')||id.includes('collage')?'image/*':undefined} onChange={e=>{chooseToolFiles(Array.from(e.target.files||[]));e.currentTarget.value=''}}/>
+          <input id="tool-file-input" type="file" multiple={multipleIds.has(id)} accept={id==='images-pdf'||id==='image-pdf'||id==='pdf-scan-images'?'.jpg,.jpeg,.png,image/jpeg,image/png':id.includes('pdf')?'.pdf,application/pdf':id.includes('image')||id.includes('favicon')||id.includes('collage')?'image/*':undefined} onChange={e=>{chooseToolFiles(Array.from(e.target.files||[]));e.currentTarget.value=''}}/>
           <label htmlFor="tool-file-input"><FileUp size={28}/><strong>Drop files here or browse</strong><span>{multipleIds.has(id)?'Select multiple files if needed.':'Select a file from your device.'}</span></label>
           {files.length>0&&<div className="selected-files">{files.map((f,i)=><div key={`${f.name}-${i}`}>{f.name}<span>{(f.size/1024).toFixed(1)} KB</span></div>)}</div>}
         </div>}
@@ -469,7 +473,7 @@ export default function ToolPage() {
         {id==='regex'&&<label className="field-label">Regex flags<input maxLength={7} value={flags} onChange={e=>setFlags(e.target.value)} placeholder="g"/></label>}
         {id==='regex'&&<label className="field-label">Text to test<textarea maxLength={200_000} value={input} onChange={e=>setInput(e.target.value)} rows={5} placeholder="Text to test against regex..."/></label>}
         {!['regex'].includes(id)&&!needsFiles&&<label className="field-label">Input<textarea maxLength={10_000_000} value={input} onChange={e=>setInput(e.target.value)} rows={6} placeholder={extendedPlaceholders[id]||textPlaceholders[id]||'Enter text or value...'}/></label>}
-        {needsFiles&&['pdf-split','pdf-remove-pages','pdf-organize-pages','pdf-header-footer','pdf-metadata-editor','pdf-crop','image-crop','image-color','pdf-watermark','pdf-rotate','image-watermark'].includes(id)&&<label className="field-label">{id==='pdf-split'?'Pages to extract':id==='pdf-remove-pages'?'Page numbers to remove':id==='pdf-organize-pages'?'New page order':id==='pdf-header-footer'?'Header | Footer':id==='pdf-metadata-editor'?'Metadata JSON':id==='pdf-crop'?'Crop rectangle (x,y,width,height) in points':id==='image-crop'?'Crop rectangle (x,y,width,height)':id==='image-color'?'Pixel coordinate (x,y)':id==='pdf-rotate'?'Rotation degrees':id==='image-watermark'?'Watermark text':'Watermark text'}{id==='pdf-metadata-editor'?<textarea rows={5} maxLength={10000} value={input} onChange={e=>setInput(e.target.value)} placeholder={extendedHelp[id]||help[id]||textPlaceholders[id]||'Enter the required values...'}/>:<input maxLength={10000} value={input} onChange={e=>setInput(e.target.value)} placeholder={extendedHelp[id]||help[id]||textPlaceholders[id]||'Enter the required values...'}/>}</label>}
+        {needsFiles&&['pdf-split','pdf-extract-pages','pdf-remove-pages','pdf-organize-pages','pdf-sign-visible','pdf-edit-annotate','pdf-header-footer','pdf-metadata-editor','pdf-crop','image-crop','image-color','pdf-watermark','pdf-rotate','image-watermark'].includes(id)&&<label className="field-label">{id==='pdf-split'||id==='pdf-extract-pages'?'Pages to extract':id==='pdf-sign-visible'?'Visible signature text':id==='pdf-edit-annotate'?'Text to add to page 1':id==='pdf-remove-pages'?'Page numbers to remove':id==='pdf-organize-pages'?'New page order':id==='pdf-header-footer'?'Header | Footer':id==='pdf-metadata-editor'?'Metadata JSON':id==='pdf-crop'?'Crop rectangle (x,y,width,height) in points':id==='image-crop'?'Crop rectangle (x,y,width,height)':id==='image-color'?'Pixel coordinate (x,y)':id==='pdf-rotate'?'Rotation degrees':id==='image-watermark'?'Watermark text':'Watermark text'}{id==='pdf-metadata-editor'?<textarea rows={5} maxLength={10000} value={input} onChange={e=>setInput(e.target.value)} placeholder={extendedHelp[id]||help[id]||textPlaceholders[id]||'Enter the required values...'}/>:<input maxLength={10000} value={input} onChange={e=>setInput(e.target.value)} placeholder={extendedHelp[id]||help[id]||textPlaceholders[id]||'Enter the required values...'}/>}</label>}
         {(help[id]||extendedHelp[id])&&<div className="subtle-hint">{help[id]||extendedHelp[id]}</div>}
         <div className="workspace-actions"><button className="button-primary" disabled={busy} onClick={run}>{busy?'Processing...':'Run tool'} <span>→</span></button><button className="button-secondary" onClick={()=>{requestId.current+=1;setBusy(false);setInput('');setSecondary('');setFiles([]);setOutput(null);setError('')}}><RotateCcw size={15}/> Reset</button></div>
       </>}
