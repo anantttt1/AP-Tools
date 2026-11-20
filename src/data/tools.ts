@@ -127,6 +127,13 @@ export const tools: Tool[] = [
     "icon": "presentation"
   },
   {
+    "id": "powerpoint-to-pdf",
+    "name": "PowerPoint to PDF",
+    "category": "PDF",
+    "description": "Convert a local PPTX presentation into a PDF in your browser. Image-based slides are preserved; complex layouts may be simplified.",
+    "icon": "file-pdf"
+  },
+  {
     "id": "html-to-pdf",
     "name": "HTML to PDF",
     "category": "PDF",
