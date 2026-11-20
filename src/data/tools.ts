@@ -120,6 +120,13 @@ export const tools: Tool[] = [
     "icon": "file-image"
   },
   {
+    "id": "word-to-pdf",
+    "name": "Word to PDF",
+    "category": "PDF",
+    "description": "Convert DOCX text into a downloadable PDF entirely in your browser. Document files stay on your device.",
+    "icon": "file-pdf"
+  },
+  {
     "id": "pdf-to-word",
     "name": "PDF to Word",
     "category": "PDF",
