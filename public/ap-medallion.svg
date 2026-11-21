@@ -1,102 +1,23 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
-<title id="title">AP Creative Studio</title><desc id="desc">Metallic silver AP monogram on a dark circular circuit-board medallion.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+<title id="title">AP Creative Tools</title><desc id="desc">The supplied metallic AP circuit medallion with animated green circuit pulses.</desc>
 <defs>
- <radialGradient id="core" cx="48%" cy="34%" r="72%"><stop stop-color="#202633"/><stop offset=".58" stop-color="#090d15"/><stop offset="1" stop-color="#020409"/></radialGradient>
- <linearGradient id="rim" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff"/><stop offset=".14" stop-color="#7c8490"/><stop offset=".29" stop-color="#f8fbff"/><stop offset=".48" stop-color="#555d69"/><stop offset=".68" stop-color="#e8edf4"/><stop offset=".84" stop-color="#737b88"/><stop offset="1" stop-color="#f8fbff"/></linearGradient>
- <linearGradient id="letter" x1=".1" y1="0" x2=".82" y2="1"><stop stop-color="#fff"/><stop offset=".22" stop-color="#aeb7c4"/><stop offset=".43" stop-color="#f9fbff"/><stop offset=".66" stop-color="#6b7481"/><stop offset=".82" stop-color="#e7edf5"/><stop offset="1" stop-color="#4c5563"/></linearGradient>
- <linearGradient id="edge" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff"/><stop offset=".45" stop-color="#67717e"/><stop offset="1" stop-color="#10151e"/></linearGradient>
- <clipPath id="disc"><circle cx="256" cy="256" r="211"/></clipPath>
- 
- <linearGradient id="ap-circuit-current" x1="0" y1="0" x2="1" y2="0">
-  <stop offset="0" stop-color="#064b2c" stop-opacity="0"/>
-  <stop offset=".28" stop-color="#16a34a" stop-opacity=".2"/>
-  <stop offset=".48" stop-color="#a7ffbf"/>
-  <stop offset=".58" stop-color="#22e36f"/>
-  <stop offset="1" stop-color="#16a34a" stop-opacity="0"/>
- </linearGradient>
- <filter id="ap-circuit-glow" x="-80%" y="-80%" width="260%" height="260%">
-  <feGaussianBlur stdDeviation="2.6" result="greenBlur"/>
-  <feColorMatrix in="greenBlur" type="matrix" values="0 0 0 0 0.08 0 0 0 0 1 0 0 0 0 0.36 0 0 0 .9 0" result="greenGlow"/>
-  <feMerge><feMergeNode in="greenGlow"/><feMergeNode in="SourceGraphic"/></feMerge>
- </filter>
- <filter id="shadow" x="-30%" y="-30%" width="160%" height="170%"><feGaussianBlur in="SourceAlpha" stdDeviation="8"/><feOffset dy="8"/><feComponentTransfer><feFuncA type="linear" slope=".75"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
- <linearGradient id="ap-water" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff"/><stop offset=".28" stop-color="#c8f1ff"/><stop offset=".62" stop-color="#63b9e8"/><stop offset="1" stop-color="#dff8ff"/></linearGradient>
- <linearGradient id="ap-sheen" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#fff" stop-opacity="0"/><stop offset=".45" stop-color="#fff" stop-opacity=".9"/><stop offset=".55" stop-color="#d9f4ff" stop-opacity=".75"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
- <filter id="ap-glow" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="4" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+ <clipPath id="badgeClip"><circle cx="256" cy="256" r="255"/></clipPath>
+ <filter id="greenGlow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
  <style>
-
- .ap-circuit-current{opacity:.12;mix-blend-mode:screen}
- .ap-trace{stroke-dasharray:18 150;stroke-dashoffset:0;animation:ap-current-flow 3.8s linear infinite}
- .trace-b{animation-delay:-.8s}.trace-c{animation-delay:-1.6s}.trace-d{animation-delay:-2.4s}.trace-e{animation-delay:-.4s}.trace-f{animation-delay:-1.2s}.trace-g{animation-delay:-2s}.trace-h{animation-delay:-2.8s}.trace-i{animation-delay:-1s}.trace-j{animation-delay:-3s}
- .ap-circuit-nodes circle{fill:#a5ffc1;opacity:.1;animation:ap-node-pulse 2.6s ease-in-out infinite}
- .ap-circuit-nodes circle:nth-child(2n){animation-delay:-1.3s}
- @keyframes ap-current-flow{0%{stroke-dashoffset:0;opacity:.12}12%{opacity:1}72%{opacity:.9}100%{stroke-dashoffset:-168;opacity:.12}}
- @keyframes ap-node-pulse{0%,100%{opacity:.08;transform:scale(.75);transform-box:fill-box;transform-origin:center}45%{opacity:1;transform:scale(1.8)}}
- @media(prefers-reduced-motion:reduce){.ap-trace,.ap-circuit-nodes circle{animation:none!important;stroke-dasharray:none;opacity:.35}}
-
- .ap-medallion-art{transform-box:fill-box;transform-origin:center;opacity:0;animation:ap-logo-settle 1.45s cubic-bezier(.18,.82,.22,1) .12s forwards}
- .ap-water-burst{transform-box:fill-box;transform-origin:center;opacity:0;animation:ap-water-bloom 1.9s cubic-bezier(.16,.72,.2,1) both}
- .ap-water-ring{fill:none;stroke:url(#ap-water);stroke-width:8;stroke-linecap:round;opacity:0;filter:url(#ap-glow);animation:ap-water-ring 2.2s cubic-bezier(.12,.7,.2,1) both}
- .ap-water-drops{fill:url(#ap-water);stroke:#fff;stroke-opacity:.7;stroke-width:2;filter:url(#ap-glow);opacity:0;animation:ap-water-drops 1.8s cubic-bezier(.15,.72,.2,1) both}
- .ap-logo-sheen{fill:url(#ap-sheen);opacity:0;transform:translateX(-560px);animation:ap-sheen-pass 7.5s ease-in-out 1.9s infinite}
- @keyframes ap-logo-settle{0%{opacity:0;transform:scale(.72) rotate(-13deg)}62%{opacity:1;transform:scale(1.035) rotate(1.4deg)}82%{transform:scale(.988) rotate(-.5deg)}100%{opacity:1;transform:scale(1) rotate(0)}}
- @keyframes ap-water-bloom{0%{opacity:0;transform:scale(.42)}18%{opacity:.96}58%{opacity:.76;transform:scale(1.08)}100%{opacity:0;transform:scale(1.22)}}
- @keyframes ap-water-ring{0%{opacity:0;stroke-width:15;transform:scale(.78)}22%{opacity:.9}100%{opacity:0;stroke-width:1.5;transform:scale(1.22)}}
- @keyframes ap-water-drops{0%{opacity:0;transform:scale(.3)}18%{opacity:1}68%{opacity:.9}100%{opacity:0;transform:scale(1.2) translateY(-5px)}}
- @keyframes ap-sheen-pass{0%,68%{opacity:0;transform:translateX(-560px)}73%{opacity:.42}82%{opacity:.2;transform:translateX(560px)}83%,100%{opacity:0;transform:translateX(560px)}}
- @media(prefers-reduced-motion:reduce){.ap-medallion-art,.ap-water-burst,.ap-water-ring,.ap-water-drops,.ap-logo-sheen{animation:none!important;opacity:1!important;transform:none!important}}
+ .circuit{fill:none;stroke:#7dff8c;stroke-width:3.2;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:2 34;stroke-dashoffset:0;opacity:0;filter:url(#greenGlow);animation:current-flow 3.6s linear infinite, circuit-glow 2.4s ease-in-out infinite alternate}
+ .circuit.slow{animation-duration:5s,2.9s;animation-delay:-1.8s,.4s}
+ .node{fill:#a4ff9b;opacity:0;filter:url(#greenGlow);animation:node-pulse 2.1s ease-in-out infinite}
+ @keyframes current-flow{to{stroke-dashoffset:-144}}
+ @keyframes circuit-glow{0%{opacity:.08}40%{opacity:.9}100%{opacity:.18}}
+ @keyframes node-pulse{0%,100%{opacity:.08;transform:scale(.7)}50%{opacity:.95;transform:scale(1.5)}}
+ @media(prefers-reduced-motion:reduce){.circuit,.node{animation:none;opacity:.28}}
  </style>
 </defs>
-
-<g class="ap-water-burst" fill="none" stroke="url(#ap-water)" stroke-width="9" stroke-linecap="round" filter="url(#ap-glow)">
- <path d="M256 7 C300 28 335 3 365 36 C397 69 440 62 465 103 C485 136 505 143 498 180 C491 220 520 245 500 282 C482 318 500 356 466 384 C437 407 439 452 398 468 C360 482 338 512 298 493 C258 475 224 509 189 490 C153 471 110 486 91 450 C72 416 30 412 38 370 C46 329 8 303 25 266 C43 229 13 194 43 163 C73 132 57 90 96 75 C133 60 145 16 185 31 C220 45 231 4 256 7Z" opacity=".76"/>
-</g>
-<circle class="ap-water-ring" cx="256" cy="256" r="239" pathLength="100" stroke-dasharray="76 24"/>
-<g class="ap-water-drops">
- <path d="M78 150 C62 125 75 106 87 91 C98 109 111 128 95 150 C90 157 83 157 78 150Z"/>
- <path d="M420 93 C406 72 418 57 430 43 C440 61 452 78 438 95 C433 101 425 100 420 93Z"/>
- <path d="M465 300 C451 279 462 265 474 251 C485 269 497 286 483 303 C478 309 470 307 465 300Z"/>
- <path d="M43 335 C30 317 39 302 49 290 C60 306 71 322 59 338 C54 344 47 341 43 335Z"/>
- <path d="M345 474 C332 456 342 442 352 430 C363 447 375 462 362 477 C357 483 349 480 345 474Z"/>
- <path d="M160 34 C150 20 158 9 166 0 C175 13 185 26 175 38 C171 43 164 40 160 34Z"/>
-</g>
-<g class="ap-medallion-art"><circle cx="256" cy="256" r="247" fill="#02040a"/>
-<circle cx="256" cy="250" r="240" fill="url(#rim)"/>
-<circle cx="256" cy="250" r="228" fill="#111722" stroke="#05080e" stroke-width="5"/>
-<circle cx="256" cy="250" r="216" fill="url(#core)" stroke="#aeb7c4" stroke-width="3"/>
-<g clip-path="url(#disc)" fill="none" stroke="#697789" stroke-width="2.1" opacity=".42" stroke-linecap="round" stroke-linejoin="round">
- <path d="M42 132h70v28h42m-112 28h48v42h36m-84 38h86v-28h45m-70 112h62v-34h40m-93 82h80v-29h36M468 120h-58v32h-38m96 30h-64v34h-36m99 42h-75v-28h-30m104 104h-72v-35h-43m90 98h-80v-30h-44"/>
- <path d="M125 35v68h38v40m-10-108v48h30v35m44-98v73h-28v40m75-106v65h-35v32m84-97v83h-34v37m80-117v58h-31v36m-215 250v-52h32v-34m57 88v-69h-27v-33m75 106v-71h28v-34m68 103v-54h-27v-30"/>
- <circle cx="112" cy="160" r="7"/><circle cx="160" cy="203" r="6"/><circle cx="191" cy="108" r="7"/><circle cx="286" cy="115" r="6"/><circle cx="376" cy="158" r="7"/><circle cx="414" cy="230" r="6"/><circle cx="100" cy="316" r="7"/><circle cx="161" cy="377" r="6"/><circle cx="332" cy="398" r="7"/><circle cx="414" cy="350" r="6"/>
- <path d="M70 218h44l17-17h26m-87 113h54l17 17h30m199-188h-45l-16 17h-31m104 207h-55l-18-18h-25M205 55v30m-55 308v-25m209-250v-28m-18 290v-29"/>
- <path d="M92 91l19 19m-19 0 19-19M390 82l20 20m-20 0 20-20M82 389l20 20m-20 0 20-20M400 393l20 20m-20 0 20-20"/>
-</g>
-
-<g class="ap-circuit-current" clip-path="url(#disc)" fill="none" stroke="url(#ap-circuit-current)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" filter="url(#ap-circuit-glow)">
- <path class="ap-trace trace-a" d="M72 132h66v28h48v38h36v-54h28v-48h32"/>
- <path class="ap-trace trace-b" d="M92 218h48v-34h34v-42h48v-27h42"/>
- <path class="ap-trace trace-c" d="M116 355h48v-34h34v-40h34v-32h34"/>
- <path class="ap-trace trace-d" d="M440 124h-48v35h-36v42h-40v31h-28"/>
- <path class="ap-trace trace-e" d="M452 270h-55v-34h-36v-38h-34v-30h-32"/>
- <path class="ap-trace trace-f" d="M420 374h-50v-32h-42v-34h-34v-28h-28"/>
- <path class="ap-trace trace-g" d="M202 64v46h-25v38h-32v36"/>
- <path class="ap-trace trace-h" d="M312 62v48h-28v35h-28v40"/>
- <path class="ap-trace trace-i" d="M148 430v-42h32v-34h34v-28"/>
- <path class="ap-trace trace-j" d="M354 430v-42h-30v-34h-35v-28"/>
-</g>
-<g class="ap-circuit-nodes" clip-path="url(#disc)" filter="url(#ap-circuit-glow)">
- <circle cx="138" cy="160" r="3.2"/><circle cx="224" cy="196" r="3.2"/><circle cx="318" cy="232" r="3.2"/>
- <circle cx="392" cy="159" r="3.2"/><circle cx="164" cy="321" r="3.2"/><circle cx="370" cy="342" r="3.2"/>
- <circle cx="202" cy="110" r="3.2"/><circle cx="312" cy="110" r="3.2"/><circle cx="180" cy="388" r="3.2"/><circle cx="324" cy="388" r="3.2"/>
-</g>
-<circle cx="256" cy="250" r="215" fill="none" stroke="#fff" stroke-opacity=".18" stroke-width="1.5"/>
-<g filter="url(#shadow)" stroke-linejoin="round">
- <path d="M126 345 211 159q5-11 17-11t18 11l94 186h-49l-63-130-59 130z" fill="url(#letter)" stroke="#10151e" stroke-width="8"/>
- <path d="M175 296h102l-23-37h-58z" fill="#090d14"/>
- <path d="M286 148h75q64 0 64 54 0 42-38 58 26 15 30 49l10 36h-48l-11-42q-8-29-37-29h-38l17 71h-48l-44-197z" fill="url(#letter)" stroke="#10151e" stroke-width="8"/>
- <path d="M293 190h64q22 0 22 15t-22 15h-55z" fill="#0a0e16" opacity=".95"/>
-</g>
-<circle cx="256" cy="250" r="229" fill="none" stroke="#fff" stroke-opacity=".28" stroke-width="2"/>
-<circle cx="256" cy="250" r="239" fill="none" stroke="#03060c" stroke-width="4"/>
-</g><path class="ap-logo-sheen" d="M-30 0 L85 0 420 512 305 512Z"/>
-</svg>
+<g clip-path="url(#badgeClip)">
+ <image x="0" y="0" width="512" height="512" preserveAspectRatio="xMidYMid slice" xlink:href="data:image/jpeg;base64,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"/>
+ <g filter="url(#greenGlow)">
+  <path class="circuit" d="M85 164 H124 V137 H165 V105 H211 M91 228 H135 V204 H163 V177 H187 M72 294 H115 V322 H156 V350 H190 M107 381 H146 V404 H182 V430 H215 M426 153 H388 V126 H350 V98 H315 M440 225 H402 V202 H372 V178 H344 M442 294 H402 V321 H370 V349 H336 M411 380 H376 V407 H342 V432 H309"/>
+  <path class="circuit slow" d="M118 92 V123 H148 V148 H177 M394 91 V119 H366 V144 H337 M83 345 H119 V370 H152 M430 348 H394 V372 H363"/>
+  <circle class="node" cx="165" cy="105" r="4"/><circle class="node" cx="187" cy="177" r="4"/><circle class="node" cx="156" cy="350" r="4"/><circle class="node" cx="182" cy="430" r="4"/><circle class="node" cx="350" cy="98" r="4"/><circle class="node" cx="344" cy="178" r="4"/><circle class="node" cx="370" cy="349" r="4"/><circle class="node" cx="342" cy="432" r="4"/>
+ </g>
+</g></svg>
