@@ -127,7 +127,7 @@ export default function Home() {
       <h3>Is AP Creative Tools free?</h3><p>The tools currently listed on the site are available without an account or paid subscription.</p>
       <h3>Are my PDF and image files uploaded?</h3><p>For supported local tools, processing happens in your browser. The site does not send selected files to an AP Creative Tools backend.</p>
       <h3>Can I merge or split PDF files online?</h3><p>Yes. Open Merge PDF to combine multiple PDF documents, or Split PDF to extract selected pages. Other available PDF utilities include rotation, watermarks, page numbers and text extraction.</p>
-      <h3>Does AP Creative Tools support every PDF conversion?</h3><p>No. The available tools are listed in the PDF workspace. Office document conversion, OCR and other unsupported workflows should not be assumed to work until they are added.</p>
+      <h3>Which document conversions are supported?</h3><p>Available browser-based conversions include PDF to PowerPoint (each PDF page becomes an image slide), supported PPTX to PDF, PDF to Word (selectable text extraction), and Word to PDF (best-effort text extraction from DOCX). These conversions do not guarantee preservation of complex layouts, charts, images or advanced formatting. Scanned-PDF OCR and legacy .ppt/.doc files are not supported.</p>
     </section>
 
     <div className="benefits"><div><Zap /><b>Fast by design</b><p>Lightweight tools with focused interfaces.</p></div><div><ShieldCheck /><b>Privacy first</b><p>Supported tasks run locally in your browser.</p></div><div><Image /><b>Always useful</b><p>A growing collection of everyday utilities.</p></div></div>
