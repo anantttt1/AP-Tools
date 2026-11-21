@@ -43,12 +43,30 @@ export default function Home() {
       <a className="hero-art" href="https://ap-creativestudio.vercel.app/" target="_blank" rel="noopener noreferrer" aria-label="Visit AP Creative Studio">
         <span className="hero-art-water" aria-hidden="true">
           <svg className="hero-water-defs" width="0" height="0" aria-hidden="true">
-            <defs><filter id="studio-water-goo"><feGaussianBlur in="SourceGraphic" stdDeviation="7" result="blur"/><feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -10" result="goo"/><feComposite in="SourceGraphic" in2="goo" operator="atop"/></filter></defs>
+            <defs>
+              <filter id="studio-water-goo" x="-60%" y="-60%" width="220%" height="220%">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="4.5" result="soft"/>
+                <feColorMatrix in="soft" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 24 -11" result="goo"/>
+                <feComposite in="SourceGraphic" in2="goo" operator="atop" result="merged"/>
+                <feTurbulence type="fractalNoise" baseFrequency=".018 .045" numOctaves="2" seed="8" result="noise"/>
+                <feDisplacementMap in="merged" in2="noise" scale="3.5" xChannelSelector="R" yChannelSelector="G" result="organic"/>
+                <feSpecularLighting in="noise" surfaceScale="2.8" specularConstant=".72" specularExponent="24" lighting-color="#ffffff" result="gloss">
+                  <feDistantLight azimuth="225" elevation="58"/>
+                </feSpecularLighting>
+                <feComposite in="gloss" in2="organic" operator="in" result="highlights"/>
+                <feBlend in="organic" in2="highlights" mode="screen"/>
+              </filter>
+            </defs>
           </svg>
           <span className="water-ribbon water-ribbon-left" />
           <span className="water-ribbon water-ribbon-right" />
           <span className="water-drop water-drop-a" /><span className="water-drop water-drop-b" />
           <span className="water-drop water-drop-c" /><span className="water-drop water-drop-d" />
+          <span className="water-drop water-drop-e" /><span className="water-drop water-drop-f" />
+          <span className="water-drop water-drop-g" /><span className="water-drop water-drop-h" />
+          <span className="water-drop water-drop-i" /><span className="water-drop water-drop-j" />
+          <span className="water-spray water-spray-left" /><span className="water-spray water-spray-right" />
+          <span className="water-crown" />
           <span className="water-pool" />
           <span className="water-ripple water-ripple-a" /><span className="water-ripple water-ripple-b" />
           <img src="/ap-creative-studio-logo.webp" alt="AP Creative Studio logo" />
