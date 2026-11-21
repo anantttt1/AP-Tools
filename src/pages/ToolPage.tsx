@@ -7,6 +7,7 @@ import { Download, Heart, RotateCcw, ShieldCheck, AlertCircle, Copy, FileUp, Clo
 import { tools } from '../data/tools'
 import { useAppStore } from '../store/useAppStore'
 import { processTool, type ProcessResult } from '../lib/processor'
+import { downloadBlob } from '../lib/download'
 
 const fileToolIds = new Set([
   'zip-creator','zip-extractor','file-type','file-size','file-hash','file-compare','bulk-rename',
@@ -560,9 +561,7 @@ export default function ToolPage() {
   const suggestedTools=[...new Set([...explicitRelated,...sameCategory])].filter(relatedId=>relatedId!==id).map(relatedId=>tools.find(item=>item.id===relatedId)).filter((item):item is (typeof tools)[number]=>Boolean(item)).slice(0,4)
   const download=()=>{
     if(output?.kind!=='blob')return
-    const url=URL.createObjectURL(output.blob)
-    const a=document.createElement('a');a.href=url;a.download=output.filename;a.click()
-    window.setTimeout(()=>URL.revokeObjectURL(url),1000)
+    downloadBlob(output.blob,output.filename)
   }
   return <motion.div className="page-stack" initial={{opacity:0,y:8}} animate={{opacity:1,y:0}}>
     <div className="breadcrumbs"><Link to="/tools">All tools</Link><span>/</span><span>{tool.category}</span><span>/</span><strong>{tool.name}</strong></div>
@@ -607,3 +606,4 @@ export default function ToolPage() {
     <div className="privacy-note"><ShieldCheck size={17}/><span><strong>Privacy first.</strong> Processing happens locally for supported tools. Nothing is uploaded to an AP TOOLS server.</span></div>
   </motion.div>
 }
+

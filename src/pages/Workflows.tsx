@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import { ArrowDown, ArrowUp, Play, Plus, Save, Trash2, Workflow as WorkflowIcon } from 'lucide-react'
 import { tools } from '../data/tools'
 import { processTool, type ProcessResult } from '../lib/processor'
+import { downloadBlob } from '../lib/download'
 
 type Step = { id: string; input: string; secondary: string }
 type SavedWorkflow = { name: string; steps: Step[] }
@@ -96,13 +97,8 @@ export default function Workflows() {
       }
       if (last?.kind === 'text' || last?.kind === 'html') setResult(last.value)
       else if (last?.kind === 'blob') {
-        const url = URL.createObjectURL(last.blob)
-        const anchor = document.createElement('a')
-        anchor.href = url
-        anchor.download = last.filename
-        anchor.click()
+        downloadBlob(last.blob, last.filename)
         setResult(`Final output downloaded: ${last.filename}`)
-        window.setTimeout(() => URL.revokeObjectURL(url), 1000)
       }
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Workflow failed.')
@@ -145,3 +141,4 @@ export default function Workflows() {
     {saved.length > 0 && <div className="section-block"><div className="section-heading"><div><h2>Saved workflows</h2><p>Stored on this device only, without encryption.</p></div></div><div className="saved-workflows">{saved.map((workflow, i) => <button className="saved-workflow" key={`${workflow.name}-${i}`} onClick={() => { setSteps(workflow.steps.map(step => ({ ...step }))); setName(workflow.name) }}><strong>{workflow.name}</strong><span>{workflow.steps.length} steps</span></button>)}</div></div>}
   </motion.div>
 }
+

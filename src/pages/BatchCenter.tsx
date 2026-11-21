@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { Download, Layers, FileUp, Play, ShieldCheck } from 'lucide-react'
 import JSZip from 'jszip'
 import { processTool, type ProcessResult } from '../lib/processor'
+import { downloadBlob } from '../lib/download'
 
 const csvCell=(value:string)=>{const safe=/^[\s]*[=+\-@]/.test(value)?`'${value}`:value;return `"${safe.replace(/"/g,'""')}"`}
 const operations=[
@@ -42,7 +43,7 @@ export default function BatchCenter(){
         setProgress(Math.round((i+1)/files.length*100))
       }
       if(operation==='file-hash'||operation==='file-type'){const csv=new Blob([rows.join('\n')]);outputBytes+=csv.size;if(outputBytes>160*1024*1024)throw new Error('Batch output exceeds the 160 MB download limit.');zip.file('results.csv',csv)}const blob=await zip.generateAsync({type:'blob',compression:'DEFLATE',compressionOptions:{level:4}});if(blob.size>160*1024*1024)throw new Error('Batch output exceeds the 160 MB download limit.')
-      const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='ap-tools-batch-results.zip';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)
+      downloadBlob(blob,'ap-tools-batch-results.zip')
       setResult(`${files.length} files processed. Your ZIP download has started.`)
     }catch(e){setError(e instanceof Error?e.message:'Batch processing failed.')}
     finally{setBusy(false)}
@@ -61,3 +62,4 @@ export default function BatchCenter(){
     <div className="privacy-note"><ShieldCheck size={17}/><span><strong>Local processing.</strong> Selected files are handled by your browser and are not uploaded to an AP TOOLS server.</span></div>
   </motion.div>
 }
+
