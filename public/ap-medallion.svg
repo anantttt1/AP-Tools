@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+<title id="title">AP Creative Studio</title><desc id="desc">Metallic silver AP monogram on a dark circular circuit-board medallion.</desc>
+<defs>
+ <radialGradient id="core" cx="48%" cy="34%" r="72%"><stop stop-color="#202633"/><stop offset=".58" stop-color="#090d15"/><stop offset="1" stop-color="#020409"/></radialGradient>
+ <linearGradient id="rim" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff"/><stop offset=".14" stop-color="#7c8490"/><stop offset=".29" stop-color="#f8fbff"/><stop offset=".48" stop-color="#555d69"/><stop offset=".68" stop-color="#e8edf4"/><stop offset=".84" stop-color="#737b88"/><stop offset="1" stop-color="#f8fbff"/></linearGradient>
+ <linearGradient id="letter" x1=".1" y1="0" x2=".82" y2="1"><stop stop-color="#fff"/><stop offset=".22" stop-color="#aeb7c4"/><stop offset=".43" stop-color="#f9fbff"/><stop offset=".66" stop-color="#6b7481"/><stop offset=".82" stop-color="#e7edf5"/><stop offset="1" stop-color="#4c5563"/></linearGradient>
+ <linearGradient id="edge" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff"/><stop offset=".45" stop-color="#67717e"/><stop offset="1" stop-color="#10151e"/></linearGradient>
+ <clipPath id="disc"><circle cx="256" cy="256" r="211"/></clipPath>
+ <filter id="shadow" x="-30%" y="-30%" width="160%" height="170%"><feGaussianBlur in="SourceAlpha" stdDeviation="8"/><feOffset dy="8"/><feComponentTransfer><feFuncA type="linear" slope=".75"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+</defs>
+<circle cx="256" cy="256" r="247" fill="#02040a"/>
+<circle cx="256" cy="250" r="240" fill="url(#rim)"/>
+<circle cx="256" cy="250" r="228" fill="#111722" stroke="#05080e" stroke-width="5"/>
+<circle cx="256" cy="250" r="216" fill="url(#core)" stroke="#aeb7c4" stroke-width="3"/>
+<g clip-path="url(#disc)" fill="none" stroke="#697789" stroke-width="2.1" opacity=".42" stroke-linecap="round" stroke-linejoin="round">
+ <path d="M42 132h70v28h42m-112 28h48v42h36m-84 38h86v-28h45m-70 112h62v-34h40m-93 82h80v-29h36M468 120h-58v32h-38m96 30h-64v34h-36m99 42h-75v-28h-30m104 104h-72v-35h-43m90 98h-80v-30h-44"/>
+ <path d="M125 35v68h38v40m-10-108v48h30v35m44-98v73h-28v40m75-106v65h-35v32m84-97v83h-34v37m80-117v58h-31v36m-215 250v-52h32v-34m57 88v-69h-27v-33m75 106v-71h28v-34m68 103v-54h-27v-30"/>
+ <circle cx="112" cy="160" r="7"/><circle cx="160" cy="203" r="6"/><circle cx="191" cy="108" r="7"/><circle cx="286" cy="115" r="6"/><circle cx="376" cy="158" r="7"/><circle cx="414" cy="230" r="6"/><circle cx="100" cy="316" r="7"/><circle cx="161" cy="377" r="6"/><circle cx="332" cy="398" r="7"/><circle cx="414" cy="350" r="6"/>
+ <path d="M70 218h44l17-17h26m-87 113h54l17 17h30m199-188h-45l-16 17h-31m104 207h-55l-18-18h-25M205 55v30m-55 308v-25m209-250v-28m-18 290v-29"/>
+ <path d="M92 91l19 19m-19 0 19-19M390 82l20 20m-20 0 20-20M82 389l20 20m-20 0 20-20M400 393l20 20m-20 0 20-20"/>
+</g>
+<circle cx="256" cy="250" r="215" fill="none" stroke="#fff" stroke-opacity=".18" stroke-width="1.5"/>
+<g filter="url(#shadow)" stroke-linejoin="round">
+ <path d="M126 345 211 159q5-11 17-11t18 11l94 186h-49l-63-130-59 130z" fill="url(#letter)" stroke="#10151e" stroke-width="8"/>
+ <path d="M175 296h102l-23-37h-58z" fill="#090d14"/>
+ <path d="M286 148h75q64 0 64 54 0 42-38 58 26 15 30 49l10 36h-48l-11-42q-8-29-37-29h-38l17 71h-48l-44-197z" fill="url(#letter)" stroke="#10151e" stroke-width="8"/>
+ <path d="M293 190h64q22 0 22 15t-22 15h-55z" fill="#0a0e16" opacity=".95"/>
+</g>
+<circle cx="256" cy="250" r="229" fill="none" stroke="#fff" stroke-opacity=".28" stroke-width="2"/>
+<circle cx="256" cy="250" r="239" fill="none" stroke="#03060c" stroke-width="4"/>
+</svg>

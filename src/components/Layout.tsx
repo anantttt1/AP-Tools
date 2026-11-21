@@ -34,7 +34,7 @@ export default function Layout() {
     <aside className={`sidebar ${collapsed ? 'collapsed' : ''} ${mobile ? 'mobile-open' : ''}`}>
       <div className="brand">
         <div className="brand-heading">
-          <img className="brand-mark-image" src="/toolbox-hero.webp" alt="AP Tools digital toolbox" />
+          <img className="brand-mark-image" src="/ap-medallion.svg" alt="AP Creative Studio metallic emblem" />
           {!collapsed && <div><b>AP <span>TOOLS</span></b><small>ALL YOUR TOOLS. ONE PLACE.</small></div>}
         </div>
         <button className="mobile-close" onClick={() => setMobile(false)} aria-label="Close navigation"><X size={17}/></button>

@@ -48,13 +48,14 @@ export default function Home() {
                 <feGaussianBlur in="SourceGraphic" stdDeviation="4.5" result="soft"/>
                 <feColorMatrix in="soft" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 24 -11" result="goo"/>
                 <feComposite in="SourceGraphic" in2="goo" operator="atop" result="merged"/>
-                <feTurbulence type="fractalNoise" baseFrequency=".018 .045" numOctaves="2" seed="8" result="noise"/>
-                <feDisplacementMap in="merged" in2="noise" scale="3.5" xChannelSelector="R" yChannelSelector="G" result="organic"/>
-                <feSpecularLighting in="noise" surfaceScale="2.8" specularConstant=".72" specularExponent="24" lighting-color="#ffffff" result="gloss">
+                <feTurbulence type="fractalNoise" baseFrequency=".012 .032" numOctaves="3" seed="13" result="noise"/>
+                <feDisplacementMap in="merged" in2="noise" scale="8" xChannelSelector="R" yChannelSelector="G" result="organic"/>
+                <feGaussianBlur in="organic" stdDeviation=".35" result="softOrganic"/>
+                <feSpecularLighting in="noise" surfaceScale="5" specularConstant="1" specularExponent="34" lighting-color="#ffffff" result="gloss">
                   <feDistantLight azimuth="225" elevation="58"/>
                 </feSpecularLighting>
-                <feComposite in="gloss" in2="organic" operator="in" result="highlights"/>
-                <feBlend in="organic" in2="highlights" mode="screen"/>
+                <feComposite in="gloss" in2="softOrganic" operator="in" result="highlights"/>
+                <feBlend in="softOrganic" in2="highlights" mode="screen"/>
               </filter>
             </defs>
           </svg>
@@ -69,7 +70,7 @@ export default function Home() {
           <span className="water-crown" />
           <span className="water-pool" />
           <span className="water-ripple water-ripple-a" /><span className="water-ripple water-ripple-b" />
-          <img src="/ap-creative-studio-logo.webp" alt="AP Creative Studio logo" />
+          <img src="/ap-medallion.svg" alt="AP Creative Studio metallic emblem" />
           <span className="water-shine" />
         </span>
         <span className="hero-art-copy">
