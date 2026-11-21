@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import { Link, useNavigate } from 'react-router-dom'
-import { useEffect, useRef, useState } from 'react'
+import { useState } from 'react'
 import { Search, ArrowRight, ArrowUpRight, FileText, Image, Code2, Archive, ShieldCheck, Zap } from 'lucide-react'
 import { tools } from '../data/tools'
 import ToolCard from '../components/ToolCard'
@@ -26,35 +26,6 @@ const getTools = (ids: string[]) => ids.map(id => tools.find(tool => tool.id ===
 
 export default function Home() {
   const [q, setQ] = useState('')
-  const studioWheelRef = useRef<HTMLImageElement>(null)
-
-  // Roll the Studio mark like a small tyre in response to left/right phone tilt.
-  // The listener is passive, bounded and cleaned up when the Home page unmounts.
-  useEffect(() => {
-    const wheel = studioWheelRef.current
-    if (!wheel || !('DeviceOrientationEvent' in window)) return
-    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
-
-    let roll = 0
-    const handleOrientation = (event: DeviceOrientationEvent) => {
-      if (typeof event.gamma !== 'number' || !Number.isFinite(event.gamma)) return
-
-      // Keep the emblem anchored in the centre of its card.
-      // Phone tilt controls rotation only; it must never push the logo outside its clipping area.
-      const tilt = Math.max(-32, Math.min(32, event.gamma))
-      const targetRoll = (tilt / 32) * 12
-
-      // Ease sensor noise while preserving the complete logo inside the card.
-      roll += (targetRoll - roll) * 0.18
-      wheel.style.setProperty('--studio-wheel-roll', roll.toFixed(2) + 'deg')
-    }
-
-    window.addEventListener('deviceorientation', handleOrientation, { passive: true })
-    return () => {
-      window.removeEventListener('deviceorientation', handleOrientation)
-      wheel.style.removeProperty('--studio-wheel-roll')
-    }
-  }, [])
   const go = useNavigate()
   const popular = ['image-compress', 'pdf-merge', 'zip-extractor', 'json-format', 'qr-generator', 'password'].map(id => tools.find(t => t.id === id)!).filter(Boolean)
   const pdfTools = getTools(pdfToolIds)
@@ -62,14 +33,16 @@ export default function Home() {
 
   return <motion.div className="stack" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
     <section className="hero">
-      <div className="eyebrow">● YOUR EVERYDAY DIGITAL TOOLKIT</div>
-      <h1>Everything you need.<br /><span>One powerful workspace.</span></h1>
-      <p>Free online PDF, image, file and productivity tools. Merge PDF files, split pages, add watermarks, convert images and manage everyday documents in one browser workspace.</p>
-      <div className="hero-search"><Search /><input value={q} onChange={e => setQ(e.target.value)} onKeyDown={e => e.key === 'Enter' && go('/tools?q=' + encodeURIComponent(q))} placeholder="Search PDF, image and file tools..." /><button onClick={() => go('/tools?q=' + encodeURIComponent(q))}>Explore tools <ArrowRight size={16} /></button></div>
-      <div className="hero-foot"><ShieldCheck size={15} /> Browser-based processing · No account required · Free to use</div>
-      <a className="hero-art" href="https://ap-creativestudio.vercel.app/" target="_blank" rel="noopener noreferrer" aria-label="Explore AP Creative Studio — opens in a new tab">
-        <img ref={studioWheelRef} src="/ap-creative-studio-logo.webp" alt="AP Creative Studio logo — tilt your phone left or right to roll the wheel" />
-        <span className="hero-art-copy"><strong>Step Into Creativity</strong><small>Design. Build. Create. <ArrowUpRight size={14} /></small><em>VISIT AP CREATIVE STUDIO</em><span className="hero-art-tilt-hint">↔ Tilt your phone to roll the logo</span></span>
+      <div className="hero-copy">
+        <div className="eyebrow">● YOUR EVERYDAY DIGITAL TOOLKIT</div>
+        <h1>Everything you need.<br /><span>One powerful workspace.</span></h1>
+        <p>Free online PDF, image, file and productivity tools. Merge PDF files, split pages, add watermarks, convert images and manage everyday documents in one browser workspace.</p>
+        <div className="hero-search"><Search /><input value={q} onChange={e => setQ(e.target.value)} onKeyDown={e => e.key === 'Enter' && go('/tools?q=' + encodeURIComponent(q))} placeholder="Search PDF, image and file tools..." /><button onClick={() => go('/tools?q=' + encodeURIComponent(q))}>Explore tools <ArrowRight size={16} /></button></div>
+        <div className="hero-foot"><ShieldCheck size={15} /> Browser-based processing · No account required · Free to use</div>
+      </div>
+      <a className="hero-art" href="https://ap-creativestudio.vercel.app/" target="_blank" rel="noopener noreferrer" aria-label="Open AP Creative Studio website in a new tab">
+        <img src="/ap-creative-studio-logo.webp" alt="AP Creative Studio logo" />
+        <span className="hero-art-copy"><strong>AP Creative Studio</strong><small>Open website <ArrowUpRight size={14} /></small></span>
       </a>
     </section>
 
@@ -133,3 +106,4 @@ export default function Home() {
     <div className="benefits"><div><Zap /><b>Fast by design</b><p>Lightweight tools with focused interfaces.</p></div><div><ShieldCheck /><b>Privacy first</b><p>Supported tasks run locally in your browser.</p></div><div><Image /><b>Always useful</b><p>A growing collection of everyday utilities.</p></div></div>
   </motion.div>
 }
+
