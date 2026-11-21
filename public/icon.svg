@@ -1,16 +1,26 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
 <defs>
- <linearGradient id="rim" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff"/><stop offset=".22" stop-color="#69717f"/><stop offset=".48" stop-color="#f8fbff"/><stop offset=".72" stop-color="#343a45"/><stop offset="1" stop-color="#dfe4ec"/></linearGradient>
- <linearGradient id="metal" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff"/><stop offset=".45" stop-color="#aeb6c4"/><stop offset=".72" stop-color="#303744"/><stop offset="1" stop-color="#e9edf4"/></linearGradient>
- <radialGradient id="disc"><stop stop-color="#202633"/><stop offset=".8" stop-color="#080a0f"/><stop offset="1" stop-color="#000"/></radialGradient>
- <pattern id="circuit" width="90" height="90" patternUnits="userSpaceOnUse" fill="none" stroke="#687487" stroke-width="3" opacity=".45"><path d="M0 20h30v20h20V0M70 0v30h20M0 70h20V50h25M90 65H65V90M45 90V70h20"/><circle cx="30" cy="40" r="4" fill="#8995a8"/><circle cx="70" cy="30" r="4" fill="#8995a8"/></pattern>
+ <radialGradient id="face" cx="38%" cy="28%" r="78%"><stop stop-color="#252a34"/><stop offset=".55" stop-color="#080a10"/><stop offset="1" stop-color="#020307"/></radialGradient>
+ <linearGradient id="rim" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f8fbff"/><stop offset=".22" stop-color="#5c6471"/><stop offset=".45" stop-color="#f5f7fa"/><stop offset=".68" stop-color="#3d424c"/><stop offset="1" stop-color="#dce2eb"/></linearGradient>
+ <linearGradient id="metal" x1="0" y1="0" x2=".25" y2="1"><stop stop-color="#fff"/><stop offset=".35" stop-color="#bfc6d1"/><stop offset=".65" stop-color="#5c6471"/><stop offset="1" stop-color="#f4f6fa"/></linearGradient>
+ <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="8"/></filter>
 </defs>
-<circle cx="256" cy="256" r="249" fill="#050609" stroke="#161a22" stroke-width="8"/>
-<circle cx="256" cy="256" r="237" fill="url(#rim)"/>
-<circle cx="256" cy="256" r="218" fill="#090b10" stroke="#fff" stroke-opacity=".55" stroke-width="5"/>
-<circle cx="256" cy="256" r="205" fill="url(#disc)"/>
-<circle cx="256" cy="256" r="202" fill="url(#circuit)"/>
-<circle cx="256" cy="256" r="205" fill="none" stroke="#8e99a9" stroke-opacity=".35" stroke-width="2"/>
-<text x="256" y="327" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="220" font-weight="800" letter-spacing="-20" fill="url(#metal)" stroke="#10141c" stroke-width="7" paint-order="stroke">AP</text>
-<circle cx="256" cy="256" r="236" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width="3"/>
+<circle cx="256" cy="265" r="239" fill="#000" opacity=".65" filter="url(#shadow)"/>
+<circle cx="256" cy="256" r="244" fill="#05060a" stroke="#151820" stroke-width="8"/>
+<circle cx="256" cy="256" r="231" fill="url(#rim)" stroke="#07090e" stroke-width="5"/>
+<circle cx="256" cy="256" r="214" fill="#090b11" stroke="#f3f5fa" stroke-width="5"/>
+<circle cx="256" cy="256" r="203" fill="url(#face)" stroke="#454c58" stroke-width="2"/>
+<g fill="none" stroke="#59616e" stroke-width="3" opacity=".56" stroke-linecap="round" stroke-linejoin="round">
+ <path d="M80 170h60l18-18h42m-120 42h48l16 16h38m-86 32h58v35h35m-98 24h65l18-18h28M100 350h48l20-20h32m-80 48h62v-28h42"/>
+ <path d="M432 160h-50l-18 18h-38m86 24h-50l-15 15h-38m95 34h-62v34h-38m89 28h-54l-20-20h-32m75 70h-53l-18-18h-35"/>
+ <path d="M175 62v46l18 18v35m36-97v56l-14 14v38m44-110v49l16 16v39m35-89v48l-17 18v29M170 430v-40l20-20v-32m44 94v-58l-16-16v-31m49 105v-49l18-18v-38m36 105v-51l-16-16v-28"/>
+ <circle cx="158" cy="152" r="9"/><circle cx="119" cy="246" r="8"/><circle cx="164" cy="354" r="9"/><circle cx="350" cy="151" r="9"/><circle cx="399" cy="244" r="8"/><circle cx="350" cy="359" r="9"/>
+ <path d="M105 115l20 0 0 20m261 0h22v-22m-270 282v22h-22m280-22v22h22"/>
+ <path d="M95 290h28m266-85h28M220 92h22m-20 328h22"/>
+</g>
+<g fill="none" stroke="#aeb7c4" stroke-width="1.4" opacity=".25">
+ <circle cx="256" cy="256" r="194"/><circle cx="256" cy="256" r="186"/>
+</g>
+<text x="256" y="322" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="214" font-weight="800" letter-spacing="-20" fill="url(#metal)" stroke="#050609" stroke-width="8" paint-order="stroke">AP</text>
+<path d="M137 412Q256 448 375 412" fill="none" stroke="#fff" stroke-opacity=".22" stroke-width="3"/>
 </svg>

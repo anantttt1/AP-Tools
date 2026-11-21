@@ -56,7 +56,7 @@ export default function Layout() {
       <header className="topbar">
         <button className="mobile-menu" onClick={() => setMobile(v => !v)} aria-label="Open navigation"><Menu size={19}/></button>
         <button className="top-search" onClick={() => go('/tools')}><Search size={17}/>Search for a tool...<kbd>Ctrl K</kbd></button>
-        <span className="free-tag">● Free tools</span><div className="avatar"><img src="/ap-creative-studio-logo.webp" alt="AP Creative Studio" /></div>
+        <span className="free-tag">● Free tools</span><div className="avatar"><img src="/icon.svg" alt="AP Creative Studio" /></div>
       </header>
       <main className="content"><Outlet/></main>
       <footer>© {new Date().getFullYear()} AP TOOLS <span>Free tools · Private processing · No account required</span><div className="footer-legal-links"><Link className="footer-privacy-link" to="/privacy">Privacy Policy</Link><Link className="footer-privacy-link" to="/terms">Terms &amp; Conditions</Link></div></footer>
