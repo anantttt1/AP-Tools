@@ -36,28 +36,23 @@ export default function Home() {
     if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return
 
     let roll = 0
-    let shift = 0
     const handleOrientation = (event: DeviceOrientationEvent) => {
       if (typeof event.gamma !== 'number' || !Number.isFinite(event.gamma)) return
 
-      // Map the full left/right tilt range across the complete promo card.
-      // Rotation follows the distance travelled, like a real rolling tyre.
+      // Keep the emblem anchored in the centre of its card.
+      // Phone tilt controls rotation only; it must never push the logo outside its clipping area.
       const tilt = Math.max(-32, Math.min(32, event.gamma))
-      const targetShift = ((tilt + 32) / 64) * 260 - 35
-      const targetRoll = (targetShift / 74) * (180 / Math.PI)
+      const targetRoll = (tilt / 32) * 12
 
-      // A little easing keeps sensor noise from making the logo jitter.
-      roll += (targetRoll - roll) * 0.22
-      shift += (targetShift - shift) * 0.22
+      // Ease sensor noise while preserving the complete logo inside the card.
+      roll += (targetRoll - roll) * 0.18
       wheel.style.setProperty('--studio-wheel-roll', roll.toFixed(2) + 'deg')
-      wheel.style.setProperty('--studio-wheel-x', shift.toFixed(2) + 'px')
     }
 
     window.addEventListener('deviceorientation', handleOrientation, { passive: true })
     return () => {
       window.removeEventListener('deviceorientation', handleOrientation)
       wheel.style.removeProperty('--studio-wheel-roll')
-      wheel.style.removeProperty('--studio-wheel-x')
     }
   }, [])
   const go = useNavigate()
