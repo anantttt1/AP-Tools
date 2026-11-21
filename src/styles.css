@@ -136,3 +136,32 @@ html{scroll-behavior:smooth;scroll-padding-top:24px}
 @media(max-width:420px){.hero{padding:24px 16px}.hero-art{padding:0}.hero-art-copy strong{font-size:15px}}
 @media(prefers-reduced-motion:reduce){.hero-art img{transition:none}}
 
+
+
+/* Liquid reveal: droplets fall, merge and reveal the original Studio emblem. */
+.hero-art-logo{position:relative;display:block;width:min(100%,210px);aspect-ratio:1;isolation:isolate;overflow:visible}
+.hero-art-logo>img{position:absolute!important;inset:0;width:100%!important;height:100%!important;object-fit:contain;opacity:0;transform:scale(.82);animation:studio-logo-resolve 1.05s cubic-bezier(.2,.8,.2,1) 1.02s both;will-change:opacity,transform}
+.hero-liquid{position:absolute;z-index:2;display:block;left:50%;top:50%;width:27%;aspect-ratio:1;border-radius:58% 42% 62% 38%;opacity:0;background:radial-gradient(circle at 32% 25%,#c4c0ff 0%,#766cff 34%,#4036c9 76%,#28216f 100%);box-shadow:inset -5px -7px 12px #17104a55,0 9px 20px #635bff35;filter:blur(.35px);transform:translate(-50%,-50%) scale(.2);animation:studio-liquid-fall 1.28s cubic-bezier(.18,.75,.22,1) both;will-change:transform,opacity,border-radius}
+.hero-liquid-one{margin-left:0;margin-top:-58%;animation-delay:0s}
+.hero-liquid-two{margin-left:-39%;margin-top:-34%;width:19%;animation-delay:.16s}
+.hero-liquid-three{margin-left:37%;margin-top:-27%;width:22%;animation-delay:.29s}
+@keyframes studio-liquid-fall{
+  0%{opacity:0;transform:translate(-50%,-155%) scale(.42,.72);border-radius:55% 45% 62% 38%}
+  12%{opacity:.96}
+  48%{opacity:1;transform:translate(-50%,-35%) scale(.78,1.2);border-radius:48% 52% 68% 32%}
+  68%{opacity:1;transform:translate(-50%,-50%) scale(1.3,.82);border-radius:48%}
+  86%{opacity:.8;transform:translate(-50%,-50%) scale(1.7,1.35);border-radius:46%}
+  100%{opacity:0;transform:translate(-50%,-50%) scale(2.05,1.75);border-radius:50%}
+}
+@keyframes studio-logo-resolve{
+  0%{opacity:0;transform:scale(.82);filter:blur(8px)}
+  55%{opacity:1;filter:blur(1px)}
+  100%{opacity:1;transform:scale(1);filter:blur(0)}
+}
+.hero-art:hover .hero-art-logo>img{filter:drop-shadow(0 11px 17px rgba(13,18,35,.2))!important}
+@media(max-width:900px){.hero-art-logo{width:min(100%,180px)}}
+@media(max-width:760px){.hero-art-logo{width:min(100%,210px)}}
+@media(prefers-reduced-motion:reduce){
+  .hero-liquid{animation:none;opacity:0}
+  .hero-art-logo>img{animation:none;opacity:1;transform:none;filter:none;will-change:auto}
+}

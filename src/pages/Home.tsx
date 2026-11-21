@@ -41,7 +41,12 @@ export default function Home() {
         <div className="hero-foot"><ShieldCheck size={15} /> Browser-based processing · No account required · Free to use</div>
       </div>
       <a className="hero-art" href="https://ap-creativestudio.vercel.app/" target="_blank" rel="noopener noreferrer" aria-label="Open AP Creative Studio website in a new tab">
-        <img src="/ap-creative-studio-logo.webp" alt="AP Creative Studio logo" />
+        <span className="hero-art-logo" aria-hidden="true">
+          <span className="hero-liquid hero-liquid-one" />
+          <span className="hero-liquid hero-liquid-two" />
+          <span className="hero-liquid hero-liquid-three" />
+          <img src="/ap-creative-studio-logo.webp" alt="" />
+        </span>
         <span className="hero-art-copy"><strong>AP Creative Studio</strong><small>Open website <ArrowUpRight size={14} /></small></span>
       </a>
     </section>
