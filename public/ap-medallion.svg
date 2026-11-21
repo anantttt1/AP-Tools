@@ -1,6 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
 <title id="title">AP Creative Studio</title><desc id="desc">Metallic silver AP monogram on a dark circular circuit-board medallion.</desc>
 <defs>
+ <radialGradient id="core" cx="48%" cy="34%" r="72%"><stop stop-color="#202633"/><stop offset=".58" stop-color="#090d15"/><stop offset="1" stop-color="#020409"/></radialGradient>
+ <linearGradient id="rim" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff"/><stop offset=".14" stop-color="#7c8490"/><stop offset=".29" stop-color="#f8fbff"/><stop offset=".48" stop-color="#555d69"/><stop offset=".68" stop-color="#e8edf4"/><stop offset=".84" stop-color="#737b88"/><stop offset="1" stop-color="#f8fbff"/></linearGradient>
+ <linearGradient id="letter" x1=".1" y1="0" x2=".82" y2="1"><stop stop-color="#fff"/><stop offset=".22" stop-color="#aeb7c4"/><stop offset=".43" stop-color="#f9fbff"/><stop offset=".66" stop-color="#6b7481"/><stop offset=".82" stop-color="#e7edf5"/><stop offset="1" stop-color="#4c5563"/></linearGradient>
+ <linearGradient id="edge" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff"/><stop offset=".45" stop-color="#67717e"/><stop offset="1" stop-color="#10151e"/></linearGradient>
+ <clipPath id="disc"><circle cx="256" cy="256" r="211"/></clipPath>
+ <filter id="shadow" x="-30%" y="-30%" width="160%" height="170%"><feGaussianBlur in="SourceAlpha" stdDeviation="8"/><feOffset dy="8"/><feComponentTransfer><feFuncA type="linear" slope=".75"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
  <linearGradient id="ap-water" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff"/><stop offset=".28" stop-color="#c8f1ff"/><stop offset=".62" stop-color="#63b9e8"/><stop offset="1" stop-color="#dff8ff"/></linearGradient>
  <linearGradient id="ap-sheen" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#fff" stop-opacity="0"/><stop offset=".45" stop-color="#fff" stop-opacity=".9"/><stop offset=".55" stop-color="#d9f4ff" stop-opacity=".75"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
  <filter id="ap-glow" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="4" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
@@ -18,12 +24,8 @@
  @media(prefers-reduced-motion:reduce){.ap-medallion-art,.ap-water-burst,.ap-water-ring,.ap-water-drops,.ap-logo-sheen{animation:none!important;opacity:1!important;transform:none!important}}
  </style>
 </defs>
-<defs>
- <radialGradient id="core" cx="48%" cy="34%" r="72%"><stop stop-color="#202633"/><stop offset=".58" stop-color="#090d15"/><stop offset="1" stop-color="#020409"/></radialGradient>
- <linearGradient id="rim" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff"/><stop offset=".14" stop-color="#7c8490"/><stop offset=".29" stop-color="#f8fbff"/><stop offset=".48" stop-color="#555d69"/><stop offset=".68" stop-color="#e8edf4"/><stop offset=".84" stop-color="#737b88"/><stop offset="1" stop-color="#f8fbff"/></linearGradient>
- <linearGradient id="letter" x1=".1" y1="0" x2=".82" y2="1"><stop stop-color="#fff"/><stop offset=".22" stop-color="#aeb7c4"/><stop offset=".43" stop-color="#f9fbff"/><stop offset=".66" stop-color="#6b7481"/><stop offset=".82" stop-color="#e7edf5"/><stop offset="1" stop-color="#4c5563"/></linearGradient>
- <linearGradient id="edge" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff"/><stop offset=".45" stop-color="#67717e"/><stop offset="1" stop-color="#10151e"/></linearGradient>
- <clipPath id="disc"><g class="ap-water-burst" fill="none" stroke="url(#ap-water)" stroke-width="9" stroke-linecap="round" filter="url(#ap-glow)">
+
+<g class="ap-water-burst" fill="none" stroke="url(#ap-water)" stroke-width="9" stroke-linecap="round" filter="url(#ap-glow)">
  <path d="M256 7 C300 28 335 3 365 36 C397 69 440 62 465 103 C485 136 505 143 498 180 C491 220 520 245 500 282 C482 318 500 356 466 384 C437 407 439 452 398 468 C360 482 338 512 298 493 C258 475 224 509 189 490 C153 471 110 486 91 450 C72 416 30 412 38 370 C46 329 8 303 25 266 C43 229 13 194 43 163 C73 132 57 90 96 75 C133 60 145 16 185 31 C220 45 231 4 256 7Z" opacity=".76"/>
 </g>
 <circle class="ap-water-ring" cx="256" cy="256" r="239" pathLength="100" stroke-dasharray="76 24"/>
@@ -35,10 +37,7 @@
  <path d="M345 474 C332 456 342 442 352 430 C363 447 375 462 362 477 C357 483 349 480 345 474Z"/>
  <path d="M160 34 C150 20 158 9 166 0 C175 13 185 26 175 38 C171 43 164 40 160 34Z"/>
 </g>
-<g class="ap-medallion-art"><circle cx="256" cy="256" r="211"/></clipPath>
- <filter id="shadow" x="-30%" y="-30%" width="160%" height="170%"><feGaussianBlur in="SourceAlpha" stdDeviation="8"/><feOffset dy="8"/><feComponentTransfer><feFuncA type="linear" slope=".75"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-</defs>
-<circle cx="256" cy="256" r="247" fill="#02040a"/>
+<g class="ap-medallion-art"><circle cx="256" cy="256" r="247" fill="#02040a"/>
 <circle cx="256" cy="250" r="240" fill="url(#rim)"/>
 <circle cx="256" cy="250" r="228" fill="#111722" stroke="#05080e" stroke-width="5"/>
 <circle cx="256" cy="250" r="216" fill="url(#core)" stroke="#aeb7c4" stroke-width="3"/>
@@ -58,4 +57,5 @@
 </g>
 <circle cx="256" cy="250" r="229" fill="none" stroke="#fff" stroke-opacity=".28" stroke-width="2"/>
 <circle cx="256" cy="250" r="239" fill="none" stroke="#03060c" stroke-width="4"/>
-</g><path class="ap-logo-sheen" d="M-30 0 L85 0 420 512 305 512Z"/></svg>
+</g><path class="ap-logo-sheen" d="M-30 0 L85 0 420 512 305 512Z"/>
+</svg>
