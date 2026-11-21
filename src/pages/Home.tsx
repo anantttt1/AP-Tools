@@ -40,18 +40,26 @@ export default function Home() {
         <div className="hero-search"><Search /><input value={q} onChange={e => setQ(e.target.value)} onKeyDown={e => e.key === 'Enter' && go('/tools?q=' + encodeURIComponent(q))} placeholder="Search PDF, image and file tools..." /><button onClick={() => go('/tools?q=' + encodeURIComponent(q))}>Explore tools <ArrowRight size={16} /></button></div>
         <div className="hero-foot"><ShieldCheck size={15} /> Browser-based processing · No account required · Free to use</div>
       </div>
-      <a className="hero-art" href="https://ap-creativestudio.vercel.app/" target="_blank" rel="noopener noreferrer" aria-label="Open AP Creative Studio website in a new tab">
-        <span className="hero-art-logo" aria-hidden="true">
-          <span className="hero-liquid-pool" />
-          <span className="hero-liquid hero-liquid-one" />
-          <span className="hero-liquid hero-liquid-two" />
-          <span className="hero-liquid hero-liquid-three" />
-          <span className="hero-liquid hero-liquid-four" />
-          <span className="hero-liquid hero-liquid-five" />
-          <img src="/ap-creative-studio-logo.webp" alt="" />
-          <span className="hero-liquid-glint" />
+      <a className="hero-art" href="https://ap-creativestudio.vercel.app/" target="_blank" rel="noopener noreferrer" aria-label="Visit AP Creative Studio">
+        <span className="hero-art-water" aria-hidden="true">
+          <svg className="hero-water-defs" width="0" height="0" aria-hidden="true">
+            <defs><filter id="studio-water-goo"><feGaussianBlur in="SourceGraphic" stdDeviation="7" result="blur"/><feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -10" result="goo"/><feComposite in="SourceGraphic" in2="goo" operator="atop"/></filter></defs>
+          </svg>
+          <span className="water-ribbon water-ribbon-left" />
+          <span className="water-ribbon water-ribbon-right" />
+          <span className="water-drop water-drop-a" /><span className="water-drop water-drop-b" />
+          <span className="water-drop water-drop-c" /><span className="water-drop water-drop-d" />
+          <span className="water-pool" />
+          <span className="water-ripple water-ripple-a" /><span className="water-ripple water-ripple-b" />
+          <img src="/ap-creative-studio-logo.webp" alt="AP Creative Studio logo" />
+          <span className="water-shine" />
         </span>
-        <span className="hero-art-copy"><strong>AP Creative Studio</strong><small>Open website <ArrowUpRight size={14} /></small></span>
+        <span className="hero-art-copy">
+          <small className="studio-banner-kicker">CREATIVE DESIGN · DIGITAL EXPERIENCES</small>
+          <strong>AP Creative Studio</strong>
+          <span className="studio-banner-line">Ideas into impact.</span>
+          <em>Explore the studio <ArrowUpRight size={14} /></em>
+        </span>
       </a>
     </section>
 
