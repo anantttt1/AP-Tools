@@ -42,10 +42,14 @@ export default function Home() {
       </div>
       <a className="hero-art" href="https://ap-creativestudio.vercel.app/" target="_blank" rel="noopener noreferrer" aria-label="Open AP Creative Studio website in a new tab">
         <span className="hero-art-logo" aria-hidden="true">
+          <span className="hero-liquid-pool" />
           <span className="hero-liquid hero-liquid-one" />
           <span className="hero-liquid hero-liquid-two" />
           <span className="hero-liquid hero-liquid-three" />
+          <span className="hero-liquid hero-liquid-four" />
+          <span className="hero-liquid hero-liquid-five" />
           <img src="/ap-creative-studio-logo.webp" alt="" />
+          <span className="hero-liquid-glint" />
         </span>
         <span className="hero-art-copy"><strong>AP Creative Studio</strong><small>Open website <ArrowUpRight size={14} /></small></span>
       </a>
