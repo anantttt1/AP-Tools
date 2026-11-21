@@ -1,24 +1,12 @@
 {
-  "name": "AP TOOLS \u2014 All your tools. One place.",
+  "name": "AP TOOLS — All your tools. One place.",
   "short_name": "AP TOOLS",
   "description": "Free browser-based tools for files, PDFs, images, developers and productivity.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#f8fafc",
-  "theme_color": "#ffffff",
+  "background_color": "#080b14",
+  "theme_color": "#080b14",
   "icons": [
-    {
-      "src": "/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
     {
       "src": "/icon.svg",
       "sizes": "any",
