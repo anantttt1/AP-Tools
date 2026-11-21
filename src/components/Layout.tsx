@@ -33,8 +33,11 @@ export default function Layout() {
   return <div className="shell">
     <aside className={`sidebar ${collapsed ? 'collapsed' : ''} ${mobile ? 'mobile-open' : ''}`}>
       <div className="brand">
-        <div className="brand-mark"><Layers3 size={21}/></div>
-        {!collapsed && <div><b>AP <span>TOOLS</span></b><small>ALL YOUR TOOLS. ONE PLACE.</small></div>}
+        {!collapsed && <img className="brand-visual" src="/toolbox-hero.webp" alt="A creative toolbox filled with digital file and media tools" />}
+        <div className="brand-heading">
+          <div className="brand-mark"><Layers3 size={21}/></div>
+          {!collapsed && <div><b>AP <span>TOOLS</span></b><small>ALL YOUR TOOLS. ONE PLACE.</small></div>}
+        </div>
         <button className="mobile-close" onClick={() => setMobile(false)} aria-label="Close navigation"><X size={17}/></button>
       </div>
       <div className="nav-label">{!collapsed && 'WORKSPACE'}</div>
