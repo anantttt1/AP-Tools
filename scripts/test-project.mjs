@@ -127,6 +127,7 @@ assert.ok(processor.includes('ppt/presentation.xml') && processor.includes('ppt/
 assert.ok(processor.includes('<p:defaultTextStyle><a:defPPr><a:defRPr lang="en-US"/></a:defPPr></p:defaultTextStyle>'), 'Generated PowerPoint must include a default text style for Office compatibility')
 assert.ok(processor.includes('<p:sldLayoutId id="2147483649" r:id="rId1"/>'), 'Generated PowerPoint slide layout ID must be in the valid OOXML range');
 assert.ok(processor.includes('slideMaster1.xml.rels') && processor.includes('relationships/theme') && processor.includes('Target="../theme/theme1.xml"'), 'Slide master must explicitly relate to its theme part')
+assert.ok(processor.includes('<p:clrMap accent1="accent1" accent2="accent2"') && processor.includes('<p:titleStyle><a:lvl1pPr>') && processor.includes('<p:bodyStyle><a:lvl1pPr>'), 'Generated PowerPoint slide master must use valid color tokens and required text styles')
 assert.ok(!processor.includes('Id="rId1004" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme" Target="theme/theme1.xml"'), 'Presentation part must not contain an invalid theme relationship')
 assert.ok(!processor.includes('Id="rId1004" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme" Target="theme/theme1.xml"'), 'Presentation part must not contain an invalid theme relationship')
 assert.ok(toolPage.includes("'pdf-to-powerpoint'"), 'PDF to PowerPoint must be wired to the upload interface')
