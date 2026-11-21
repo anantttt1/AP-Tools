@@ -23,6 +23,13 @@ const settings = read('src/pages/Settings.tsx')
 const vercel = JSON.parse(read('vercel.json'))
 const dependencies = {...pkg.dependencies, ...pkg.devDependencies}
 
+
+assert.ok(processor.includes("ppt/presProps.xml") && processor.includes("ppt/viewProps.xml") && processor.includes("ppt/tableStyles.xml"), 'PDF-to-PowerPoint must include Office presentation support parts')
+assert.ok(processor.includes("docProps/core.xml") && processor.includes("docProps/app.xml"), 'PDF-to-PowerPoint must include Office document properties')
+assert.ok(processor.includes("PowerPoint package validation failed: invalid XML"), 'PDF-to-PowerPoint must parse-check generated XML before download')
+assert.ok(processor.includes("No selectable text was found"), 'PDF-to-Word must report scanned PDFs without selectable text')
+assert.ok(processor.includes("Legacy .doc files are not supported"), 'Word-to-PDF must clearly identify unsupported legacy DOC files')
+
 const ids = [...catalog.matchAll(/"id": "([^"]+)"/g)].map(match => match[1])
 const cases = new Set([processor, extendedProcessor].flatMap(source => [...source.matchAll(/case '([^']+)'/g)].map(match => match[1])))
 const relatedMapStart = toolPage.indexOf('const relatedToolMap: Record<string,string[]> = {')
