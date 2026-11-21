@@ -6,11 +6,34 @@
  <linearGradient id="letter" x1=".1" y1="0" x2=".82" y2="1"><stop stop-color="#fff"/><stop offset=".22" stop-color="#aeb7c4"/><stop offset=".43" stop-color="#f9fbff"/><stop offset=".66" stop-color="#6b7481"/><stop offset=".82" stop-color="#e7edf5"/><stop offset="1" stop-color="#4c5563"/></linearGradient>
  <linearGradient id="edge" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff"/><stop offset=".45" stop-color="#67717e"/><stop offset="1" stop-color="#10151e"/></linearGradient>
  <clipPath id="disc"><circle cx="256" cy="256" r="211"/></clipPath>
+ 
+ <linearGradient id="ap-circuit-current" x1="0" y1="0" x2="1" y2="0">
+  <stop offset="0" stop-color="#064b2c" stop-opacity="0"/>
+  <stop offset=".28" stop-color="#16a34a" stop-opacity=".2"/>
+  <stop offset=".48" stop-color="#a7ffbf"/>
+  <stop offset=".58" stop-color="#22e36f"/>
+  <stop offset="1" stop-color="#16a34a" stop-opacity="0"/>
+ </linearGradient>
+ <filter id="ap-circuit-glow" x="-80%" y="-80%" width="260%" height="260%">
+  <feGaussianBlur stdDeviation="2.6" result="greenBlur"/>
+  <feColorMatrix in="greenBlur" type="matrix" values="0 0 0 0 0.08 0 0 0 0 1 0 0 0 0 0.36 0 0 0 .9 0" result="greenGlow"/>
+  <feMerge><feMergeNode in="greenGlow"/><feMergeNode in="SourceGraphic"/></feMerge>
+ </filter>
  <filter id="shadow" x="-30%" y="-30%" width="160%" height="170%"><feGaussianBlur in="SourceAlpha" stdDeviation="8"/><feOffset dy="8"/><feComponentTransfer><feFuncA type="linear" slope=".75"/></feComponentTransfer><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
  <linearGradient id="ap-water" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff"/><stop offset=".28" stop-color="#c8f1ff"/><stop offset=".62" stop-color="#63b9e8"/><stop offset="1" stop-color="#dff8ff"/></linearGradient>
  <linearGradient id="ap-sheen" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#fff" stop-opacity="0"/><stop offset=".45" stop-color="#fff" stop-opacity=".9"/><stop offset=".55" stop-color="#d9f4ff" stop-opacity=".75"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
  <filter id="ap-glow" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="4" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
  <style>
+
+ .ap-circuit-current{opacity:.12;mix-blend-mode:screen}
+ .ap-trace{stroke-dasharray:18 150;stroke-dashoffset:0;animation:ap-current-flow 3.8s linear infinite}
+ .trace-b{animation-delay:-.8s}.trace-c{animation-delay:-1.6s}.trace-d{animation-delay:-2.4s}.trace-e{animation-delay:-.4s}.trace-f{animation-delay:-1.2s}.trace-g{animation-delay:-2s}.trace-h{animation-delay:-2.8s}.trace-i{animation-delay:-1s}.trace-j{animation-delay:-3s}
+ .ap-circuit-nodes circle{fill:#a5ffc1;opacity:.1;animation:ap-node-pulse 2.6s ease-in-out infinite}
+ .ap-circuit-nodes circle:nth-child(2n){animation-delay:-1.3s}
+ @keyframes ap-current-flow{0%{stroke-dashoffset:0;opacity:.12}12%{opacity:1}72%{opacity:.9}100%{stroke-dashoffset:-168;opacity:.12}}
+ @keyframes ap-node-pulse{0%,100%{opacity:.08;transform:scale(.75);transform-box:fill-box;transform-origin:center}45%{opacity:1;transform:scale(1.8)}}
+ @media(prefers-reduced-motion:reduce){.ap-trace,.ap-circuit-nodes circle{animation:none!important;stroke-dasharray:none;opacity:.35}}
+
  .ap-medallion-art{transform-box:fill-box;transform-origin:center;opacity:0;animation:ap-logo-settle 1.45s cubic-bezier(.18,.82,.22,1) .12s forwards}
  .ap-water-burst{transform-box:fill-box;transform-origin:center;opacity:0;animation:ap-water-bloom 1.9s cubic-bezier(.16,.72,.2,1) both}
  .ap-water-ring{fill:none;stroke:url(#ap-water);stroke-width:8;stroke-linecap:round;opacity:0;filter:url(#ap-glow);animation:ap-water-ring 2.2s cubic-bezier(.12,.7,.2,1) both}
@@ -47,6 +70,24 @@
  <circle cx="112" cy="160" r="7"/><circle cx="160" cy="203" r="6"/><circle cx="191" cy="108" r="7"/><circle cx="286" cy="115" r="6"/><circle cx="376" cy="158" r="7"/><circle cx="414" cy="230" r="6"/><circle cx="100" cy="316" r="7"/><circle cx="161" cy="377" r="6"/><circle cx="332" cy="398" r="7"/><circle cx="414" cy="350" r="6"/>
  <path d="M70 218h44l17-17h26m-87 113h54l17 17h30m199-188h-45l-16 17h-31m104 207h-55l-18-18h-25M205 55v30m-55 308v-25m209-250v-28m-18 290v-29"/>
  <path d="M92 91l19 19m-19 0 19-19M390 82l20 20m-20 0 20-20M82 389l20 20m-20 0 20-20M400 393l20 20m-20 0 20-20"/>
+</g>
+
+<g class="ap-circuit-current" clip-path="url(#disc)" fill="none" stroke="url(#ap-circuit-current)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" filter="url(#ap-circuit-glow)">
+ <path class="ap-trace trace-a" d="M72 132h66v28h48v38h36v-54h28v-48h32"/>
+ <path class="ap-trace trace-b" d="M92 218h48v-34h34v-42h48v-27h42"/>
+ <path class="ap-trace trace-c" d="M116 355h48v-34h34v-40h34v-32h34"/>
+ <path class="ap-trace trace-d" d="M440 124h-48v35h-36v42h-40v31h-28"/>
+ <path class="ap-trace trace-e" d="M452 270h-55v-34h-36v-38h-34v-30h-32"/>
+ <path class="ap-trace trace-f" d="M420 374h-50v-32h-42v-34h-34v-28h-28"/>
+ <path class="ap-trace trace-g" d="M202 64v46h-25v38h-32v36"/>
+ <path class="ap-trace trace-h" d="M312 62v48h-28v35h-28v40"/>
+ <path class="ap-trace trace-i" d="M148 430v-42h32v-34h34v-28"/>
+ <path class="ap-trace trace-j" d="M354 430v-42h-30v-34h-35v-28"/>
+</g>
+<g class="ap-circuit-nodes" clip-path="url(#disc)" filter="url(#ap-circuit-glow)">
+ <circle cx="138" cy="160" r="3.2"/><circle cx="224" cy="196" r="3.2"/><circle cx="318" cy="232" r="3.2"/>
+ <circle cx="392" cy="159" r="3.2"/><circle cx="164" cy="321" r="3.2"/><circle cx="370" cy="342" r="3.2"/>
+ <circle cx="202" cy="110" r="3.2"/><circle cx="312" cy="110" r="3.2"/><circle cx="180" cy="388" r="3.2"/><circle cx="324" cy="388" r="3.2"/>
 </g>
 <circle cx="256" cy="250" r="215" fill="none" stroke="#fff" stroke-opacity=".18" stroke-width="1.5"/>
 <g filter="url(#shadow)" stroke-linejoin="round">
