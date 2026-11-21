@@ -124,6 +124,7 @@ assert.ok(settings.includes('Browser storage could not be cleared'), 'Settings m
 assert.ok(extendedProcessor.includes('hmac-sha256') && extendedProcessor.includes('color-contrast-checker') && extendedProcessor.includes('json-unflatten'), 'Extended processors must include cryptographic, colour and nested-data utilities')
 assert.ok(processor.includes("case 'pdf-to-powerpoint':"), 'PDF to PowerPoint processor must be implemented')
 assert.ok(processor.includes('ppt/presentation.xml') && processor.includes('ppt/slides/slide'), 'PDF to PowerPoint must create a PPTX presentation and slide parts')
+assert.ok(processor.includes('<p:defaultTextStyle><a:defRPr lang="en-US"/></p:defaultTextStyle>'), 'Generated PowerPoint must include a default text style for Office compatibility')
 assert.ok(toolPage.includes("'pdf-to-powerpoint'"), 'PDF to PowerPoint must be wired to the upload interface')
 assert.ok(processor.includes("case 'powerpoint-to-pdf':"), 'PowerPoint to PDF processor must be implemented')
 assert.ok(processor.includes('entries.length>1000') && processor.includes('declaredBytes>200*1024*1024'), 'PowerPoint archive entry and expanded-size limits must be enforced')
